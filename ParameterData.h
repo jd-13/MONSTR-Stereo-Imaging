@@ -14,7 +14,7 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 
 
-const int   CROSSOVERLOWER_MIN {40},
+const float CROSSOVERLOWER_MIN {40},
             CROSSOVERLOWER_MAX {10000},
             CROSSOVERLOWER_DEFAULT {100},
 

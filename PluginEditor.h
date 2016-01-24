@@ -17,8 +17,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_HEADER_F1B68972952BE4__
-#define __JUCE_HEADER_F1B68972952BE4__
+#ifndef __JUCE_HEADER_51C532A7320DE07A__
+#define __JUCE_HEADER_51C532A7320DE07A__
 
 //[Headers]     -- You can add your own extra header files here --
 #include "JuceHeader.h"
@@ -35,23 +35,26 @@
     Describe your class and how it works here!
                                                                     //[/Comments]
 */
-class PluginEditor  : public Component
+class MonstrAudioProcessorEditor  : public AudioProcessorEditor,
+                                    public Timer,
+                                    public SliderListener
 {
 public:
     //==============================================================================
-    PluginEditor ();
-    ~PluginEditor();
+    MonstrAudioProcessorEditor (MonstrAudioProcessor& ownerFilter);
+    ~MonstrAudioProcessorEditor();
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
     void timerCallback();
-    MONSTRAudioProcessor* getProcessor() const {
-        return static_cast<MONSTRAudioProcessor*>(getAudioProcessor);
+    MonstrAudioProcessor* getProcessor() const {
+        return static_cast<MonstrAudioProcessor*>(getAudioProcessor());
     }
     //[/UserMethods]
 
     void paint (Graphics& g);
     void resized();
+    void sliderValueChanged (Slider* sliderThatWasMoved);
 
 
 
@@ -60,13 +63,17 @@ private:
     //[/UserVariables]
 
     //==============================================================================
+    ScopedPointer<Slider> crossoverSld;
+    ScopedPointer<Slider> width1Sld;
+    ScopedPointer<Slider> width2Sld;
+    ScopedPointer<Slider> width3Sld;
 
 
     //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PluginEditor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MonstrAudioProcessorEditor)
 };
 
 //[EndFile] You can add extra defines here...
 //[/EndFile]
 
-#endif   // __JUCE_HEADER_F1B68972952BE4__
+#endif   // __JUCE_HEADER_51C532A7320DE07A__

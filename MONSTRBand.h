@@ -12,10 +12,11 @@
 #define MONSTRBAND_H_INCLUDED
 
 #include "../JuceLibraryCode/JuceHeader.h"
+#include "ParameterData.h"
 
 class MONSTRBand {
 public:
-    MONSTRBand();
+    MONSTRBand(bool newIsLower, bool newIsUpper, int newSampleRate);
     ~MONSTRBand();
     
     void setLowCutoff(float val);
@@ -28,15 +29,21 @@ public:
     float getWidth() const;
     float getIsBypassed() const;
     
-    void makeBandBottom(bool val);
-    void makeBandTop(bool val);
+    void makeBandLower(bool val);
+    void makeBandUpper(bool val);
     
-    void process(float inLeftSample, float inRightSample) const;
+    void process(float& inLeftSample, float& inRightSample) const;
     
 private:
-    bool isBypassed;
+    bool    isBypassed,
+            isLower,
+            isUpper;
     
-    float width;
+    float   width,
+            lowCutoff,
+            highCutoff;
+    
+    int sampleRate;
     
     IIRFilter   lowCut,
                 highCut;
@@ -44,6 +51,8 @@ private:
     IIRCoefficients lowCutCoef,
                     highCutCoef;
     
+    template<typename T>
+    T boundsCheck(T param, T min, T max);
     
 };
 

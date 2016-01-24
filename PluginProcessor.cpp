@@ -187,7 +187,54 @@ const String MonstrAudioProcessor::getParameterName (int index)
 
 const String MonstrAudioProcessor::getParameterText (int index)
 {
-    return String();
+    switch (index) {
+        case isBypassedBand1:
+            return String(mMONSTR.band1.getIsBypassed());
+            
+        case widthBand1:
+            return String(TranslateParam_Inter2Norm(mMONSTR.band1.getWidth(), WIDTH_MIN, WIDTH_MAX));
+            
+            
+            
+        case crossoverLower:
+            return String(TranslateParam_Inter2Norm(mMONSTR.band1.getHighCutoff(), CROSSOVERLOWER_MIN, CROSSOVERLOWER_MAX));
+            
+            
+            
+        case isBypassedBand2:
+            return String(mMONSTR.band2.getIsBypassed());
+            
+        case widthBand2:
+            return String(TranslateParam_Inter2Norm(mMONSTR.band2.getWidth(), WIDTH_MIN, WIDTH_MAX));
+            
+            
+            
+        case crossoverUpper:
+            return String(TranslateParam_Inter2Norm(mMONSTR.band2.getHighCutoff(), CROSSOVERUPPER_MIN, CROSSOVERUPPER_MAX));
+            
+            
+            
+        case isBypassedBand3:
+            return String(mMONSTR.band3.getIsBypassed());
+            
+        case widthBand3:
+            return String(TranslateParam_Inter2Norm(mMONSTR.band3.getWidth(), WIDTH_MIN, WIDTH_MAX));
+            
+        default:
+            return String::empty;
+    }
+}
+
+bool MonstrAudioProcessor::isParameterAutomatable(int parameterIndex) const {
+    switch (parameterIndex) {
+        case isBypassedBand1:
+        case isBypassedBand2:
+        case isBypassedBand3:
+            return false;
+            
+        default:
+            return true;
+    }
 }
 
 const String MonstrAudioProcessor::getInputChannelName (int channelIndex) const
@@ -283,14 +330,15 @@ void MonstrAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& 
     // I've added this to avoid people getting screaming feedback
     // when they first compile the plugin, but obviously you don't need to
     // this code if your algorithm already fills all the output channels.
-    for (int i = getNumInputChannels(); i < getNumOutputChannels(); ++i)
+    for (int i = getNumInputChannels(); i < getNumOutputChannels(); ++i) {
         buffer.clear (i, 0, buffer.getNumSamples());
+    }
 
     // This is the place where you'd normally do the guts of your plugin's
     // audio processing...
     for (int channel = 0; channel < getNumInputChannels(); ++channel)
     {
-        float* channelData = buffer.getWritePointer (channel);
+        float* inLeftSample = buffer.getWritePointer (channel);
 
         // ..do something to the data...
     }
@@ -313,12 +361,73 @@ void MonstrAudioProcessor::getStateInformation (MemoryBlock& destData)
     // You should use this method to store your parameters in the memory block.
     // You could do that either as raw data, or use the XML or ValueTree classes
     // as intermediaries to make it easy to save and load complex data.
+    std::vector<float> userParams;
+    for (int iii {0}; iii < totalNumParams; iii++) {
+        userParams.push_back(getParameter(iii));
+    }
+    
+    XmlElement root("Root");
+    XmlElement *el = root.createNewChildElement("AllUserParam");
+    
+    el->addTextElement(String(floatVectorToString(userParams)));
+    copyXmlToBinary(root, destData);
 }
 
 void MonstrAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
+    std::unique_ptr<XmlElement> pRoot(getXmlFromBinary(data, sizeInBytes));
+    std::vector<float> tmpUserParam;
+    
+    if (pRoot != NULL) {
+        forEachXmlChildElement((*pRoot), pChild) {
+            if (pChild->hasTagName("AllUserParam")) {
+                String sFloatCSV = pChild->getAllSubText();
+                if (stringToFloatVector(sFloatCSV, tmpUserParam, totalNumParams) == totalNumParams) {
+                    for (int iii {0}; iii < totalNumParams; iii++) {
+                        setParameter(iii, tmpUserParam[iii]);
+                    }
+                }
+            }
+        }
+        
+        // Slightly hacky fix to prevent inverted button settings on startup
+        setParameter(isBypassedBand1, getParameter(isBypassedBand1));
+        setParameter(isBypassedBand2, getParameter(isBypassedBand2));
+        setParameter(isBypassedBand3, getParameter(isBypassedBand3));
+        
+        UIUpdateFlag = true;
+    }
+}
+
+
+String MonstrAudioProcessor::floatVectorToString(const std::vector<float>& fData) const {
+    String result {""};
+    
+    if (fData.size() < 1) {
+        return result;
+    }
+    
+    for (int iii {0}; iii < (fData.size() - 1); iii++) {
+        result << String(fData[iii])<<",";
+    }
+    
+    result << String(fData[fData.size() - 1]);
+    
+    return result;
+}
+
+int MonstrAudioProcessor::stringToFloatVector(const String sFloatCSV, std::vector<float>& fData, int maxNumFloat) const {
+    StringArray tokenizer;
+    int tokenCount {tokenizer.addTokens(sFloatCSV, ",","")};
+    int resultCount {(maxNumFloat <= tokenCount) ? maxNumFloat : tokenCount};
+    
+    for (int iii {0}; iii < resultCount; iii++) {
+        fData.push_back(tokenizer[iii].getFloatValue());
+    }
+    
+    return ((tokenCount <= maxNumFloat) ? resultCount : -1);
 }
 
 //==============================================================================
