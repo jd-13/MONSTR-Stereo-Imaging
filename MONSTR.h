@@ -23,11 +23,12 @@ public:
                 band2,
                 band3;
     
-    void ClockProcess(float* leftSample, float* rightSample);
+    void ClockProcess(float* leftSample, float* rightSample, int numSamples);
+    
+    void setSampleRate(double newSampleRate);
     
     
-private:
-    
+private:    
 };
 
 

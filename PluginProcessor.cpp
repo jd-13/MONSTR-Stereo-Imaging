@@ -15,22 +15,22 @@
 //==============================================================================
 MonstrAudioProcessor::MonstrAudioProcessor()
 {
-    mMONSTR.band1.makeBandBottom(true);
-    mMONSTR.band1.makeBandTop(false);
+    mMONSTR.band1.makeBandLower(true);
+    mMONSTR.band1.makeBandUpper(false);
     mMONSTR.band1.setLowCutoff(20);
     mMONSTR.band1.setHighCutoff(CROSSOVERLOWER_DEFAULT);
     mMONSTR.band1.setWidth(WIDTH_DEFAULT);
     mMONSTR.band1.setIsbypassed(BANDSWITCH_DEFAULT);
     
-    mMONSTR.band2.makeBandBottom(false);
-    mMONSTR.band2.makeBandTop(false);
+    mMONSTR.band2.makeBandLower(false);
+    mMONSTR.band2.makeBandUpper(false);
     mMONSTR.band2.setLowCutoff(CROSSOVERLOWER_DEFAULT);
     mMONSTR.band2.setHighCutoff(CROSSOVERUPPER_DEFAULT);
     mMONSTR.band2.setWidth(WIDTH_DEFAULT);
     mMONSTR.band2.setIsbypassed(BANDSWITCH_DEFAULT);
     
-    mMONSTR.band3.makeBandBottom(false);
-    mMONSTR.band3.makeBandTop(false);
+    mMONSTR.band3.makeBandLower(false);
+    mMONSTR.band3.makeBandUpper(true);
     mMONSTR.band3.setLowCutoff(CROSSOVERUPPER_DEFAULT);
     mMONSTR.band3.setHighCutoff(20000);
     mMONSTR.band3.setWidth(WIDTH_DEFAULT);
@@ -74,7 +74,7 @@ float MonstrAudioProcessor::getParameter (int index)
             return mMONSTR.band2.getIsBypassed();
             
         case widthBand2:
-            return mMONSTR.band2.getWidth();
+            return TranslateParam_Inter2Norm(mMONSTR.band2.getWidth(), WIDTH_MIN, WIDTH_MAX);
             
         
         
@@ -336,12 +336,12 @@ void MonstrAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& 
 
     // This is the place where you'd normally do the guts of your plugin's
     // audio processing...
-    for (int channel = 0; channel < getNumInputChannels(); ++channel)
-    {
-        float* inLeftSample = buffer.getWritePointer (channel);
-
-        // ..do something to the data...
-    }
+    float* inLeftSample {buffer.getWritePointer(0)};
+    float* inRightSample {buffer.getWritePointer(1)};
+        
+    mMONSTR.setSampleRate(getSampleRate());
+    
+    mMONSTR.ClockProcess(inLeftSample, inRightSample, buffer.getNumSamples());
 }
 
 //==============================================================================

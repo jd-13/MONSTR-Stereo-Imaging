@@ -63,10 +63,11 @@ private:
     //[/UserVariables]
 
     //==============================================================================
-    ScopedPointer<Slider> crossoverSld;
     ScopedPointer<Slider> width1Sld;
     ScopedPointer<Slider> width2Sld;
     ScopedPointer<Slider> width3Sld;
+    ScopedPointer<Slider> crossoverLowerSld;
+    ScopedPointer<Slider> crossoverUpperSld;
 
 
     //==============================================================================
