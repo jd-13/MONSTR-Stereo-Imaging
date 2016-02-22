@@ -58,10 +58,22 @@ MonstrAudioProcessorEditor::MonstrAudioProcessorEditor (MonstrAudioProcessor& ow
     crossoverLowerSld->addListener (this);
 
     addAndMakeVisible (crossoverUpperSld = new Slider ("Crossover Upper Slider"));
-    crossoverUpperSld->setRange (0, 10, 0);
+    crossoverUpperSld->setRange (0, 1, 0);
     crossoverUpperSld->setSliderStyle (Slider::LinearHorizontal);
     crossoverUpperSld->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
     crossoverUpperSld->addListener (this);
+
+    addAndMakeVisible (switchBand1Btn = new ToggleButton ("Switch Band 1 Button"));
+    switchBand1Btn->setButtonText (TRANS("new toggle button"));
+    switchBand1Btn->addListener (this);
+
+    addAndMakeVisible (switchBand2Btn = new ToggleButton ("Switch Band 2 Button"));
+    switchBand2Btn->setButtonText (TRANS("new toggle button"));
+    switchBand2Btn->addListener (this);
+
+    addAndMakeVisible (switchBand3Btn = new ToggleButton ("Switch Band 3 Button"));
+    switchBand3Btn->setButtonText (TRANS("new toggle button"));
+    switchBand3Btn->addListener (this);
 
 
     //[UserPreSize]
@@ -85,6 +97,9 @@ MonstrAudioProcessorEditor::~MonstrAudioProcessorEditor()
     width3Sld = nullptr;
     crossoverLowerSld = nullptr;
     crossoverUpperSld = nullptr;
+    switchBand1Btn = nullptr;
+    switchBand2Btn = nullptr;
+    switchBand3Btn = nullptr;
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -108,11 +123,14 @@ void MonstrAudioProcessorEditor::resized()
     //[UserPreResize] Add your own custom resize code here..
     //[/UserPreResize]
 
-    width1Sld->setBounds (16, 112, 72, 264);
-    width2Sld->setBounds (120, 112, 72, 264);
-    width3Sld->setBounds (216, 112, 72, 264);
+    width1Sld->setBounds (16, 152, 72, 264);
+    width2Sld->setBounds (120, 152, 72, 264);
+    width3Sld->setBounds (216, 152, 72, 264);
     crossoverLowerSld->setBounds (16, 40, 168, 24);
     crossoverUpperSld->setBounds (192, 40, 150, 24);
+    switchBand1Btn->setBounds (48, 104, 64, 40);
+    switchBand2Btn->setBounds (144, 104, 64, 40);
+    switchBand3Btn->setBounds (240, 104, 64, 40);
     //[UserResized] Add your own custom resize handling here..
     //[/UserResized]
 }
@@ -158,6 +176,33 @@ void MonstrAudioProcessorEditor::sliderValueChanged (Slider* sliderThatWasMoved)
     //[/UsersliderValueChanged_Post]
 }
 
+void MonstrAudioProcessorEditor::buttonClicked (Button* buttonThatWasClicked)
+{
+    //[UserbuttonClicked_Pre]
+    MonstrAudioProcessor* ourProcessor {getProcessor()};
+    //[/UserbuttonClicked_Pre]
+
+    if (buttonThatWasClicked == switchBand1Btn)
+    {
+        //[UserButtonCode_switchBand1Btn] -- add your button handler code here..
+        ourProcessor->setParameter(MonstrAudioProcessor::, <#float newValue#>)
+        //[/UserButtonCode_switchBand1Btn]
+    }
+    else if (buttonThatWasClicked == switchBand2Btn)
+    {
+        //[UserButtonCode_switchBand2Btn] -- add your button handler code here..
+        //[/UserButtonCode_switchBand2Btn]
+    }
+    else if (buttonThatWasClicked == switchBand3Btn)
+    {
+        //[UserButtonCode_switchBand3Btn] -- add your button handler code here..
+        //[/UserButtonCode_switchBand3Btn]
+    }
+
+    //[UserbuttonClicked_Post]
+    //[/UserbuttonClicked_Post]
+}
+
 
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
@@ -193,17 +238,17 @@ BEGIN_JUCER_METADATA
                  fixedSize="1" initialWidth="600" initialHeight="600">
   <BACKGROUND backgroundColour="ffffffff"/>
   <SLIDER name="Band 1 Width Slider" id="a19cf5783381f0f4" memberName="width1Sld"
-          virtualName="" explicitFocusOrder="0" pos="16 112 72 264" min="0"
+          virtualName="" explicitFocusOrder="0" pos="16 152 72 264" min="0"
           max="1" int="0.010000000000000000208" style="LinearVertical"
           textBoxPos="TextBoxLeft" textBoxEditable="1" textBoxWidth="80"
           textBoxHeight="20" skewFactor="1"/>
   <SLIDER name="Band 2 Width Slider" id="4c81fe5c3b84dad" memberName="width2Sld"
-          virtualName="" explicitFocusOrder="0" pos="120 112 72 264" min="0"
+          virtualName="" explicitFocusOrder="0" pos="120 152 72 264" min="0"
           max="1" int="0.010000000000000000208" style="LinearVertical"
           textBoxPos="TextBoxLeft" textBoxEditable="1" textBoxWidth="80"
           textBoxHeight="20" skewFactor="1"/>
   <SLIDER name="Band 3 Width Slider" id="f1626a0c5e7a4180" memberName="width3Sld"
-          virtualName="" explicitFocusOrder="0" pos="216 112 72 264" min="0"
+          virtualName="" explicitFocusOrder="0" pos="216 152 72 264" min="0"
           max="1" int="0.010000000000000000208" style="LinearVertical"
           textBoxPos="TextBoxLeft" textBoxEditable="1" textBoxWidth="80"
           textBoxHeight="20" skewFactor="1"/>
@@ -213,8 +258,17 @@ BEGIN_JUCER_METADATA
           textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
   <SLIDER name="Crossover Upper Slider" id="d5eaf01002d1395" memberName="crossoverUpperSld"
           virtualName="" explicitFocusOrder="0" pos="192 40 150 24" min="0"
-          max="10" int="0" style="LinearHorizontal" textBoxPos="TextBoxLeft"
+          max="1" int="0" style="LinearHorizontal" textBoxPos="TextBoxLeft"
           textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
+  <TOGGLEBUTTON name="Switch Band 1 Button" id="2480ca9153c32a51" memberName="switchBand1Btn"
+                virtualName="" explicitFocusOrder="0" pos="48 104 64 40" buttonText="new toggle button"
+                connectedEdges="0" needsCallback="1" radioGroupId="0" state="0"/>
+  <TOGGLEBUTTON name="Switch Band 2 Button" id="3247d14a24a05021" memberName="switchBand2Btn"
+                virtualName="" explicitFocusOrder="0" pos="144 104 64 40" buttonText="new toggle button"
+                connectedEdges="0" needsCallback="1" radioGroupId="0" state="0"/>
+  <TOGGLEBUTTON name="Switch Band 3 Button" id="d478f5021d1920df" memberName="switchBand3Btn"
+                virtualName="" explicitFocusOrder="0" pos="240 104 64 40" buttonText="new toggle button"
+                connectedEdges="0" needsCallback="1" radioGroupId="0" state="0"/>
 </JUCER_COMPONENT>
 
 END_JUCER_METADATA

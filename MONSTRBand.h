@@ -36,17 +36,18 @@ public:
     void setLowCutoff(float val);
     void setHighCutoff(float val);
     void setWidth(float val);
-    void setIsbypassed(bool val);
+    void setIsActive(bool val);
     
     void setSampleRate(double newSampleRate);
     
     float getLowCutoff() const;
     float getHighCutoff() const;
     float getWidth() const;
-    float getIsBypassed() const;
+    float getIsActive() const;
     
-    void makeBandLower(bool val);
-    void makeBandUpper(bool val);
+    void makeBandLower();
+    void makeBandMiddle();
+    void makeBandUpper();
     
     void reset();
     

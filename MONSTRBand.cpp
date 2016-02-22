@@ -36,7 +36,6 @@ MONSTRBand::MONSTRBand(bool newIsLower, bool newIsUpper) :
                             highCutRight(),
                             isLower(newIsLower),
                             isUpper(newIsUpper) {
-    //assert(isLower != isUpper);
 }
 
 
@@ -47,7 +46,6 @@ MONSTRBand::~MONSTRBand() {
 
 
 void MONSTRBand::setLowCutoff(float val) {
-    // TODO: add better bounds checks
     // if this is the lowest band, then do not cut the low frequencies
     if (!isLower && !isUpper) {
         lowCutoff = boundsCheck<float>(val, CROSSOVERLOWER_MIN, CROSSOVERLOWER_MAX);
@@ -62,7 +60,6 @@ void MONSTRBand::setLowCutoff(float val) {
 
 void MONSTRBand::setHighCutoff(float val) {
     // if this is the highest band, then do not cut the high frequencies
-    
     if (!isLower && !isUpper) {
         highCutoff = boundsCheck<float>(val, CROSSOVERUPPER_MIN, CROSSOVERUPPER_MAX);
         highCutLeft.setCoefficients(IIRCoefficients::makeLowPass(sampleRate, highCutoff));
@@ -96,7 +93,6 @@ float MONSTRBand::getLowCutoff() const {
 }
 
 float MONSTRBand::getHighCutoff() const {
-    Logger::outputDebugString(__func__ + String(": ") + String(highCutoff));
     return highCutoff;
 }
 
@@ -108,16 +104,22 @@ float MONSTRBand::getIsBypassed() const {
     return isBypassed;
 }
 
-void MONSTRBand::makeBandLower(bool val) {
+void MONSTRBand::makeBandLower() {
     // lets the band know if it covers the lowest frequencies
-    isLower = val;
-    isUpper = !val;
+    isLower = true;
+    isUpper = false;
 }
 
-void MONSTRBand::makeBandUpper(bool val) {
+void MONSTRBand::makeBandMiddle() {
+    // lets the band know if it covers the middle frequencies
+    isLower = false;
+    isUpper = false;
+}
+
+void MONSTRBand::makeBandUpper() {
     // lets the band know if it covers the highest frequencies
-    isLower = !val;
-    isUpper = val;
+    isLower = false;
+    isUpper = true;
 }
 
 void MONSTRBand::reset() {
@@ -130,8 +132,20 @@ void MONSTRBand::reset() {
 void MONSTRBand::process2in2out(float* inLeftSamples, float* inRightSamples, int numSamples) {
     // add upper/lower bypass depending on isupper/islower
     
-    highCutLeft.processSamples(inLeftSamples, numSamples);
-    highCutRight.processSamples(inRightSamples, numSamples);
+    if (isLower) {
+        highCutLeft.processSamples(inLeftSamples, numSamples);
+        highCutRight.processSamples(inRightSamples, numSamples);
+    } else if (isUpper) {
+        lowCutLeft.processSamples(inLeftSamples, numSamples);
+        lowCutRight.processSamples(inRightSamples, numSamples);
+    } else {
+        lowCutLeft.processSamples(inLeftSamples, numSamples);
+        lowCutRight.processSamples(inRightSamples, numSamples);
+        highCutLeft.processSamples(inLeftSamples, numSamples);
+        highCutRight.processSamples(inRightSamples, numSamples);
+    }
+    
+
 }
 
 

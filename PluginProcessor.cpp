@@ -15,26 +15,23 @@
 //==============================================================================
 MonstrAudioProcessor::MonstrAudioProcessor()
 {
-    mMONSTR.band1.makeBandLower(true);
-    mMONSTR.band1.makeBandUpper(false);
+    mMONSTR.band1.makeBandLower();
     mMONSTR.band1.setLowCutoff(20);
     mMONSTR.band1.setHighCutoff(CROSSOVERLOWER_DEFAULT);
     mMONSTR.band1.setWidth(WIDTH_DEFAULT);
-    mMONSTR.band1.setIsbypassed(BANDSWITCH_DEFAULT);
+    mMONSTR.band1.setIsActive(BANDSWITCH_DEFAULT);
     
-    mMONSTR.band2.makeBandLower(false);
-    mMONSTR.band2.makeBandUpper(false);
+    mMONSTR.band2.makeBandMiddle();
     mMONSTR.band2.setLowCutoff(CROSSOVERLOWER_DEFAULT);
     mMONSTR.band2.setHighCutoff(CROSSOVERUPPER_DEFAULT);
     mMONSTR.band2.setWidth(WIDTH_DEFAULT);
-    mMONSTR.band2.setIsbypassed(BANDSWITCH_DEFAULT);
+    mMONSTR.band2.setIsActive(BANDSWITCH_DEFAULT);
     
-    mMONSTR.band3.makeBandLower(false);
-    mMONSTR.band3.makeBandUpper(true);
+    mMONSTR.band3.makeBandUpper();
     mMONSTR.band3.setLowCutoff(CROSSOVERUPPER_DEFAULT);
     mMONSTR.band3.setHighCutoff(20000);
     mMONSTR.band3.setWidth(WIDTH_DEFAULT);
-    mMONSTR.band3.setIsbypassed(BANDSWITCH_DEFAULT);
+    mMONSTR.band3.setIsActive(BANDSWITCH_DEFAULT);
     
     UIUpdateFlag = true;
 }
@@ -57,8 +54,8 @@ int MonstrAudioProcessor::getNumParameters()
 float MonstrAudioProcessor::getParameter (int index)
 {
     switch (index) {
-        case isBypassedBand1:
-            return mMONSTR.band1.getIsBypassed();
+        case isActiveBand1:
+            return mMONSTR.band1.getIsActive();
             
         case widthBand1:
             return TranslateParam_Inter2Norm(mMONSTR.band1.getWidth(), WIDTH_MIN, WIDTH_MAX);
@@ -70,8 +67,8 @@ float MonstrAudioProcessor::getParameter (int index)
             
         
         
-        case isBypassedBand2:
-            return mMONSTR.band2.getIsBypassed();
+        case isActiveBand2:
+            return mMONSTR.band2.getIsActive();
             
         case widthBand2:
             return TranslateParam_Inter2Norm(mMONSTR.band2.getWidth(), WIDTH_MIN, WIDTH_MAX);
@@ -83,8 +80,8 @@ float MonstrAudioProcessor::getParameter (int index)
             
         
         
-        case isBypassedBand3:
-            return mMONSTR.band3.getIsBypassed();
+        case isActiveBand3:
+            return mMONSTR.band3.getIsActive();
             
         case widthBand3:
             return TranslateParam_Inter2Norm(mMONSTR.band3.getWidth(), WIDTH_MIN, WIDTH_MAX);
@@ -99,8 +96,8 @@ float MonstrAudioProcessor::getParameter (int index)
 void MonstrAudioProcessor::setParameter (int index, float newValue)
 {
     switch (index) {
-        case isBypassedBand1:
-            mMONSTR.band1.setIsbypassed(newValue < 0.5);
+        case isActiveBand1:
+            mMONSTR.band1.setIsActive(newValue < 0.5);
             break;
             
         case widthBand1:
@@ -116,8 +113,8 @@ void MonstrAudioProcessor::setParameter (int index, float newValue)
             
             
             
-        case isBypassedBand2:
-            mMONSTR.band2.setIsbypassed(newValue < 0.5);
+        case isActiveBand2:
+            mMONSTR.band2.setIsActive(newValue < 0.5);
             break;
             
         case widthBand2:
@@ -133,8 +130,8 @@ void MonstrAudioProcessor::setParameter (int index, float newValue)
             
             
             
-        case isBypassedBand3:
-            mMONSTR.band3.setIsbypassed(newValue < 0.5);
+        case isActiveBand3:
+            mMONSTR.band3.setIsActive(newValue < 0.5);
             break;
             
         case widthBand3:
@@ -148,7 +145,7 @@ void MonstrAudioProcessor::setParameter (int index, float newValue)
 const String MonstrAudioProcessor::getParameterName (int index)
 {
     switch (index) {
-        case isBypassedBand1:
+        case isActiveBand1:
             return SWITCHBAND1_STR;
             
         case widthBand1:
@@ -161,7 +158,7 @@ const String MonstrAudioProcessor::getParameterName (int index)
             
             
             
-        case isBypassedBand2:
+        case isActiveBand2:
             return SWITCHBAND2_STR;
             
         case widthBand2:
@@ -174,7 +171,7 @@ const String MonstrAudioProcessor::getParameterName (int index)
             
             
             
-        case isBypassedBand3:
+        case isActiveBand3:
             return SWITCHBAND3_STR;
             
         case widthBand3:
@@ -188,8 +185,8 @@ const String MonstrAudioProcessor::getParameterName (int index)
 const String MonstrAudioProcessor::getParameterText (int index)
 {
     switch (index) {
-        case isBypassedBand1:
-            return String(mMONSTR.band1.getIsBypassed());
+        case isActiveBand1:
+            return String(mMONSTR.band1.getIsActive());
             
         case widthBand1:
             return String(TranslateParam_Inter2Norm(mMONSTR.band1.getWidth(), WIDTH_MIN, WIDTH_MAX));
@@ -201,8 +198,8 @@ const String MonstrAudioProcessor::getParameterText (int index)
             
             
             
-        case isBypassedBand2:
-            return String(mMONSTR.band2.getIsBypassed());
+        case isActiveBand2:
+            return String(mMONSTR.band2.getIsActive());
             
         case widthBand2:
             return String(TranslateParam_Inter2Norm(mMONSTR.band2.getWidth(), WIDTH_MIN, WIDTH_MAX));
@@ -214,8 +211,8 @@ const String MonstrAudioProcessor::getParameterText (int index)
             
             
             
-        case isBypassedBand3:
-            return String(mMONSTR.band3.getIsBypassed());
+        case isActiveBand3:
+            return String(mMONSTR.band3.getIsActive());
             
         case widthBand3:
             return String(TranslateParam_Inter2Norm(mMONSTR.band3.getWidth(), WIDTH_MIN, WIDTH_MAX));
@@ -227,9 +224,9 @@ const String MonstrAudioProcessor::getParameterText (int index)
 
 bool MonstrAudioProcessor::isParameterAutomatable(int parameterIndex) const {
     switch (parameterIndex) {
-        case isBypassedBand1:
-        case isBypassedBand2:
-        case isBypassedBand3:
+        case isActiveBand1:
+        case isActiveBand2:
+        case isActiveBand3:
             return false;
             
         default:
@@ -313,6 +310,9 @@ void MonstrAudioProcessor::changeProgramName (int index, const String& newName)
 void MonstrAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     // Use this method as the place to do any pre-playback
+    mMONSTR.band1.reset();
+    mMONSTR.band2.reset();
+    mMONSTR.band3.reset();
     // initialisation that you need..
 }
 
@@ -393,9 +393,9 @@ void MonstrAudioProcessor::setStateInformation (const void* data, int sizeInByte
         }
         
         // Slightly hacky fix to prevent inverted button settings on startup
-        setParameter(isBypassedBand1, getParameter(isBypassedBand1));
-        setParameter(isBypassedBand2, getParameter(isBypassedBand2));
-        setParameter(isBypassedBand3, getParameter(isBypassedBand3));
+        setParameter(isActiveBand1, getParameter(isActiveBand1));
+        setParameter(isActiveBand2, getParameter(isActiveBand2));
+        setParameter(isActiveBand3, getParameter(isActiveBand3));
         
         UIUpdateFlag = true;
     }

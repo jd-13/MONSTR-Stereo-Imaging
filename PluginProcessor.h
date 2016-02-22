@@ -69,17 +69,17 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
     
     enum Parameters {
-        isBypassedBand1 = 0,
+        isActiveBand1 = 0,
         widthBand1,
         
         crossoverLower,
         
-        isBypassedBand2,
+        isActiveBand2,
         widthBand2,
         
         crossoverUpper,
         
-        isBypassedBand3,
+        isActiveBand3,
         widthBand3,
         
         totalNumParams

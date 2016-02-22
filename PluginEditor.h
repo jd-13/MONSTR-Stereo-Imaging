@@ -37,7 +37,8 @@
 */
 class MonstrAudioProcessorEditor  : public AudioProcessorEditor,
                                     public Timer,
-                                    public SliderListener
+                                    public SliderListener,
+                                    public ButtonListener
 {
 public:
     //==============================================================================
@@ -55,6 +56,7 @@ public:
     void paint (Graphics& g);
     void resized();
     void sliderValueChanged (Slider* sliderThatWasMoved);
+    void buttonClicked (Button* buttonThatWasClicked);
 
 
 
@@ -68,6 +70,9 @@ private:
     ScopedPointer<Slider> width3Sld;
     ScopedPointer<Slider> crossoverLowerSld;
     ScopedPointer<Slider> crossoverUpperSld;
+    ScopedPointer<ToggleButton> switchBand1Btn;
+    ScopedPointer<ToggleButton> switchBand2Btn;
+    ScopedPointer<ToggleButton> switchBand3Btn;
 
 
     //==============================================================================
