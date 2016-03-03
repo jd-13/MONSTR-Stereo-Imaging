@@ -75,7 +75,7 @@ void MONSTRBand::setWidth(float val) {
     width = boundsCheck<float>(val, WIDTH_MIN, WIDTH_MAX);
 }
 
-void MONSTRBand::setIsbypassed(bool val) {
+void MONSTRBand::setIsActive(bool val) {
     isBypassed = val;
 }
 
@@ -100,7 +100,7 @@ float MONSTRBand::getWidth() const {
     return width;
 }
 
-float MONSTRBand::getIsBypassed() const {
+float MONSTRBand::getIsActive() const {
     return isBypassed;
 }
 
