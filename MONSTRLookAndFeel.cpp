@@ -40,6 +40,26 @@ void MONSTRLookAndFeel::drawLinearSliderThumb(Graphics &g,
                                               const Slider::SliderStyle style,
                                               juce::Slider &slider) {
     
+    const float thumbRadius {static_cast<float>(getSliderThumbRadius(slider) - 2)};
+    
+    if (style == Slider::LinearHorizontal) {
+        Path p;
+        p.addEllipse(sliderPos - thumbRadius, y + height * 0.5f, thumbRadius * 2, thumbRadius * 2);
+        
+        g.setColour(darkGrey);
+        g.fillPath(p);
+        
+        p.clear();
+        p.addLineSegment(Line<float>(sliderPos, y, sliderPos, height), 2);
+        
+        g.strokePath(p, PathStrokeType(2.0f));
+    }
+    
+    // just for the testing GUI layout. This will become redundant later
+    else if (style == Slider::LinearVertical) {
+        LookAndFeel_V2::drawLinearSliderThumb(g, x, y, width, height, sliderPos, minSliderPos, maxSliderPos, style, slider);
+    }
+    
     
 }
 
