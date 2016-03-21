@@ -14,13 +14,19 @@
 #define _USE_MATH_DEFINES
 
 #include "../JuceLibraryCode/JuceHeader.h"
+#include "MONSTRCrossoverBackground.h"
 #include "math.h"
 
 class MONSTRLookAndFeel : public LookAndFeel_V2 {
 public:
     MONSTRLookAndFeel();
     
-/*    virtual void drawLinearSliderThumb(Graphics& g,
+    ~MONSTRLookAndFeel();
+    
+    // allow friend class access, mostly so it doesn't have to redefine colours
+    friend class MONSTRCrossoverBackground;
+    
+    virtual void drawLinearSliderThumb(Graphics& g,
                                        int x,
                                        int y,
                                        int width,
@@ -29,7 +35,7 @@ public:
                                        float minSliderPos,
                                        float maxSliderPos,
                                        const Slider::SliderStyle style,
-                                       Slider& slider) override;*/
+                                       Slider& slider) override;
     
     virtual void drawLinearSliderBackground(Graphics& g,
                                             int x,
@@ -45,13 +51,14 @@ public:
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MONSTRLookAndFeel);
     
-    Colour  lightGrey,
-            darkGrey,
-            red,
-            yellow,
-            green;
-    
-    inline double GuiSine(double x, double offset) const;
+    static const Colour lightGrey,
+                        darkGrey,
+                        red,
+                        yellow,
+                        green,
+                        redTrans,
+                        yellowTrans,
+                        greenTrans;
 };
 
 

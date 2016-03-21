@@ -18,6 +18,7 @@
 */
 
 //[Headers] You can add your own extra header files here...
+#include "MONSTRCrossoverBackground.h"
 //[/Headers]
 
 #include "PluginEditor.h"
@@ -114,9 +115,25 @@ void MonstrAudioProcessorEditor::paint (Graphics& g)
     //[UserPrePaint] Add your own custom painting code here..
     //[/UserPrePaint]
 
-    g.fillAll (Colours::white);
+    g.fillAll (Colours::black);
 
     //[UserPaint] Add your own custom painting code here..
+
+    // Define a rectangle for the sine wave to be drawn in
+    Rectangle<float> sineBackgroundBounds(crossoverLowerSld->getX(),
+                                          crossoverLowerSld->getY(),
+                                          crossoverUpperSld->getX() + crossoverUpperSld->getWidth() - crossoverLowerSld->getX(),
+                                          crossoverLowerSld->getHeight());
+
+    // Then draw the sine
+    MONSTRCrossoverBackground::drawAll(g,
+                                       sineBackgroundBounds,
+                                       TranslateParam_Norm2Inter(crossoverLowerSld->getValue(), CROSSOVERLOWER_MIN, CROSSOVERLOWER_MAX),
+                                       TranslateParam_Norm2Inter(crossoverUpperSld->getValue(), CROSSOVERUPPER_MIN, CROSSOVERUPPER_MAX),
+                                       width1Sld->getValue(),
+                                       width2Sld->getValue(),
+                                       width3Sld->getValue());
+
     //[/UserPaint]
 }
 
@@ -129,7 +146,7 @@ void MonstrAudioProcessorEditor::resized()
     width2Sld->setBounds (128, 280, 72, 264);
     width3Sld->setBounds (224, 280, 72, 264);
     crossoverLowerSld->setBounds (16, 8, 288, 200);
-    crossoverUpperSld->setBounds (296, 8, 288, 200);
+    crossoverUpperSld->setBounds (312, 8, 288, 200);
     switchBand1Btn->setBounds (48, 232, 64, 40);
     switchBand2Btn->setBounds (144, 232, 64, 40);
     switchBand3Btn->setBounds (240, 232, 64, 40);
@@ -209,6 +226,9 @@ void MonstrAudioProcessorEditor::buttonClicked (Button* buttonThatWasClicked)
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
 void MonstrAudioProcessorEditor::timerCallback() {
+
+
+
     MonstrAudioProcessor* ourProcessor = getProcessor();
 
     if (ourProcessor->NeedsUIUpdate()) {
@@ -259,7 +279,7 @@ BEGIN_JUCER_METADATA
           max="1" int="0" style="LinearHorizontal" textBoxPos="NoTextBox"
           textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
   <SLIDER name="Crossover Upper Slider" id="d5eaf01002d1395" memberName="crossoverUpperSld"
-          virtualName="" explicitFocusOrder="0" pos="296 8 288 200" min="0"
+          virtualName="" explicitFocusOrder="0" pos="312 8 288 200" min="0"
           max="1" int="0" style="LinearHorizontal" textBoxPos="NoTextBox"
           textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
   <TOGGLEBUTTON name="Switch Band 1 Button" id="2480ca9153c32a51" memberName="switchBand1Btn"
