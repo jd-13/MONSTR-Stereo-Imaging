@@ -1,39 +1,113 @@
 /*
   ==============================================================================
 
-    MONSTRCrossoverBackground.cpp
+    MONSTRCrossover.cpp
     Created: 6 Mar 2016 10:37:32am
     Author:  Jack Devlin
 
   ==============================================================================
 */
 
-#include "MONSTRCrossoverBackground.h"
+#include "MONSTRCrossover.h"
 
-MONSTRCrossoverBackground::MONSTRCrossoverBackground() {
+MONSTRCrossover::MONSTRCrossover() {
     
 }
 
-MONSTRCrossoverBackground::~MONSTRCrossoverBackground() {
+MONSTRCrossover::~MONSTRCrossover() {
     
 }
+
+void MONSTRCrossover::update(Graphics &g,
+                             const Rectangle<float>& bounds,
+                             float crossoverLowerHz,
+                             float crossoverUpperHz,
+                             Slider& width1Sld,
+                             Slider& width2Sld,
+                             Slider& width3Sld) {
+    
+    // calculate the raw logarithmic values
+    const int scaleCoefficient {100};
+    double crossoverLowerXPos {log2(crossoverLowerHz / scaleCoefficient) / log2(CROSSOVERLOWER_MAX / scaleCoefficient)};
+    double crossoverUpperXPos {log2(crossoverUpperHz / scaleCoefficient) / log2(CROSSOVERUPPER_MAX / scaleCoefficient)};
+
+    // normalise so that they correspond to actual coordinates
+    crossoverLowerXPos *= bounds.getWidth() * (log2(CROSSOVERLOWER_MAX / scaleCoefficient) / log2(20000));
+    crossoverUpperXPos *= bounds.getWidth() * (log2(CROSSOVERUPPER_MAX / scaleCoefficient) / log2(20000));
+    
+    
+    drawAll(g,
+            bounds,
+            crossoverLowerHz,
+            crossoverUpperHz,
+            crossoverLowerXPos,
+            crossoverUpperXPos,
+            width1Sld.getValue(),
+            width2Sld.getValue(),
+            width3Sld.getValue());
+    
+    resizeSliders(g,
+                  bounds,
+                  crossoverLowerXPos,
+                  crossoverUpperXPos,
+                  width1Sld,
+                  width2Sld,
+                  width3Sld);
+}
+
 
 // calls all of the private draw methods
-void MONSTRCrossoverBackground::drawAll(Graphics &g,
-                                        Rectangle<float> bounds,
-                                        float crossoverLowerHz,
-                                        float crossoverUpperHz,
-                                        float width1Value,
-                                        float width2Value,
-                                        float width3Value) {
+void MONSTRCrossover::drawAll(Graphics &g,
+                              Rectangle<float> bounds,
+                              float crossoverLowerHz,
+                              float crossoverUpperHz,
+                              float crossoverLowerXPos,
+                              float crossoverUpperXPos,
+                              float width1Value,
+                              float width2Value,
+                              float width3Value) {
+    
     drawNeutralLine(g, bounds);
-    drawWidthRectangle(g, bounds, crossoverLowerHz, crossoverUpperHz, width1Value, width2Value, width3Value);
+    drawWidthRectangle(g,
+                       bounds,
+                       crossoverLowerXPos,
+                       crossoverUpperXPos,
+                       width1Value,
+                       width2Value,
+                       width3Value);
     drawSine(g, bounds, crossoverLowerHz, crossoverUpperHz);
 
 }
 
+void MONSTRCrossover::resizeSliders(Graphics &g,
+                                    const Rectangle<float>& bounds,
+                                    float crossoverLowerXPos,
+                                    float crossoverUpperXPos,
+                                    Slider& width1Sld,
+                                    Slider& width2Sld,
+                                    Slider& width3Sld) {
+    // a margin to be applied where the edges of the vertical sliders meet the thumbs
+    // of the horizontal sliders to prevent overlap
+    const int margin {10};
+    
+    width1Sld.setBounds(bounds.getX(),
+                        bounds.getY(),
+                        crossoverLowerXPos - margin,
+                        bounds.getHeight());
+    
+    width2Sld.setBounds(bounds.getX() + crossoverLowerXPos + margin,
+                        bounds.getY(),
+                        crossoverUpperXPos - crossoverLowerXPos - margin,
+                        bounds.getHeight());
+    
+    width3Sld.setBounds(bounds.getX() + crossoverUpperXPos + margin,
+                        bounds.getY(),
+                        bounds.getWidth() - crossoverUpperXPos,
+                        bounds.getHeight());
+}
+
 // draws the sine wave behind each band
-void MONSTRCrossoverBackground::drawSine(Graphics &g,
+void MONSTRCrossover::drawSine(Graphics &g,
                                          Rectangle<float> bounds,
                                          float crossoverLowerHz,
                                          float crossoverUpperHz) {
@@ -96,16 +170,14 @@ void MONSTRCrossoverBackground::drawSine(Graphics &g,
 }
 
 // draws the rectangles showing the width of each band
-void MONSTRCrossoverBackground::drawWidthRectangle(Graphics &g,
+void MONSTRCrossover::drawWidthRectangle(Graphics &g,
                                                    Rectangle<float> bounds,
-                                                   float crossoverLowerHz,
-                                                   float crossoverUpperHz,
+                                                   float crossoverLowerXPos,
+                                                   float crossoverUpperXPos,
                                                    float width1Value,
                                                    float width2Value,
                                                    float width3Value) {
     const float range {0.25};
-    const float crossoverLowerXPos {bounds.getWidth() * (crossoverLowerHz / 20000)};
-    const float crossoverUpperXPos {bounds.getWidth() * (crossoverUpperHz / 20000)};
     
     if (width1Value > 0.5) {
         g.setColour(MONSTRLookAndFeel::redTrans);
@@ -200,7 +272,7 @@ void MONSTRCrossoverBackground::drawWidthRectangle(Graphics &g,
 }
 
 // draws the lines representing neutral width
-void MONSTRCrossoverBackground::drawNeutralLine(Graphics &g,
+void MONSTRCrossover::drawNeutralLine(Graphics &g,
                                                 Rectangle<float> bounds) {
     
     Path p;

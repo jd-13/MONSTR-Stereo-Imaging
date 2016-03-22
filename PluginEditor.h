@@ -64,17 +64,18 @@ public:
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
     MONSTRLookAndFeel customLookAndFeel;
+    Rectangle<float> crossoverBounds;
     //[/UserVariables]
 
     //==============================================================================
-    ScopedPointer<Slider> width1Sld;
-    ScopedPointer<Slider> width2Sld;
-    ScopedPointer<Slider> width3Sld;
     ScopedPointer<Slider> crossoverLowerSld;
     ScopedPointer<Slider> crossoverUpperSld;
     ScopedPointer<ToggleButton> switchBand1Btn;
     ScopedPointer<ToggleButton> switchBand2Btn;
     ScopedPointer<ToggleButton> switchBand3Btn;
+    ScopedPointer<Slider> width1Sld;
+    ScopedPointer<Slider> width2Sld;
+    ScopedPointer<Slider> width3Sld;
 
 
     //==============================================================================

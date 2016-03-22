@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 
-    MONSTRCrossoverBackground.h
+    MONSTRCrossover.h
     Created: 6 Mar 2016 10:37:32am
     Author:  Jack Devlin
 
@@ -15,23 +15,42 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "MONSTRLookAndFeel.h"
+#include "ParameterData.h"
 #include "math.h"
 
-class MONSTRCrossoverBackground {
+class MONSTRCrossover {
 public:
     
-    MONSTRCrossoverBackground();
-    ~MONSTRCrossoverBackground();
+    MONSTRCrossover();
+    ~MONSTRCrossover();
     
+    static void update(Graphics& g,
+                       const Rectangle<float>& bounds,
+                       float crossoverLowerHz,
+                       float crossoverUpperHz,
+                       Slider& width1Sld,
+                       Slider& width2Sld,
+                       Slider& width3Sld);
+    
+private:
     static void drawAll(Graphics& g,
                         Rectangle<float> bounds,
                         float crossoverLowerHz,
                         float crossoverUpperHz,
+                        float crossoverLowerXPos,
+                        float crossoverUpperXPos,
                         float width1Value,
                         float width2Value,
                         float width3Value);
     
-private:
+    static void resizeSliders(Graphics& g,
+                              const Rectangle<float>& bounds,
+                              float crossoverLowerXPos,
+                              float crossoverUpperXPos,
+                              Slider& width1Sld,
+                              Slider& width2Sld,
+                              Slider& width3Sld);
+    
     static void drawSine(   Graphics& g,
                             Rectangle<float> bounds,
                             float crossoverLowerHz,
@@ -39,8 +58,8 @@ private:
     
     static void drawWidthRectangle( Graphics& g,
                                     Rectangle<float> bounds,
-                                    float crossoverLowerHz,
-                                    float crossoverUpperHz,
+                                    float crossoverLowerXPos,
+                                    float crossoverUpperXPos,
                                     float width1Value,
                                     float width2Value,
                                     float width3Value);

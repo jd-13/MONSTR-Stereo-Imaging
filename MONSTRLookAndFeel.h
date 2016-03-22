@@ -14,7 +14,7 @@
 #define _USE_MATH_DEFINES
 
 #include "../JuceLibraryCode/JuceHeader.h"
-#include "MONSTRCrossoverBackground.h"
+#include "MONSTRCrossover.h"
 #include "math.h"
 
 class MONSTRLookAndFeel : public LookAndFeel_V2 {
@@ -24,7 +24,7 @@ public:
     ~MONSTRLookAndFeel();
     
     // allow friend class access, mostly so it doesn't have to redefine colours
-    friend class MONSTRCrossoverBackground;
+    friend class MONSTRCrossover;
     
     virtual void drawLinearSliderThumb(Graphics& g,
                                        int x,
