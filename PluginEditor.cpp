@@ -39,12 +39,14 @@ MonstrAudioProcessorEditor::MonstrAudioProcessorEditor (MonstrAudioProcessor& ow
     crossoverLowerSld->setSliderStyle (Slider::LinearHorizontal);
     crossoverLowerSld->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     crossoverLowerSld->addListener (this);
+    crossoverLowerSld->setSkewFactor (0.3);
 
     addAndMakeVisible (crossoverUpperSld = new Slider ("Crossover Upper Slider"));
     crossoverUpperSld->setRange (0, 1, 0);
     crossoverUpperSld->setSliderStyle (Slider::LinearHorizontal);
     crossoverUpperSld->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     crossoverUpperSld->addListener (this);
+    crossoverUpperSld->setSkewFactor (0.6);
 
     addAndMakeVisible (switchBand1Btn = new ToggleButton ("Switch Band 1 Button"));
     switchBand1Btn->setButtonText (TRANS("new toggle button"));
@@ -129,8 +131,8 @@ void MonstrAudioProcessorEditor::paint (Graphics& g)
     // Then draw the sine
     MONSTRCrossover::update(g,
                             crossoverBounds,
-                            TranslateParam_Norm2Inter(crossoverLowerSld->getValue(), CROSSOVERLOWER_MIN, CROSSOVERLOWER_MAX),
-                            TranslateParam_Norm2Inter(crossoverUpperSld->getValue(), CROSSOVERUPPER_MIN, CROSSOVERUPPER_MAX),
+                            *crossoverLowerSld,
+                            *crossoverUpperSld,
                             *width1Sld,
                             *width2Sld,
                             *width3Sld);
@@ -264,11 +266,11 @@ BEGIN_JUCER_METADATA
   <SLIDER name="Crossover Lower Slider" id="e131cd39bf883688" memberName="crossoverLowerSld"
           virtualName="" explicitFocusOrder="0" pos="16 8 288 200" min="0"
           max="1" int="0" style="LinearHorizontal" textBoxPos="NoTextBox"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
+          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="0.2999999999999999889"/>
   <SLIDER name="Crossover Upper Slider" id="d5eaf01002d1395" memberName="crossoverUpperSld"
           virtualName="" explicitFocusOrder="0" pos="312 8 288 200" min="0"
           max="1" int="0" style="LinearHorizontal" textBoxPos="NoTextBox"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
+          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="0.5999999999999999778"/>
   <TOGGLEBUTTON name="Switch Band 1 Button" id="2480ca9153c32a51" memberName="switchBand1Btn"
                 virtualName="" explicitFocusOrder="0" pos="48 232 64 40" buttonText="new toggle button"
                 connectedEdges="0" needsCallback="1" radioGroupId="0" state="0"/>

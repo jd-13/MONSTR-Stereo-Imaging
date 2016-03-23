@@ -18,23 +18,27 @@ MONSTRCrossover::~MONSTRCrossover() {
     
 }
 
+bool MONSTRCrossover::needsSetup {true};
+
 void MONSTRCrossover::update(Graphics &g,
                              const Rectangle<float>& bounds,
-                             float crossoverLowerHz,
-                             float crossoverUpperHz,
+                             Slider& crossoverLowerSld,
+                             Slider& crossoverUpperSld,
                              Slider& width1Sld,
                              Slider& width2Sld,
                              Slider& width3Sld) {
     
+    // calculate the crossover values in Hz from the sliders
+    const double crossoverLowerHz {TranslateParam_Norm2Inter(crossoverLowerSld.getValue(), CROSSOVERLOWER_MIN, CROSSOVERLOWER_MAX)};
+    const double crossoverUpperHz {TranslateParam_Norm2Inter(crossoverUpperSld.getValue(), CROSSOVERUPPER_MIN, CROSSOVERUPPER_MAX)};
+    
     // calculate the raw logarithmic values
-    const int scaleCoefficient {100};
-    double crossoverLowerXPos {log2(crossoverLowerHz / scaleCoefficient) / log2(CROSSOVERLOWER_MAX / scaleCoefficient)};
-    double crossoverUpperXPos {log2(crossoverUpperHz / scaleCoefficient) / log2(CROSSOVERUPPER_MAX / scaleCoefficient)};
+    double crossoverLowerXPos {log2((crossoverLowerHz + scaleCoefficient) / scaleCoefficient) / log2((CROSSOVERLOWER_MAX + scaleCoefficient) / scaleCoefficient)};
+    double crossoverUpperXPos {log2((crossoverUpperHz + scaleCoefficient) / scaleCoefficient) / log2((CROSSOVERUPPER_MAX + scaleCoefficient) / scaleCoefficient)};
 
     // normalise so that they correspond to actual coordinates
-    crossoverLowerXPos *= bounds.getWidth() * (log2(CROSSOVERLOWER_MAX / scaleCoefficient) / log2(20000));
-    crossoverUpperXPos *= bounds.getWidth() * (log2(CROSSOVERUPPER_MAX / scaleCoefficient) / log2(20000));
-    
+    crossoverLowerXPos *= bounds.getWidth() * (log2((CROSSOVERLOWER_MAX + scaleCoefficient) / scaleCoefficient) / log2(20000));
+    crossoverUpperXPos *= bounds.getWidth() * (log2((CROSSOVERUPPER_MAX + scaleCoefficient) / scaleCoefficient) / log2(20000));
     
     drawAll(g,
             bounds,
@@ -53,6 +57,13 @@ void MONSTRCrossover::update(Graphics &g,
                   width1Sld,
                   width2Sld,
                   width3Sld);
+    
+    // if update has not been called yet, perform any necessary setup
+    if (needsSetup) {
+        needsSetup = false;
+        
+        positionHorizontalSliders(bounds, crossoverLowerSld, crossoverUpperSld);
+    }
 }
 
 
@@ -290,6 +301,26 @@ void MONSTRCrossover::drawNeutralLine(Graphics &g,
     
     g.setColour(MONSTRLookAndFeel::lightGrey);
     g.strokePath(p, PathStrokeType(0.5f));
+}
+
+
+// calculates the positions of the horizontal crossover sliders
+void MONSTRCrossover::positionHorizontalSliders(const Rectangle<float> &bounds,
+                                                juce::Slider &crossoverLowerSld,
+                                                juce::Slider &crossoverUpperSld) {
+    // calculate the positions of the vertical edges of the sliders on the logarithmic scale
+    const double crossoverLowerLogMax {bounds.getWidth() * (log2((CROSSOVERLOWER_MAX + scaleCoefficient) / scaleCoefficient) / log2(20000))};
+    const double crossoverUpperLogMin {bounds.getWidth() * (log2((CROSSOVERUPPER_MIN + scaleCoefficient) / scaleCoefficient) / log2(20000))};
+    const double crossoverUpperLogMax {bounds.getWidth() * (log2((CROSSOVERUPPER_MAX + scaleCoefficient) / scaleCoefficient) / log2(20000))};
     
     
+    crossoverLowerSld.setBounds(bounds.getX(),
+                                bounds.getY(),
+                                crossoverLowerLogMax,
+                                bounds.getHeight());
+    
+    crossoverUpperSld.setBounds(bounds.getX() + crossoverUpperLogMin,
+                                bounds.getY(),
+                                bounds.getWidth() - crossoverUpperLogMax,
+                                bounds.getHeight());
 }
