@@ -39,14 +39,14 @@ MonstrAudioProcessorEditor::MonstrAudioProcessorEditor (MonstrAudioProcessor& ow
     crossoverLowerSld->setSliderStyle (Slider::LinearHorizontal);
     crossoverLowerSld->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     crossoverLowerSld->addListener (this);
-    crossoverLowerSld->setSkewFactor (0.3);
+    crossoverLowerSld->setSkewFactor (0.4);
 
     addAndMakeVisible (crossoverUpperSld = new Slider ("Crossover Upper Slider"));
     crossoverUpperSld->setRange (0, 1, 0);
     crossoverUpperSld->setSliderStyle (Slider::LinearHorizontal);
     crossoverUpperSld->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     crossoverUpperSld->addListener (this);
-    crossoverUpperSld->setSkewFactor (0.6);
+    crossoverUpperSld->setSkewFactor (0.7);
 
     addAndMakeVisible (switchBand1Btn = new ToggleButton ("Switch Band 1 Button"));
     switchBand1Btn->setButtonText (TRANS("new toggle button"));
@@ -82,13 +82,17 @@ MonstrAudioProcessorEditor::MonstrAudioProcessorEditor (MonstrAudioProcessor& ow
     //[UserPreSize]
     //[/UserPreSize]
 
-    setSize (600, 600);
+    setSize (600, 400);
 
 
     //[Constructor] You can add your own custom stuff here..
     startTimer(200);
 
     LookAndFeel::setDefaultLookAndFeel(&customLookAndFeel);
+    
+    width1Sld->setSliderSnapsToMousePosition(false);
+    width2Sld->setSliderSnapsToMousePosition(false);
+    width3Sld->setSliderSnapsToMousePosition(false);
 
     // Define a rectangle for the sine wave to be drawn in
     crossoverBounds = Rectangle<float>(crossoverLowerSld->getX(),
@@ -150,9 +154,9 @@ void MonstrAudioProcessorEditor::resized()
     switchBand1Btn->setBounds (48, 232, 64, 40);
     switchBand2Btn->setBounds (144, 232, 64, 40);
     switchBand3Btn->setBounds (240, 232, 64, 40);
-    width1Sld->setBounds (24, 280, 72, 264);
-    width2Sld->setBounds (128, 280, 72, 264);
-    width3Sld->setBounds (232, 288, 72, 256);
+    width1Sld->setBounds (64, 8, 72, 192);
+    width2Sld->setBounds (232, 16, 72, 184);
+    width3Sld->setBounds (432, 8, 72, 208);
     //[UserResized] Add your own custom resize handling here..
     //[/UserResized]
 }
@@ -261,16 +265,16 @@ BEGIN_JUCER_METADATA
                  componentName="" parentClasses="public AudioProcessorEditor, public Timer"
                  constructorParams="MonstrAudioProcessor&amp; ownerFilter" variableInitialisers="AudioProcessorEditor(ownerFilter)"
                  snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330"
-                 fixedSize="1" initialWidth="600" initialHeight="600">
+                 fixedSize="1" initialWidth="600" initialHeight="400">
   <BACKGROUND backgroundColour="ffffffff"/>
   <SLIDER name="Crossover Lower Slider" id="e131cd39bf883688" memberName="crossoverLowerSld"
           virtualName="" explicitFocusOrder="0" pos="16 8 288 200" min="0"
           max="1" int="0" style="LinearHorizontal" textBoxPos="NoTextBox"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="0.2999999999999999889"/>
+          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="0.4000000000000000222"/>
   <SLIDER name="Crossover Upper Slider" id="d5eaf01002d1395" memberName="crossoverUpperSld"
           virtualName="" explicitFocusOrder="0" pos="312 8 288 200" min="0"
           max="1" int="0" style="LinearHorizontal" textBoxPos="NoTextBox"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="0.5999999999999999778"/>
+          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="0.69999999999999995559"/>
   <TOGGLEBUTTON name="Switch Band 1 Button" id="2480ca9153c32a51" memberName="switchBand1Btn"
                 virtualName="" explicitFocusOrder="0" pos="48 232 64 40" buttonText="new toggle button"
                 connectedEdges="0" needsCallback="1" radioGroupId="0" state="0"/>
@@ -281,17 +285,17 @@ BEGIN_JUCER_METADATA
                 virtualName="" explicitFocusOrder="0" pos="240 232 64 40" buttonText="new toggle button"
                 connectedEdges="0" needsCallback="1" radioGroupId="0" state="0"/>
   <SLIDER name="Band 1 Width Slider" id="a19cf5783381f0f4" memberName="width1Sld"
-          virtualName="" explicitFocusOrder="0" pos="24 280 72 264" min="0"
+          virtualName="" explicitFocusOrder="0" pos="64 8 72 192" min="0"
           max="1" int="0.010000000000000000208" style="LinearVertical"
           textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
           textBoxHeight="20" skewFactor="1"/>
   <SLIDER name="Band 2 Width Slider" id="4c81fe5c3b84dad" memberName="width2Sld"
-          virtualName="" explicitFocusOrder="0" pos="128 280 72 264" min="0"
+          virtualName="" explicitFocusOrder="0" pos="232 16 72 184" min="0"
           max="1" int="0.010000000000000000208" style="LinearVertical"
           textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
           textBoxHeight="20" skewFactor="1"/>
   <SLIDER name="Band 3 Width Slider" id="f1626a0c5e7a4180" memberName="width3Sld"
-          virtualName="" explicitFocusOrder="0" pos="232 288 72 256" min="0"
+          virtualName="" explicitFocusOrder="0" pos="432 8 72 208" min="0"
           max="1" int="0.010000000000000000208" style="LinearVertical"
           textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
           textBoxHeight="20" skewFactor="1"/>
