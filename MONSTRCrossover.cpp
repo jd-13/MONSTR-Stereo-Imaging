@@ -42,8 +42,6 @@ void MONSTRCrossover::update(Graphics &g,
     
     drawAll(g,
             bounds,
-            crossoverLowerHz,
-            crossoverUpperHz,
             crossoverLowerXPos,
             crossoverUpperXPos,
             width1Sld.getValue(),
@@ -70,13 +68,13 @@ void MONSTRCrossover::update(Graphics &g,
 // calls all of the private draw methods
 void MONSTRCrossover::drawAll(Graphics &g,
                               Rectangle<float> bounds,
-                              float crossoverLowerHz,
-                              float crossoverUpperHz,
                               float crossoverLowerXPos,
                               float crossoverUpperXPos,
                               float width1Value,
                               float width2Value,
                               float width3Value) {
+    
+
     
     drawNeutralLine(g, bounds);
     drawWidthRectangle(g,
@@ -86,7 +84,7 @@ void MONSTRCrossover::drawAll(Graphics &g,
                        width1Value,
                        width2Value,
                        width3Value);
-    drawSine(g, bounds, crossoverLowerHz, crossoverUpperHz);
+    drawSine(g, bounds, crossoverLowerXPos, crossoverUpperXPos);
 
 }
 
@@ -100,6 +98,8 @@ void MONSTRCrossover::resizeSliders(Graphics &g,
     // a margin to be applied where the edges of the vertical sliders meet the thumbs
     // of the horizontal sliders to prevent overlap
     const int margin {10};
+    
+
     
     width1Sld.setBounds(bounds.getX(),
                         bounds.getY(),
@@ -120,8 +120,8 @@ void MONSTRCrossover::resizeSliders(Graphics &g,
 // draws the sine wave behind each band
 void MONSTRCrossover::drawSine(Graphics &g,
                                          Rectangle<float> bounds,
-                                         float crossoverLowerHz,
-                                         float crossoverUpperHz) {
+                                         float crossoverLowerXPos,
+                                         float crossoverUpperXPos) {
     
     const int totalPoints {2000}; // sets the resolution of the path
 
@@ -133,7 +133,7 @@ void MONSTRCrossover::drawSine(Graphics &g,
     // the second half
     
     // start from 1 since the first point is already drawn (above)
-    const int pointsToLowerSliderPos {static_cast<int>(totalPoints * static_cast<float>(crossoverLowerHz / 20000))};
+    const int pointsToLowerSliderPos {static_cast<int>(totalPoints * static_cast<float>(crossoverLowerXPos / bounds.getWidth()))};
     double absXPos {0};
     for (int iii {1}; iii < pointsToLowerSliderPos; iii++) {
         absXPos = {(1.0 / totalPoints) * iii};
@@ -150,7 +150,7 @@ void MONSTRCrossover::drawSine(Graphics &g,
     p.clear();
     absXPos = (1.0 / totalPoints) * pointsToLowerSliderPos;
     p.startNewSubPath(bounds.getX() + absXPos * bounds.getWidth(), bounds.getY() + SineFunc(absXPos) * bounds.getHeight());
-    const int pointsToUpperSliderPos {static_cast<int>(totalPoints * static_cast<float>(crossoverUpperHz / 20000))};
+    const int pointsToUpperSliderPos {static_cast<int>(totalPoints * static_cast<float>(crossoverUpperXPos / bounds.getWidth()))};
     for (int iii {pointsToLowerSliderPos + 1}; iii < pointsToUpperSliderPos; iii++) {
         absXPos = (1.0 / totalPoints) * iii;
         
@@ -309,14 +309,15 @@ void MONSTRCrossover::positionHorizontalSliders(const Rectangle<float> &bounds,
                                                 juce::Slider &crossoverLowerSld,
                                                 juce::Slider &crossoverUpperSld) {
     // calculate the positions of the vertical edges of the sliders on the logarithmic scale
+    const double crossoverLowerLogMin {bounds.getWidth() * (log2((CROSSOVERLOWER_MIN + scaleCoefficient) / scaleCoefficient) / log2(20000))};
     const double crossoverLowerLogMax {bounds.getWidth() * (log2((CROSSOVERLOWER_MAX + scaleCoefficient) / scaleCoefficient) / log2(20000))};
     const double crossoverUpperLogMin {bounds.getWidth() * (log2((CROSSOVERUPPER_MIN + scaleCoefficient) / scaleCoefficient) / log2(20000))};
     const double crossoverUpperLogMax {bounds.getWidth() * (log2((CROSSOVERUPPER_MAX + scaleCoefficient) / scaleCoefficient) / log2(20000))};
     
     
-    crossoverLowerSld.setBounds(bounds.getX(),
+    crossoverLowerSld.setBounds(bounds.getX() + crossoverLowerLogMin,
                                 bounds.getY(),
-                                crossoverLowerLogMax,
+                                crossoverLowerLogMax - crossoverLowerLogMin,
                                 bounds.getHeight());
     
     crossoverUpperSld.setBounds(bounds.getX() + crossoverUpperLogMin,

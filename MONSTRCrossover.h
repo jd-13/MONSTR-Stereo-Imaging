@@ -35,8 +35,6 @@ public:
 private:
     static void drawAll(Graphics& g,
                         Rectangle<float> bounds,
-                        float crossoverLowerHz,
-                        float crossoverUpperHz,
                         float crossoverLowerXPos,
                         float crossoverUpperXPos,
                         float width1Value,
