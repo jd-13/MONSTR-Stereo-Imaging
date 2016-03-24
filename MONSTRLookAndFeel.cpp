@@ -54,13 +54,6 @@ void MONSTRLookAndFeel::drawLinearSliderThumb(Graphics &g,
         
         g.strokePath(p, PathStrokeType(2.0f));
     }
-    
-    // just for the testing GUI layout. This will become redundant later
-    else if (style == Slider::LinearVertical) {
-        LookAndFeel_V2::drawLinearSliderThumb(g, x, y, width, height, sliderPos, minSliderPos, maxSliderPos, style, slider);
-    }
-    
-    
 }
 
 void MONSTRLookAndFeel::drawLinearSliderBackground(Graphics &g,
