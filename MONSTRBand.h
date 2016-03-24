@@ -54,7 +54,7 @@ public:
     void process2in2out(float* inLeftSamples, float* inRightSamples, int numSamples);
     
 private:
-    bool    isBypassed,
+    bool    isActive,
             isLower,
             isUpper;
     

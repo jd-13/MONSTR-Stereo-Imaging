@@ -25,7 +25,7 @@
 #include "MONSTRBand.h"
 
 MONSTRBand::MONSTRBand(bool newIsLower, bool newIsUpper) :
-                            isBypassed(BANDSWITCH_DEFAULT),
+                            isActive(BANDSWITCH_DEFAULT),
                             width(WIDTH_DEFAULT),
                             lowCutoff(CROSSOVERLOWER_DEFAULT),
                             highCutoff(CROSSOVERUPPER_DEFAULT),
@@ -76,7 +76,7 @@ void MONSTRBand::setWidth(float val) {
 }
 
 void MONSTRBand::setIsActive(bool val) {
-    isBypassed = val;
+    isActive = val;
 }
 
 void MONSTRBand::setSampleRate(double newSampleRate) {
@@ -101,7 +101,7 @@ float MONSTRBand::getWidth() const {
 }
 
 float MONSTRBand::getIsActive() const {
-    return isBypassed;
+    return isActive;
 }
 
 void MONSTRBand::makeBandLower() {
@@ -144,8 +144,6 @@ void MONSTRBand::process2in2out(float* inLeftSamples, float* inRightSamples, int
         highCutLeft.processSamples(inLeftSamples, numSamples);
         highCutRight.processSamples(inRightSamples, numSamples);
     }
-    
-
 }
 
 
