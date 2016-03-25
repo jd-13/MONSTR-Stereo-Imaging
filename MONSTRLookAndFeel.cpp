@@ -10,7 +10,8 @@
 
 #include "MONSTRLookAndFeel.h"
 
-// Initialise static const members
+// Initialise static members
+int MONSTRLookAndFeel::sliderThumbRadius {0};
 const Colour MONSTRLookAndFeel::lightGrey(200, 200, 200);
 const Colour MONSTRLookAndFeel::darkGrey(107, 107, 107);
 const Colour MONSTRLookAndFeel::red(250, 0, 0);
@@ -40,11 +41,12 @@ void MONSTRLookAndFeel::drawLinearSliderThumb(Graphics &g,
                                               const Slider::SliderStyle style,
                                               juce::Slider &slider) {
     
-    const float thumbRadius {static_cast<float>(getSliderThumbRadius(slider) - 2)};
-    
     if (style == Slider::LinearHorizontal) {
         Path p;
-        p.addEllipse(sliderPos - thumbRadius, y + height * 0.5f, thumbRadius * 2, thumbRadius * 2);
+        p.addEllipse(sliderPos - sliderThumbRadius,
+                     y + height * 0.5f - sliderThumbRadius,
+                     sliderThumbRadius * 2,
+                     sliderThumbRadius * 2);
         
         g.setColour(darkGrey);
         g.fillPath(p);
@@ -67,6 +69,10 @@ void MONSTRLookAndFeel::drawLinearSliderBackground(Graphics &g,
                                                    const Slider::SliderStyle style,
                                                    Slider& slider) {
     // do nothing
+}
+
+void MONSTRLookAndFeel::setSliderThumbRadius(Slider& sld) {
+    sliderThumbRadius = getSliderThumbRadius(sld) - 2;
 }
 
 

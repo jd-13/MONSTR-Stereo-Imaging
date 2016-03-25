@@ -41,13 +41,13 @@ private:
                         float width2Value,
                         float width3Value);
     
-    static void resizeSliders(Graphics& g,
-                              const Rectangle<float>& bounds,
-                              float crossoverLowerXPos,
-                              float crossoverUpperXPos,
-                              Slider& width1Sld,
-                              Slider& width2Sld,
-                              Slider& width3Sld);
+    static void resizeWidthSliders(Graphics& g,
+                                   const Rectangle<float>& bounds,
+                                   float crossoverLowerXPos,
+                                   float crossoverUpperXPos,
+                                   Slider& width1Sld,
+                                   Slider& width2Sld,
+                                   Slider& width3Sld);
     
     static void drawSine(   Graphics& g,
                             Rectangle<float> bounds,

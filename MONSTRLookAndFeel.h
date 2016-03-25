@@ -48,6 +48,8 @@ public:
                                             const Slider::SliderStyle style,
                                             Slider& slider) override;
     
+    void setSliderThumbRadius(Slider& sld);
+    
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MONSTRLookAndFeel);
     
@@ -59,6 +61,8 @@ private:
                         redTrans,
                         yellowTrans,
                         greenTrans;
+    
+    static int sliderThumbRadius;
 };
 
 
