@@ -35,7 +35,7 @@ void MONSTRCrossover::update(Graphics &g,
     // calculate the raw logarithmic values
     double crossoverLowerXPos {log2((crossoverLowerHz + scaleCoefficient) / scaleCoefficient) / log2((CROSSOVERLOWER_MAX + scaleCoefficient) / scaleCoefficient)};
     double crossoverUpperXPos {log2((crossoverUpperHz + scaleCoefficient) / scaleCoefficient) / log2((CROSSOVERUPPER_MAX + scaleCoefficient) / scaleCoefficient)};
-
+    
     // normalise so that they correspond to actual coordinates
     crossoverLowerXPos *= bounds.getWidth() * (log2((CROSSOVERLOWER_MAX + scaleCoefficient) / scaleCoefficient) / log2(20000));
     crossoverUpperXPos *= bounds.getWidth() * (log2((CROSSOVERUPPER_MAX + scaleCoefficient) / scaleCoefficient) / log2(20000));
@@ -74,18 +74,17 @@ void MONSTRCrossover::drawAll(Graphics &g,
                               float width2Value,
                               float width3Value) {
     
-
-    
     drawNeutralLine(g, bounds);
-    drawWidthRectangle(g,
-                       bounds,
-                       crossoverLowerXPos,
-                       crossoverUpperXPos,
-                       width1Value,
-                       width2Value,
-                       width3Value);
+    
+    drawWidthRectangles(g,
+                        bounds,
+                        crossoverLowerXPos,
+                        crossoverUpperXPos,
+                        width1Value,
+                        width2Value,
+                        width3Value);
+    
     drawSine(g, bounds, crossoverLowerXPos, crossoverUpperXPos);
-
 }
 
 void MONSTRCrossover::resizeWidthSliders(Graphics &g,
@@ -123,6 +122,11 @@ void MONSTRCrossover::drawSine(Graphics &g,
                                          float crossoverLowerXPos,
                                          float crossoverUpperXPos) {
     
+    // define the lambda for the sine function
+    auto SineFunc {[](double x) -> double {
+        return sin(pow(M_E, 1.5 * x + 1.83)) / 2 + 0.5;
+    }};
+    
     const int totalPoints {2000}; // sets the resolution of the path
 
     Path p;
@@ -131,58 +135,63 @@ void MONSTRCrossover::drawSine(Graphics &g,
     // move from left to right calculating the sine wave to draw
     // calculate the half left of the thumb, then change colour and calculate
     // the second half
+
     
     // start from 1 since the first point is already drawn (above)
     const int pointsToLowerSliderPos {static_cast<int>(totalPoints * static_cast<float>(crossoverLowerXPos / bounds.getWidth()))};
     double absXPos {0};
-    for (int iii {1}; iii < pointsToLowerSliderPos; iii++) {
-        absXPos = {(1.0 / totalPoints) * iii};
+    
+    
+    // define the lambda used in for loops to draw the sine
+    auto sineLoop {[totalPoints, &absXPos, &p, &bounds, SineFunc](int index) -> void {
+        absXPos = {(1.0 / totalPoints) * index};
         
         double absAmplitude {SineFunc(absXPos)};
         
         p.lineTo(bounds.getX() + absXPos * bounds.getWidth(), bounds.getY() + absAmplitude * bounds.getHeight());
+    }};
+    
+    
+    for (int iii {1}; iii < pointsToLowerSliderPos; iii++) {
+        sineLoop(iii);
     }
     
     g.setColour(MONSTRLookAndFeel::red);
     g.strokePath(p, PathStrokeType(2.0f));
+    
     
     // start second band
     p.clear();
     absXPos = (1.0 / totalPoints) * pointsToLowerSliderPos;
     p.startNewSubPath(bounds.getX() + absXPos * bounds.getWidth(), bounds.getY() + SineFunc(absXPos) * bounds.getHeight());
     const int pointsToUpperSliderPos {static_cast<int>(totalPoints * static_cast<float>(crossoverUpperXPos / bounds.getWidth()))};
+    
     for (int iii {pointsToLowerSliderPos + 1}; iii < pointsToUpperSliderPos; iii++) {
-        absXPos = (1.0 / totalPoints) * iii;
-        
-        double absAmplitude {SineFunc(absXPos)};
-        
-        p.lineTo(bounds.getX() + absXPos * bounds.getWidth(), bounds.getY() + absAmplitude * bounds.getHeight());
+        sineLoop(iii);
     }
     
     g.setColour(MONSTRLookAndFeel::yellow);
     g.strokePath(p, PathStrokeType(2.0f));
     
+    
     // start final band
     p.clear();
     absXPos = (1.0 / totalPoints) * pointsToUpperSliderPos;
     p.startNewSubPath(bounds.getX() + absXPos * bounds.getWidth(), bounds.getY() + SineFunc(absXPos) * bounds.getHeight());
+    
     for (int iii {pointsToUpperSliderPos + 1}; iii < totalPoints; iii++) {
-        absXPos = (1.0 / totalPoints) * iii;
-        
-        double absAmplitude {SineFunc(absXPos)};
-        
-        p.lineTo(bounds.getX() + absXPos * bounds.getWidth(), bounds.getY() + absAmplitude * bounds.getHeight());
+        sineLoop(iii);
     }
     
     g.setColour(MONSTRLookAndFeel::green);
     g.strokePath(p, PathStrokeType(2.0f));
     
-    
+
 }
 
 // draws the rectangles showing the width of each band
-void MONSTRCrossover::drawWidthRectangle(Graphics &g,
-                                                   Rectangle<float> bounds,
+void MONSTRCrossover::drawWidthRectangles(Graphics &g,
+                                                   const Rectangle<float>& bounds,
                                                    float crossoverLowerXPos,
                                                    float crossoverUpperXPos,
                                                    float width1Value,
@@ -190,96 +199,57 @@ void MONSTRCrossover::drawWidthRectangle(Graphics &g,
                                                    float width3Value) {
     const float range {0.25};
     
-    if (width1Value > 0.5) {
-        g.setColour(MONSTRLookAndFeel::redTrans);
+    // lambda to draw the width rectangles for each band
+    auto drawWidth {[&g, &bounds, &range](const Colour& colour,
+                                          float widthValue,
+                                          float x,
+                                          float bandWidth) -> void {
         
-        /* left edge
-         * top edge
-         * width
-         * height
-         */
-        
-        g.fillRect(bounds.getX(),
-                   bounds.getY() + bounds.getHeight() * neutralPos - bounds.getHeight() * range * (width1Value - 0.5),
-                   crossoverLowerXPos,
-                   (bounds.getY() + bounds.getHeight() * neutralPos) - (bounds.getY() + bounds.getHeight() * neutralPos - bounds.getHeight() * range * (width1Value - 0.5)));
-        
-        g.fillRect(bounds.getX(),
-                   bounds.getY() + bounds.getHeight() * (1 - neutralPos),
-                   crossoverLowerXPos,
-                   bounds.getHeight() * range * (width1Value - 0.5));
-        
-        
-    } else {
-        g.setColour(MONSTRLookAndFeel::redTrans);
-        
-        g.fillRect(bounds.getX(),
-                   bounds.getY() + bounds.getHeight() * neutralPos,
-                   crossoverLowerXPos,
-                   bounds.getHeight() * range * (0.5 - width1Value));
-        
-        g.fillRect(bounds.getX(),
-                   bounds.getY() + bounds.getHeight() * (1 - neutralPos) - bounds.getHeight() * range * (0.5 - width1Value),
-                   crossoverLowerXPos,
-                   (bounds.getY() + bounds.getHeight() * (1 - neutralPos)) - (bounds.getY() + bounds.getHeight() * (1 - neutralPos) - bounds.getHeight() * range * (0.5 - width1Value)));
-    }
+        g.setColour(colour);
+        if (widthValue > 0.5) {
+            
+            /* left edge
+             * top edge
+             * width
+             * height
+             */
+            
+            g.fillRect(x,
+                       bounds.getY() + bounds.getHeight() * neutralPos - bounds.getHeight() * range * (widthValue - 0.5),
+                       bandWidth,
+                       (bounds.getY() + bounds.getHeight() * neutralPos) - (bounds.getY() + bounds.getHeight() * neutralPos - bounds.getHeight() * range * (widthValue - 0.5)));
+            
+            g.fillRect(x,
+                       bounds.getY() + bounds.getHeight() * (1 - neutralPos),
+                       bandWidth,
+                       bounds.getHeight() * range * (widthValue - 0.5));
+        } else {
+            g.fillRect(x,
+                       bounds.getY() + bounds.getHeight() * neutralPos,
+                       bandWidth,
+                       bounds.getHeight() * range * (0.5 - widthValue));
+            
+            g.fillRect(x,
+                       bounds.getY() + bounds.getHeight() * (1 - neutralPos) - bounds.getHeight() * range * (0.5 - widthValue),
+                       bandWidth,
+                       (bounds.getY() + bounds.getHeight() * (1 - neutralPos)) - (bounds.getY() + bounds.getHeight() * (1 - neutralPos) - bounds.getHeight() * range * (0.5 - widthValue)));
+        }
+    }};
     
+    drawWidth(MONSTRLookAndFeel::redTrans,
+              width1Value,
+              bounds.getX(),
+              crossoverLowerXPos);
     
+    drawWidth(MONSTRLookAndFeel::yellowTrans,
+              width2Value,
+              bounds.getX() + crossoverLowerXPos,
+              crossoverUpperXPos - crossoverLowerXPos);
     
-    if (width2Value > 0.5) {
-        g.setColour(MONSTRLookAndFeel::yellowTrans);
-        
-        g.fillRect(bounds.getX() + crossoverLowerXPos,
-                   bounds.getY() + bounds.getHeight() * neutralPos - bounds.getHeight() * range * (width2Value - 0.5),
-                   crossoverUpperXPos - crossoverLowerXPos,
-                   (bounds.getY() + bounds.getHeight() * neutralPos) - (bounds.getY() + bounds.getHeight() * neutralPos - bounds.getHeight() * range * (width2Value - 0.5)));
-        
-        g.fillRect(bounds.getX() + crossoverLowerXPos,
-                   bounds.getY() + bounds.getHeight() * (1 - neutralPos),
-                   crossoverUpperXPos - crossoverLowerXPos,
-                   bounds.getHeight() * range * (width2Value - 0.5));
-    } else {
-        g.setColour(MONSTRLookAndFeel::yellowTrans);
-        
-        g.fillRect(bounds.getX() + crossoverLowerXPos,
-                   bounds.getY() + bounds.getHeight() * neutralPos,
-                   crossoverUpperXPos - crossoverLowerXPos,
-                   bounds.getHeight() * range * (0.5 - width2Value));
-        
-        g.fillRect(bounds.getX() + crossoverLowerXPos,
-                   bounds.getY() + bounds.getHeight() * (1 - neutralPos) - bounds.getHeight() * range * (0.5 - width2Value),
-                   crossoverUpperXPos - crossoverLowerXPos,
-                   (bounds.getY() + bounds.getHeight() * (1 - neutralPos)) - (bounds.getY() + bounds.getHeight() * (1 - neutralPos) - bounds.getHeight() * range * (0.5 - width2Value)));
-    }
-    
-    
-    
-    if (width3Value > 0.5) {
-        g.setColour(MONSTRLookAndFeel::greenTrans);
-        
-        g.fillRect(bounds.getX() + crossoverUpperXPos,
-                   bounds.getY() + bounds.getHeight() * neutralPos - bounds.getHeight() * range * (width3Value - 0.5),
-                   bounds.getWidth() - crossoverUpperXPos,
-                   (bounds.getY() + bounds.getHeight() * neutralPos) - (bounds.getY() + bounds.getHeight() * neutralPos - bounds.getHeight() * range * (width3Value - 0.5)));
-        
-        g.fillRect(bounds.getX() + crossoverUpperXPos,
-                   bounds.getY() + bounds.getHeight() * (1 - neutralPos),
-                   bounds.getWidth() - crossoverUpperXPos,
-                   bounds.getHeight() * range * (width3Value - 0.5));
-    } else {
-        g.setColour(MONSTRLookAndFeel::greenTrans);
-        
-        g.fillRect(bounds.getX() + crossoverUpperXPos,
-                   bounds.getY() + bounds.getHeight() * neutralPos,
-                   bounds.getWidth() - crossoverUpperXPos,
-                   bounds.getHeight() * range * (0.5 - width3Value));
-        
-        g.fillRect(bounds.getX() + crossoverUpperXPos,
-                   bounds.getY() + bounds.getHeight() * (1 - neutralPos) - bounds.getHeight() * range * (0.5 - width3Value),
-                   bounds.getWidth() - crossoverUpperXPos,
-                   (bounds.getY() + bounds.getHeight() * (1 - neutralPos)) - (bounds.getY() + bounds.getHeight() * (1 - neutralPos) - bounds.getHeight() * range * (0.5 - width3Value)));
-    }
-    
+    drawWidth(MONSTRLookAndFeel::greenTrans,
+              width3Value,
+              bounds.getX() + crossoverUpperXPos,
+              bounds.getWidth() - crossoverUpperXPos);
 }
 
 // draws the lines representing neutral width

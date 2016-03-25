@@ -17,6 +17,7 @@
 #include "MONSTRLookAndFeel.h"
 #include "ParameterData.h"
 #include "math.h"
+#include <memory>
 
 class MONSTRCrossover {
 public:
@@ -49,13 +50,13 @@ private:
                                    Slider& width2Sld,
                                    Slider& width3Sld);
     
-    static void drawSine(   Graphics& g,
-                            Rectangle<float> bounds,
-                            float crossoverLowerHz,
-                            float crossoverUpperHz);
+    static void drawSine(Graphics& g,
+                         Rectangle<float> bounds,
+                         float crossoverLowerHz,
+                         float crossoverUpperHz);
     
-    static void drawWidthRectangle( Graphics& g,
-                                    Rectangle<float> bounds,
+    static void drawWidthRectangles(Graphics& g,
+                                    const Rectangle<float>& bounds,
                                     float crossoverLowerXPos,
                                     float crossoverUpperXPos,
                                     float width1Value,
@@ -69,10 +70,6 @@ private:
                                           Slider& crossoverLowerSld,
                                           Slider& crossoverUpperSld);
     
-    static inline double SineFunc(double x) {
-        return sin(pow(M_E, 1.5 * x + 1.83)) / 2 + 0.5;
-    }
-    
     static bool needsSetup;
     
     // defines the fraction of the distance from the top and bottom
@@ -82,6 +79,8 @@ private:
     // decrease the scaling coefficient to increase the on-screen space
     // used by the lower frequencies
     constexpr static const int scaleCoefficient {50};
+    
+    
 };
 
 
