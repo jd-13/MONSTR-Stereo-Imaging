@@ -96,10 +96,10 @@ MonstrAudioProcessorEditor::MonstrAudioProcessorEditor (MonstrAudioProcessor& ow
     width3Sld->setSliderSnapsToMousePosition(false);
 
     // Define a rectangle for the sine wave to be drawn in
-    crossoverBounds = Rectangle<float>(crossoverLowerSld->getX(),
-                                       crossoverLowerSld->getY(),
-                                       crossoverUpperSld->getX() + crossoverUpperSld->getWidth() - crossoverLowerSld->getX(),
-                                       crossoverLowerSld->getHeight());
+    crossoverBounds = Rectangle<int>(crossoverLowerSld->getX(),
+                                     crossoverLowerSld->getY(),
+                                     crossoverUpperSld->getX() + crossoverUpperSld->getWidth() - crossoverLowerSld->getX(),
+                                     crossoverLowerSld->getHeight());
     //[/Constructor]
 }
 
@@ -206,7 +206,7 @@ void MonstrAudioProcessorEditor::sliderValueChanged (Slider* sliderThatWasMoved)
 void MonstrAudioProcessorEditor::buttonClicked (Button* buttonThatWasClicked)
 {
     //[UserbuttonClicked_Pre]
-    MonstrAudioProcessor* ourProcessor {getProcessor()};
+    //MonstrAudioProcessor* ourProcessor {getProcessor()};
     //[/UserbuttonClicked_Pre]
 
     if (buttonThatWasClicked == switchBand1Btn)

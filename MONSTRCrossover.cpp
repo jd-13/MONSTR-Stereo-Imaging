@@ -21,7 +21,7 @@ MONSTRCrossover::~MONSTRCrossover() {
 bool MONSTRCrossover::needsSetup {true};
 
 void MONSTRCrossover::update(Graphics &g,
-                             const Rectangle<float>& bounds,
+                             const Rectangle<int>& bounds,
                              Slider& crossoverLowerSld,
                              Slider& crossoverUpperSld,
                              Slider& width1Sld,
@@ -67,13 +67,12 @@ void MONSTRCrossover::update(Graphics &g,
 
 // calls all of the private draw methods
 void MONSTRCrossover::drawAll(Graphics &g,
-                              Rectangle<float> bounds,
-                              float crossoverLowerXPos,
-                              float crossoverUpperXPos,
-                              float width1Value,
-                              float width2Value,
-                              float width3Value) {
-    
+                              Rectangle<int> bounds,
+                              double crossoverLowerXPos,
+                              double crossoverUpperXPos,
+                              double width1Value,
+                              double width2Value,
+                              double width3Value) {
     drawNeutralLine(g, bounds);
     
     drawWidthRectangles(g,
@@ -85,10 +84,11 @@ void MONSTRCrossover::drawAll(Graphics &g,
                         width3Value);
     
     drawSine(g, bounds, crossoverLowerXPos, crossoverUpperXPos);
+
 }
 
 void MONSTRCrossover::resizeWidthSliders(Graphics &g,
-                                         const Rectangle<float>& bounds,
+                                         const Rectangle<int>& bounds,
                                          float crossoverLowerXPos,
                                          float crossoverUpperXPos,
                                          Slider& width1Sld,
@@ -118,7 +118,7 @@ void MONSTRCrossover::resizeWidthSliders(Graphics &g,
 
 // draws the sine wave behind each band
 void MONSTRCrossover::drawSine(Graphics &g,
-                                         Rectangle<float> bounds,
+                                         Rectangle<int> bounds,
                                          float crossoverLowerXPos,
                                          float crossoverUpperXPos) {
     
@@ -191,7 +191,7 @@ void MONSTRCrossover::drawSine(Graphics &g,
 
 // draws the rectangles showing the width of each band
 void MONSTRCrossover::drawWidthRectangles(Graphics &g,
-                                                   const Rectangle<float>& bounds,
+                                                   const Rectangle<int>& bounds,
                                                    float crossoverLowerXPos,
                                                    float crossoverUpperXPos,
                                                    float width1Value,
@@ -254,7 +254,7 @@ void MONSTRCrossover::drawWidthRectangles(Graphics &g,
 
 // draws the lines representing neutral width
 void MONSTRCrossover::drawNeutralLine(Graphics &g,
-                                                Rectangle<float> bounds) {
+                                      Rectangle<int> bounds) {
     
     Path p;
     p.addLineSegment(Line<float>(bounds.getX(),
@@ -275,7 +275,7 @@ void MONSTRCrossover::drawNeutralLine(Graphics &g,
 
 
 // calculates the positions of the horizontal crossover sliders
-void MONSTRCrossover::positionHorizontalSliders(const Rectangle<float> &bounds,
+void MONSTRCrossover::positionHorizontalSliders(const Rectangle<int> &bounds,
                                                 juce::Slider &crossoverLowerSld,
                                                 juce::Slider &crossoverUpperSld) {
     // calculate the positions of the vertical edges of the sliders on the logarithmic scale

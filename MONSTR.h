@@ -23,7 +23,7 @@ public:
                 band2,
                 band3;
     
-    void ClockProcess(float* leftSample, float* rightSample, int numSamples);
+    void ClockProcess(float* leftSample, float* rightSample, size_t numSamples);
     
     void setSampleRate(double newSampleRate);
     

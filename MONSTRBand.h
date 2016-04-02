@@ -62,7 +62,7 @@ private:
             lowCutoffHz,
             highCutoffHz;
     
-    int sampleRate;
+    double sampleRate;
     
     IIRFilter   lowCutLeft,
                 lowCutRight,

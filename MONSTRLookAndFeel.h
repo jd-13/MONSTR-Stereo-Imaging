@@ -51,7 +51,7 @@ public:
     void setSliderThumbRadius(Slider& sld);
     
 private:
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MONSTRLookAndFeel);
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MONSTRLookAndFeel)
     
     static const Colour lightGrey,
                         darkGrey,

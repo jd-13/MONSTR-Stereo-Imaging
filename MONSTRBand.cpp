@@ -35,7 +35,7 @@ MONSTRBand::MONSTRBand(bool newIsLower, bool newIsUpper) :
                             lowCutLeft(),
                             lowCutRight(),
                             highCutLeft(),
-                            highCutRight(){
+                            highCutRight() {
 }
 
 

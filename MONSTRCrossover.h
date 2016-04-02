@@ -26,7 +26,7 @@ public:
     ~MONSTRCrossover();
     
     static void update(Graphics& g,
-                       const Rectangle<float>& bounds,
+                       const Rectangle<int>& bounds,
                        Slider& lowerSlider,
                        Slider& upperSlider,
                        Slider& width1Sld,
@@ -35,15 +35,15 @@ public:
     
 private:
     static void drawAll(Graphics& g,
-                        Rectangle<float> bounds,
-                        float crossoverLowerXPos,
-                        float crossoverUpperXPos,
-                        float width1Value,
-                        float width2Value,
-                        float width3Value);
+                        Rectangle<int> bounds,
+                        double crossoverLowerXPos,
+                        double crossoverUpperXPos,
+                        double width1Value,
+                        double width2Value,
+                        double width3Value);
     
     static void resizeWidthSliders(Graphics& g,
-                                   const Rectangle<float>& bounds,
+                                   const Rectangle<int>& bounds,
                                    float crossoverLowerXPos,
                                    float crossoverUpperXPos,
                                    Slider& width1Sld,
@@ -51,12 +51,12 @@ private:
                                    Slider& width3Sld);
     
     static void drawSine(Graphics& g,
-                         Rectangle<float> bounds,
+                         Rectangle<int> bounds,
                          float crossoverLowerHz,
                          float crossoverUpperHz);
     
     static void drawWidthRectangles(Graphics& g,
-                                    const Rectangle<float>& bounds,
+                                    const Rectangle<int>& bounds,
                                     float crossoverLowerXPos,
                                     float crossoverUpperXPos,
                                     float width1Value,
@@ -64,9 +64,9 @@ private:
                                     float width3Value);
     
     static void drawNeutralLine(Graphics& g,
-                                Rectangle<float> bounds);
+                                Rectangle<int> bounds);
     
-    static void positionHorizontalSliders(const Rectangle<float>& bounds,
+    static void positionHorizontalSliders(const Rectangle<int>& bounds,
                                           Slider& crossoverLowerSld,
                                           Slider& crossoverUpperSld);
     

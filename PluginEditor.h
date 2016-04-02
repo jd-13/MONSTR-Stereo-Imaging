@@ -64,7 +64,7 @@ public:
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
     MONSTRLookAndFeel customLookAndFeel;
-    Rectangle<float> crossoverBounds;
+    Rectangle<int> crossoverBounds;
     //[/UserVariables]
 
     //==============================================================================

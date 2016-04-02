@@ -31,15 +31,15 @@ MONSTRLookAndFeel::~MONSTRLookAndFeel() {
 
 
 void MONSTRLookAndFeel::drawLinearSliderThumb(Graphics &g,
-                                              int x,
+                                              int /*x*/,
                                               int y,
-                                              int width,
+                                              int /*width*/,
                                               int height,
                                               float sliderPos,
-                                              float minSliderPos,
-                                              float maxSliderPos,
+                                              float /*minSliderPos*/,
+                                              float /*maxSliderPos*/,
                                               const Slider::SliderStyle style,
-                                              juce::Slider &slider) {
+                                              juce::Slider& /*slider*/) {
     
     if (style == Slider::LinearHorizontal) {
         Path p;
@@ -58,16 +58,16 @@ void MONSTRLookAndFeel::drawLinearSliderThumb(Graphics &g,
     }
 }
 
-void MONSTRLookAndFeel::drawLinearSliderBackground(Graphics &g,
-                                                   int x,
-                                                   int y,
-                                                   int width,
-                                                   int height,
-                                                   float sliderPos,
-                                                   float minSliderPos,
-                                                   float maxSliderPos,
-                                                   const Slider::SliderStyle style,
-                                                   Slider& slider) {
+void MONSTRLookAndFeel::drawLinearSliderBackground(Graphics& /*g*/,
+                                                   int /*x*/,
+                                                   int /*y*/,
+                                                   int /*width*/,
+                                                   int /*height*/,
+                                                   float /*sliderPos*/,
+                                                   float /*minSliderPos*/,
+                                                   float /*maxSliderPos*/,
+                                                   const Slider::SliderStyle /*style*/,
+                                                   Slider& /*slider*/) {
     // do nothing
 }
 
