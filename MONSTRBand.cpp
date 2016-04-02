@@ -26,16 +26,16 @@
 
 MONSTRBand::MONSTRBand(bool newIsLower, bool newIsUpper) :
                             isActive(BANDSWITCH_DEFAULT),
+                            isLower(newIsLower),
+                            isUpper(newIsUpper),
                             width(WIDTH_DEFAULT),
-                            lowCutoff(CROSSOVERLOWER_DEFAULT),
-                            highCutoff(CROSSOVERUPPER_DEFAULT),
+                            lowCutoffHz(CROSSOVERLOWER_DEFAULT),
+                            highCutoffHz(CROSSOVERUPPER_DEFAULT),
                             sampleRate(44100),
                             lowCutLeft(),
                             lowCutRight(),
                             highCutLeft(),
-                            highCutRight(),
-                            isLower(newIsLower),
-                            isUpper(newIsUpper) {
+                            highCutRight(){
 }
 
 
@@ -48,26 +48,26 @@ MONSTRBand::~MONSTRBand() {
 void MONSTRBand::setLowCutoff(float val) {
     // if this is the lowest band, then do not cut the low frequencies
     if (!isLower && !isUpper) {
-        lowCutoff = boundsCheck<float>(val, CROSSOVERLOWER_MIN, CROSSOVERLOWER_MAX);
-        lowCutLeft.setCoefficients(IIRCoefficients::makeHighPass(sampleRate, lowCutoff));
-        lowCutRight.setCoefficients(IIRCoefficients::makeHighPass(sampleRate, lowCutoff));
+        lowCutoffHz = boundsCheck<float>(val, CROSSOVERLOWER_MIN, CROSSOVERLOWER_MAX);
+        lowCutLeft.setCoefficients(IIRCoefficients::makeHighPass(sampleRate, lowCutoffHz));
+        lowCutRight.setCoefficients(IIRCoefficients::makeHighPass(sampleRate, lowCutoffHz));
     } else if (isUpper) {
-        lowCutoff = boundsCheck<float>(val, CROSSOVERUPPER_MIN, CROSSOVERUPPER_MAX);
-        lowCutLeft.setCoefficients(IIRCoefficients::makeHighPass(sampleRate, lowCutoff));
-        lowCutRight.setCoefficients(IIRCoefficients::makeHighPass(sampleRate, lowCutoff));
+        lowCutoffHz = boundsCheck<float>(val, CROSSOVERUPPER_MIN, CROSSOVERUPPER_MAX);
+        lowCutLeft.setCoefficients(IIRCoefficients::makeHighPass(sampleRate, lowCutoffHz));
+        lowCutRight.setCoefficients(IIRCoefficients::makeHighPass(sampleRate, lowCutoffHz));
     }
 }
 
 void MONSTRBand::setHighCutoff(float val) {
     // if this is the highest band, then do not cut the high frequencies
     if (!isLower && !isUpper) {
-        highCutoff = boundsCheck<float>(val, CROSSOVERUPPER_MIN, CROSSOVERUPPER_MAX);
-        highCutLeft.setCoefficients(IIRCoefficients::makeLowPass(sampleRate, highCutoff));
-        highCutRight.setCoefficients(IIRCoefficients::makeLowPass(sampleRate, highCutoff));
+        highCutoffHz = boundsCheck<float>(val, CROSSOVERUPPER_MIN, CROSSOVERUPPER_MAX);
+        highCutLeft.setCoefficients(IIRCoefficients::makeLowPass(sampleRate, highCutoffHz));
+        highCutRight.setCoefficients(IIRCoefficients::makeLowPass(sampleRate, highCutoffHz));
     } else if (isLower) {
-        highCutoff = boundsCheck<float>(val, CROSSOVERLOWER_MIN, CROSSOVERLOWER_MAX);
-        highCutLeft.setCoefficients(IIRCoefficients::makeLowPass(sampleRate, highCutoff));
-        highCutRight.setCoefficients(IIRCoefficients::makeLowPass(sampleRate, highCutoff));
+        highCutoffHz = boundsCheck<float>(val, CROSSOVERLOWER_MIN, CROSSOVERLOWER_MAX);
+        highCutLeft.setCoefficients(IIRCoefficients::makeLowPass(sampleRate, highCutoffHz));
+        highCutRight.setCoefficients(IIRCoefficients::makeLowPass(sampleRate, highCutoffHz));
     }
 }
 
@@ -83,17 +83,17 @@ void MONSTRBand::setSampleRate(double newSampleRate) {
     // if the new sample rate is different, recalculate the filter coefficients
     if (newSampleRate != sampleRate) {
         sampleRate = boundsCheck<double>(newSampleRate, 0, 192000); //TODO: confirm highest expected sample rate
-        setLowCutoff(lowCutoff);
-        setHighCutoff(highCutoff);
+        setLowCutoff(lowCutoffHz);
+        setHighCutoff(highCutoffHz);
     }
 }
 
 float MONSTRBand::getLowCutoff() const {
-    return lowCutoff;
+    return lowCutoffHz;
 }
 
 float MONSTRBand::getHighCutoff() const {
-    return highCutoff;
+    return highCutoffHz;
 }
 
 float MONSTRBand::getWidth() const {

@@ -59,8 +59,8 @@ private:
             isUpper;
     
     float   width,
-            lowCutoff,
-            highCutoff;
+            lowCutoffHz,
+            highCutoffHz;
     
     int sampleRate;
     
