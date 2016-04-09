@@ -61,12 +61,17 @@ private:
     static void positionHorizontalSliders(const Rectangle<int>& bounds,
                                           Slider& crossoverLowerSld,
                                           Slider& crossoverUpperSld);
-    static void drawFrequencyText(Graphics &g,
+    static void drawFrequencyText(Graphics& g,
                                   const Rectangle<int>& bounds,
                                   float crossoverLowerXPos,
                                   float crossoverLowerHz,
                                   float crossoverUpperXPos,
                                   float crossoverUpperHz);
+    
+    static void drawSliderThumbs(Graphics& g,
+                                 const Rectangle<int>& bounds,
+                                 float crossoverLowerXPos,
+                                 float crossoverUpperXPos);
     
     
     static bool needsSetup;

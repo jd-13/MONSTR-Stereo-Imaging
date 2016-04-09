@@ -40,22 +40,7 @@ void MONSTRLookAndFeel::drawLinearSliderThumb(Graphics &g,
                                               float /*maxSliderPos*/,
                                               const Slider::SliderStyle style,
                                               juce::Slider& /*slider*/) {
-    
-    if (style == Slider::LinearHorizontal) {
-        Path p;
-        p.addEllipse(sliderPos - sliderThumbRadius,
-                     y + height * 0.5f - sliderThumbRadius,
-                     sliderThumbRadius * 2,
-                     sliderThumbRadius * 2);
-        
-        g.setColour(darkGrey);
-        g.fillPath(p);
-        
-        p.clear();
-        p.addLineSegment(Line<float>(sliderPos, y, sliderPos, height), 2);
-        
-        g.strokePath(p, PathStrokeType(2.0f));
-    }
+    // do nothing
 }
 
 void MONSTRLookAndFeel::drawLinearSliderBackground(Graphics& /*g*/,

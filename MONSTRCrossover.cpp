@@ -59,6 +59,11 @@ void MONSTRCrossover::update(Graphics &g,
                       crossoverUpperXPos,
                       crossoverUpperHz);
     
+    drawSliderThumbs(g,
+                     bounds,
+                     crossoverLowerXPos,
+                     crossoverUpperXPos);
+    
     resizeWidthSliders(g,
                        bounds,
                        crossoverLowerXPos,
@@ -304,13 +309,36 @@ void MONSTRCrossover::drawFrequencyText(Graphics &g,
     g.setColour(MONSTRLookAndFeel::green);
     g.drawText(String(crossoverUpperHz),
                bounds.getX() + crossoverUpperXPos,
-               bounds.getHeight() * fractionOfHeight,
+               bounds.getY() + bounds.getHeight() * fractionOfHeight,
                50,
                20,
                Justification::centredLeft,
                false);
 }
 
-
-
-
+void MONSTRCrossover::drawSliderThumbs(Graphics& g,
+                                       const Rectangle<int>& bounds,
+                                       float crossoverLowerXPos,
+                                       float crossoverUpperXPos) {
+    const int sliderThumbRadius {2};
+    g.setColour(MONSTRLookAndFeel::darkGrey);
+    
+    auto drawSingleThumb = [sliderThumbRadius, &bounds, &g](int crossoverXPos) -> void {
+        Path p;
+        p.addEllipse(bounds.getX() + crossoverXPos - sliderThumbRadius,
+                     bounds.getY() + bounds.getHeight() * 0.5,
+                     sliderThumbRadius * 2,
+                     sliderThumbRadius * 2);
+        g.fillPath(p);
+        p.clear();
+        p.addLineSegment(Line<float>(bounds.getX() + crossoverXPos,
+                                     bounds.getY(),
+                                     bounds.getX() + crossoverXPos,
+                                     bounds.getY() + bounds.getHeight()),
+                         1);
+        g.strokePath(p, PathStrokeType(1.0f));
+    };
+    
+    drawSingleThumb(crossoverLowerXPos);
+    drawSingleThumb(crossoverUpperXPos);
+}

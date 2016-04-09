@@ -91,6 +91,8 @@ MonstrAudioProcessorEditor::MonstrAudioProcessorEditor (MonstrAudioProcessor& ow
     LookAndFeel::setDefaultLookAndFeel(&customLookAndFeel);
     customLookAndFeel.setSliderThumbRadius(*crossoverLowerSld);
 
+    crossoverLowerSld->setSliderSnapsToMousePosition(false);
+    crossoverUpperSld->setSliderSnapsToMousePosition(false);
     width1Sld->setSliderSnapsToMousePosition(false);
     width2Sld->setSliderSnapsToMousePosition(false);
     width3Sld->setSliderSnapsToMousePosition(false);
