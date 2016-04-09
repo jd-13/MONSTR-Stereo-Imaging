@@ -34,14 +34,6 @@ public:
                        Slider& width3Sld);
     
 private:
-    static void drawAll(Graphics& g,
-                        Rectangle<int> bounds,
-                        double crossoverLowerXPos,
-                        double crossoverUpperXPos,
-                        double width1Value,
-                        double width2Value,
-                        double width3Value);
-    
     static void resizeWidthSliders(Graphics& g,
                                    const Rectangle<int>& bounds,
                                    float crossoverLowerXPos,
@@ -69,6 +61,13 @@ private:
     static void positionHorizontalSliders(const Rectangle<int>& bounds,
                                           Slider& crossoverLowerSld,
                                           Slider& crossoverUpperSld);
+    static void drawFrequencyText(Graphics &g,
+                                  const Rectangle<int>& bounds,
+                                  float crossoverLowerXPos,
+                                  float crossoverLowerHz,
+                                  float crossoverUpperXPos,
+                                  float crossoverUpperHz);
+    
     
     static bool needsSetup;
     
@@ -78,7 +77,7 @@ private:
     
     // decrease the scaling coefficient to increase the on-screen space
     // used by the lower frequencies
-    constexpr static const int scaleCoefficient {50};
+    constexpr static const int scaleCoefficient {20};
     
     
 };

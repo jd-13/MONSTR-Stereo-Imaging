@@ -40,13 +40,24 @@ void MONSTRCrossover::update(Graphics &g,
     crossoverLowerXPos *= bounds.getWidth() * (log2((CROSSOVERLOWER_MAX + scaleCoefficient) / scaleCoefficient) / log2(20000));
     crossoverUpperXPos *= bounds.getWidth() * (log2((CROSSOVERUPPER_MAX + scaleCoefficient) / scaleCoefficient) / log2(20000));
     
-    drawAll(g,
-            bounds,
-            crossoverLowerXPos,
-            crossoverUpperXPos,
-            width1Sld.getValue(),
-            width2Sld.getValue(),
-            width3Sld.getValue());
+    drawNeutralLine(g, bounds);
+    
+    drawWidthRectangles(g,
+                        bounds,
+                        crossoverLowerXPos,
+                        crossoverUpperXPos,
+                        width1Sld.getValue(),
+                        width2Sld.getValue(),
+                        width3Sld.getValue());
+    
+    drawSine(g, bounds, crossoverLowerXPos, crossoverUpperXPos);
+    
+    drawFrequencyText(g,
+                      bounds,
+                      crossoverLowerXPos,
+                      crossoverLowerHz,
+                      crossoverUpperXPos,
+                      crossoverUpperHz);
     
     resizeWidthSliders(g,
                        bounds,
@@ -62,29 +73,6 @@ void MONSTRCrossover::update(Graphics &g,
         
         positionHorizontalSliders(bounds, crossoverLowerSld, crossoverUpperSld);
     }
-}
-
-
-// calls all of the private draw methods
-void MONSTRCrossover::drawAll(Graphics &g,
-                              Rectangle<int> bounds,
-                              double crossoverLowerXPos,
-                              double crossoverUpperXPos,
-                              double width1Value,
-                              double width2Value,
-                              double width3Value) {
-    drawNeutralLine(g, bounds);
-    
-    drawWidthRectangles(g,
-                        bounds,
-                        crossoverLowerXPos,
-                        crossoverUpperXPos,
-                        width1Value,
-                        width2Value,
-                        width3Value);
-    
-    drawSine(g, bounds, crossoverLowerXPos, crossoverUpperXPos);
-
 }
 
 void MONSTRCrossover::resizeWidthSliders(Graphics &g,
@@ -295,3 +283,34 @@ void MONSTRCrossover::positionHorizontalSliders(const Rectangle<int> &bounds,
                                 bounds.getWidth() - crossoverUpperLogMax + MONSTRLookAndFeel::sliderThumbRadius,
                                 bounds.getHeight());
 }
+
+void MONSTRCrossover::drawFrequencyText(Graphics &g,
+                                        const Rectangle<int> &bounds,
+                                        float crossoverLowerXPos,
+                                        float crossoverLowerHz,
+                                        float crossoverUpperXPos,
+                                        float crossoverUpperHz) {
+    const float fractionOfHeight {0.9};
+    
+    g.setColour(MONSTRLookAndFeel::yellow);
+    g.drawText(String(crossoverLowerHz),
+               bounds.getX() + crossoverLowerXPos,
+               bounds.getHeight() * fractionOfHeight,
+               50,
+               20,
+               Justification::centredLeft,
+               false);
+    
+    g.setColour(MONSTRLookAndFeel::green);
+    g.drawText(String(crossoverUpperHz),
+               bounds.getX() + crossoverUpperXPos,
+               bounds.getHeight() * fractionOfHeight,
+               50,
+               20,
+               Justification::centredLeft,
+               false);
+}
+
+
+
+
