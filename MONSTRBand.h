@@ -27,11 +27,13 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "ParameterData.h"
+#include "DSPFilters/Butterworth.h"
 
 class MONSTRBand {
 public:
     MONSTRBand(bool newIsLower, bool newIsUpper);
     ~MONSTRBand();
+    
     
     void setLowCutoff(float val);
     void setHighCutoff(float val);
@@ -63,11 +65,10 @@ private:
             highCutoffHz;
     
     double sampleRate;
+    static const int FILTER_ORDER {3};
     
-    IIRFilter   lowCutLeft,
-                lowCutRight,
-                highCutLeft,
-                highCutRight;
+    Dsp::SimpleFilter<Dsp::Butterworth::HighPass<3>, 2> lowCut;
+    Dsp::SimpleFilter<Dsp::Butterworth::LowPass<3>, 2> highCut;
     
     template <typename T>
     T boundsCheck(T param, T min, T max) {
