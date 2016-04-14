@@ -65,10 +65,12 @@ private:
             highCutoffHz;
     
     double sampleRate;
-    static const int FILTER_ORDER {3};
+    static const int FILTER_ORDER {2};
     
-    Dsp::SimpleFilter<Dsp::Butterworth::HighPass<3>, 2> lowCut;
-    Dsp::SimpleFilter<Dsp::Butterworth::LowPass<3>, 2> highCut;
+    Dsp::SimpleFilter<Dsp::Butterworth::HighPass<2>, 2> lowCut1;
+    Dsp::SimpleFilter<Dsp::Butterworth::HighPass<2>, 2> lowCut2;
+    Dsp::SimpleFilter<Dsp::Butterworth::LowPass<2>, 2> highCut1;
+    Dsp::SimpleFilter<Dsp::Butterworth::LowPass<2>, 2> highCut2;
     
     template <typename T>
     T boundsCheck(T param, T min, T max) {

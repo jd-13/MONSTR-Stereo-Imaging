@@ -32,10 +32,14 @@ MONSTRBand::MONSTRBand(bool newIsLower, bool newIsUpper) :
                             lowCutoffHz(CROSSOVERLOWER_DEFAULT),
                             highCutoffHz(CROSSOVERUPPER_DEFAULT),
                             sampleRate(44100),
-                            lowCut(),
-                            highCut() {
-    lowCut.setup(FILTER_ORDER, sampleRate, lowCutoffHz);
-    highCut.setup(FILTER_ORDER, sampleRate, highCutoffHz);
+                            lowCut1(),
+                            lowCut2(),
+                            highCut1(),
+                            highCut2() {
+    lowCut1.setup(FILTER_ORDER, sampleRate, lowCutoffHz);
+    lowCut2.setup(FILTER_ORDER, sampleRate, lowCutoffHz);
+    highCut1.setup(FILTER_ORDER, sampleRate, highCutoffHz);
+    highCut2.setup(FILTER_ORDER, sampleRate, highCutoffHz);
 }
 
 
@@ -49,10 +53,12 @@ void MONSTRBand::setLowCutoff(float val) {
     // if this is the lowest band, then do not cut the low frequencies
     if (!isLower && !isUpper) {
         lowCutoffHz = boundsCheck<float>(val, CROSSOVERLOWER_MIN, CROSSOVERLOWER_MAX);
-        lowCut.setup(FILTER_ORDER, sampleRate, lowCutoffHz);
+        lowCut1.setup(FILTER_ORDER, sampleRate, lowCutoffHz);
+        lowCut2.setup(FILTER_ORDER, sampleRate, lowCutoffHz);
     } else if (isUpper) {
         lowCutoffHz = boundsCheck<float>(val, CROSSOVERUPPER_MIN, CROSSOVERUPPER_MAX);
-        lowCut.setup(FILTER_ORDER, sampleRate, lowCutoffHz);
+        lowCut1.setup(FILTER_ORDER, sampleRate, lowCutoffHz);
+        lowCut2.setup(FILTER_ORDER, sampleRate, lowCutoffHz);
     }
 }
 
@@ -60,10 +66,12 @@ void MONSTRBand::setHighCutoff(float val) {
     // if this is the highest band, then do not cut the high frequencies
     if (!isLower && !isUpper) {
         highCutoffHz = boundsCheck<float>(val, CROSSOVERUPPER_MIN, CROSSOVERUPPER_MAX);
-        highCut.setup(FILTER_ORDER, sampleRate, highCutoffHz);
+        highCut1.setup(FILTER_ORDER, sampleRate, highCutoffHz);
+        highCut2.setup(FILTER_ORDER, sampleRate, highCutoffHz);
     } else if (isLower) {
         highCutoffHz = boundsCheck<float>(val, CROSSOVERLOWER_MIN, CROSSOVERLOWER_MAX);
-        highCut.setup(FILTER_ORDER, sampleRate, highCutoffHz);
+        highCut1.setup(FILTER_ORDER, sampleRate, highCutoffHz);
+        highCut2.setup(FILTER_ORDER, sampleRate, highCutoffHz);
     }
 }
 
@@ -119,8 +127,10 @@ void MONSTRBand::makeBandUpper() {
 }
 
 void MONSTRBand::reset() {
-    lowCut.reset();
-    highCut.reset();
+    lowCut1.reset();
+    lowCut2.reset();
+    highCut1.reset();
+    highCut2.reset();
 }
 
 void MONSTRBand::process2in2out(float* inLeftSamples, float* inRightSamples, int numSamples) {
@@ -131,13 +141,19 @@ void MONSTRBand::process2in2out(float* inLeftSamples, float* inRightSamples, int
     channelsArray[1] = inRightSamples;
     
     if (isLower) {
-        highCut.process(numSamples, channelsArray);
+        highCut1.process(numSamples, channelsArray);
+        highCut2.process(numSamples, channelsArray);
     } else if (isUpper) {
-        lowCut.process(numSamples, channelsArray);
+        lowCut1.process(numSamples, channelsArray);
+        lowCut2.process(numSamples, channelsArray);
     } else {
-        lowCut.process(numSamples, channelsArray);
-        highCut.process(numSamples, channelsArray);
+        lowCut1.process(numSamples, channelsArray);
+        lowCut2.process(numSamples, channelsArray);
+        highCut1.process(numSamples, channelsArray);
+        highCut2.process(numSamples, channelsArray);
     }
+    
+    delete[] channelsArray;
 }
 
 
