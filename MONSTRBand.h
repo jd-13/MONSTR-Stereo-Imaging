@@ -26,6 +26,7 @@
 #define MONSTRBAND_H_INCLUDED
 
 #include "../JuceLibraryCode/JuceHeader.h"
+#include <vector>
 #include "ParameterData.h"
 #include "DSPFilters/Butterworth.h"
 
@@ -53,7 +54,8 @@ public:
     
     void reset();
     
-    void process2in2out(float* inLeftSamples, float* inRightSamples, int numSamples);
+    void process2in2out(std::vector<float>& inLeftSamples,
+                        std::vector<float>& inRightSamples, int numSamples);
     
 private:
     bool    isActive,
@@ -71,6 +73,8 @@ private:
     Dsp::SimpleFilter<Dsp::Butterworth::HighPass<2>, 2> lowCut2;
     Dsp::SimpleFilter<Dsp::Butterworth::LowPass<2>, 2> highCut1;
     Dsp::SimpleFilter<Dsp::Butterworth::LowPass<2>, 2> highCut2;
+    
+    void filterSamples(float* inLeftSamples, float* inRightSamples, int numSamples);
     
     template <typename T>
     T boundsCheck(T param, T min, T max) {

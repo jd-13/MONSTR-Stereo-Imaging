@@ -133,9 +133,7 @@ void MONSTRBand::reset() {
     highCut2.reset();
 }
 
-void MONSTRBand::process2in2out(float* inLeftSamples, float* inRightSamples, int numSamples) {
-    // add upper/lower bypass depending on isupper/islower
-    
+void MONSTRBand::filterSamples(float *inLeftSamples, float *inRightSamples, int numSamples) {
     float** channelsArray = new float*[2];
     channelsArray[0] = inLeftSamples;
     channelsArray[1] = inRightSamples;
@@ -154,6 +152,32 @@ void MONSTRBand::process2in2out(float* inLeftSamples, float* inRightSamples, int
     }
     
     delete[] channelsArray;
+}
+
+void MONSTRBand::process2in2out(std::vector<float>& inLeftSamples,
+                                std::vector<float>& inRightSamples,
+                                int numSamples) {
+    
+    // Apply the filtering before processing
+    filterSamples(&inLeftSamples[0], &inRightSamples[0], numSamples);
+    
+    if (isActive) {
+        // Do the actual stereo widening or narrowing
+        // Based on: http://musicdsp.org/showArchiveComment.php?ArchiveID=256
+        double coef_S {width * 0.5};
+        
+        for (size_t iii {0}; iii < numSamples; iii++) {
+            
+            double mid {(inLeftSamples[iii] + inRightSamples[iii]) * 0.5};
+            double side {(inRightSamples[iii] - inLeftSamples[iii]) * coef_S};
+            
+            inLeftSamples[iii] = mid - side;
+            inRightSamples[iii] = mid + side;
+        }
+
+    }
+
+    
 }
 
 
