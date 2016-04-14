@@ -40,6 +40,8 @@ void MONSTRCrossover::update(Graphics &g,
     crossoverLowerXPos *= bounds.getWidth() * (log2((CROSSOVERLOWER_MAX + scaleCoefficient) / scaleCoefficient) / log2(20000));
     crossoverUpperXPos *= bounds.getWidth() * (log2((CROSSOVERUPPER_MAX + scaleCoefficient) / scaleCoefficient) / log2(20000));
     
+    drawSine(g, bounds, crossoverLowerXPos, crossoverUpperXPos);
+
     drawNeutralLine(g, bounds);
     
     drawWidthRectangles(g,
@@ -50,7 +52,6 @@ void MONSTRCrossover::update(Graphics &g,
                         width2Sld,
                         width3Sld);
     
-    drawSine(g, bounds, crossoverLowerXPos, crossoverUpperXPos);
     
     drawFrequencyText(g,
                       bounds,
