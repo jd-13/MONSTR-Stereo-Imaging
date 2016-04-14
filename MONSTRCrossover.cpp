@@ -24,9 +24,9 @@ void MONSTRCrossover::update(Graphics &g,
                              const Rectangle<int>& bounds,
                              Slider& crossoverLowerSld,
                              Slider& crossoverUpperSld,
-                             Slider& width1Sld,
-                             Slider& width2Sld,
-                             Slider& width3Sld) {
+                             MONSTRWidthSlider& width1Sld,
+                             MONSTRWidthSlider& width2Sld,
+                             MONSTRWidthSlider& width3Sld) {
     
     // calculate the crossover values in Hz from the sliders
     const double crossoverLowerHz {TranslateParam_Norm2Inter(crossoverLowerSld.getValue(), CROSSOVERLOWER_MIN, CROSSOVERLOWER_MAX)};
@@ -46,9 +46,9 @@ void MONSTRCrossover::update(Graphics &g,
                         bounds,
                         crossoverLowerXPos,
                         crossoverUpperXPos,
-                        width1Sld.getValue(),
-                        width2Sld.getValue(),
-                        width3Sld.getValue());
+                        width1Sld,
+                        width2Sld,
+                        width3Sld);
     
     drawSine(g, bounds, crossoverLowerXPos, crossoverUpperXPos);
     
@@ -84,9 +84,9 @@ void MONSTRCrossover::resizeWidthSliders(Graphics &g,
                                          const Rectangle<int>& bounds,
                                          float crossoverLowerXPos,
                                          float crossoverUpperXPos,
-                                         Slider& width1Sld,
-                                         Slider& width2Sld,
-                                         Slider& width3Sld) {
+                                         MONSTRWidthSlider& width1Sld,
+                                         MONSTRWidthSlider& width2Sld,
+                                         MONSTRWidthSlider& width3Sld) {
     // a margin to be applied where the edges of the vertical sliders meet the thumbs
     // of the horizontal sliders to prevent overlap
     const int margin {10};
@@ -187,18 +187,24 @@ void MONSTRCrossover::drawWidthRectangles(Graphics &g,
                                                    const Rectangle<int>& bounds,
                                                    float crossoverLowerXPos,
                                                    float crossoverUpperXPos,
-                                                   float width1Value,
-                                                   float width2Value,
-                                                   float width3Value) {
+                                                   MONSTRWidthSlider& width1Sld,
+                                                   MONSTRWidthSlider& width2Sld,
+                                                   MONSTRWidthSlider& width3Sld) {
     const float range {0.25};
     
     // lambda to draw the width rectangles for each band
     auto drawWidth {[&g, &bounds, &range](const Colour& colour,
                                           float widthValue,
                                           float x,
-                                          float bandWidth) -> void {
+                                          float bandWidth,
+                                          bool isBandActive) -> void {
         
-        g.setColour(colour);
+        if (isBandActive) {
+            g.setColour(colour);
+        } else {
+            g.setColour(MONSTRLookAndFeel::lightGrey);
+        }
+        
         if (widthValue > 0.5) {
             
             /* left edge
@@ -230,19 +236,22 @@ void MONSTRCrossover::drawWidthRectangles(Graphics &g,
     }};
     
     drawWidth(MONSTRLookAndFeel::redTrans,
-              width1Value,
+              width1Sld.getValue(),
               bounds.getX(),
-              crossoverLowerXPos);
+              crossoverLowerXPos,
+              width1Sld.getIsBandActive());
     
     drawWidth(MONSTRLookAndFeel::yellowTrans,
-              width2Value,
+              width2Sld.getValue(),
               bounds.getX() + crossoverLowerXPos,
-              crossoverUpperXPos - crossoverLowerXPos);
+              crossoverUpperXPos - crossoverLowerXPos,
+              width2Sld.getIsBandActive());
     
     drawWidth(MONSTRLookAndFeel::greenTrans,
-              width3Value,
+              width3Sld.getValue(),
               bounds.getX() + crossoverUpperXPos,
-              bounds.getWidth() - crossoverUpperXPos);
+              bounds.getWidth() - crossoverUpperXPos,
+              width3Sld.getIsBandActive());
 }
 
 // draws the lines representing neutral width
@@ -321,24 +330,38 @@ void MONSTRCrossover::drawSliderThumbs(Graphics& g,
                                        float crossoverLowerXPos,
                                        float crossoverUpperXPos) {
     const int sliderThumbRadius {2};
-    g.setColour(MONSTRLookAndFeel::darkGrey);
     
-    auto drawSingleThumb = [sliderThumbRadius, &bounds, &g](int crossoverXPos) -> void {
+    auto drawSingleThumb = [sliderThumbRadius, &bounds, &g](int crossoverXPos,
+                                                            Colour topColour,
+                                                            Colour bottomColour) -> void {
         Path p;
+        g.setColour(MONSTRLookAndFeel::darkGrey);
         p.addEllipse(bounds.getX() + crossoverXPos - sliderThumbRadius,
                      bounds.getY() + bounds.getHeight() * 0.5,
                      sliderThumbRadius * 2,
                      sliderThumbRadius * 2);
         g.fillPath(p);
         p.clear();
+        
+        g.setColour(topColour);
         p.addLineSegment(Line<float>(bounds.getX() + crossoverXPos,
                                      bounds.getY(),
+                                     bounds.getX() + crossoverXPos,
+                                     bounds.getY() + bounds.getHeight() * 0.5),
+                         1);
+        g.strokePath(p, PathStrokeType(1.0f));
+        
+        p.clear();
+        
+        g.setColour(bottomColour);
+        p.addLineSegment(Line<float>(bounds.getX() + crossoverXPos,
+                                     bounds.getY() + bounds.getHeight() * 0.5,
                                      bounds.getX() + crossoverXPos,
                                      bounds.getY() + bounds.getHeight()),
                          1);
         g.strokePath(p, PathStrokeType(1.0f));
     };
     
-    drawSingleThumb(crossoverLowerXPos);
-    drawSingleThumb(crossoverUpperXPos);
+    drawSingleThumb(crossoverLowerXPos, MONSTRLookAndFeel::red, MONSTRLookAndFeel::yellow);
+    drawSingleThumb(crossoverUpperXPos, MONSTRLookAndFeel::yellow, MONSTRLookAndFeel::green);
 }

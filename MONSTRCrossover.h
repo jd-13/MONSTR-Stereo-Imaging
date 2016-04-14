@@ -15,6 +15,7 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "MONSTRLookAndFeel.h"
+#include "MONSTRWidthSlider.h"
 #include "ParameterData.h"
 #include "math.h"
 #include <memory>
@@ -29,18 +30,18 @@ public:
                        const Rectangle<int>& bounds,
                        Slider& lowerSlider,
                        Slider& upperSlider,
-                       Slider& width1Sld,
-                       Slider& width2Sld,
-                       Slider& width3Sld);
+                       MONSTRWidthSlider& width1Sld,
+                       MONSTRWidthSlider& width2Sld,
+                       MONSTRWidthSlider& width3Sld);
     
 private:
     static void resizeWidthSliders(Graphics& g,
                                    const Rectangle<int>& bounds,
                                    float crossoverLowerXPos,
                                    float crossoverUpperXPos,
-                                   Slider& width1Sld,
-                                   Slider& width2Sld,
-                                   Slider& width3Sld);
+                                   MONSTRWidthSlider& width1Sld,
+                                   MONSTRWidthSlider& width2Sld,
+                                   MONSTRWidthSlider& width3Sld);
     
     static void drawSine(Graphics& g,
                          Rectangle<int> bounds,
@@ -51,9 +52,9 @@ private:
                                     const Rectangle<int>& bounds,
                                     float crossoverLowerXPos,
                                     float crossoverUpperXPos,
-                                    float width1Value,
-                                    float width2Value,
-                                    float width3Value);
+                                    MONSTRWidthSlider& width1Sld,
+                                    MONSTRWidthSlider& width2Sld,
+                                    MONSTRWidthSlider& width3Sld);
     
     static void drawNeutralLine(Graphics& g,
                                 Rectangle<int> bounds);
@@ -86,7 +87,5 @@ private:
     
     
 };
-
-
 
 #endif  // MONSTRCROSSOVERBACKGROUND_H_INCLUDED

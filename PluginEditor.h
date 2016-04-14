@@ -24,6 +24,7 @@
 #include "JuceHeader.h"
 #include "PluginProcessor.h"
 #include "MONSTRLookAndFeel.h"
+#include "MONSTRWidthSlider.h"
 //[/Headers]
 
 
@@ -38,8 +39,7 @@
 */
 class MonstrAudioProcessorEditor  : public AudioProcessorEditor,
                                     public Timer,
-                                    public SliderListener,
-                                    public ButtonListener
+                                    public SliderListener
 {
 public:
     //==============================================================================
@@ -57,7 +57,6 @@ public:
     void paint (Graphics& g);
     void resized();
     void sliderValueChanged (Slider* sliderThatWasMoved);
-    void buttonClicked (Button* buttonThatWasClicked);
 
 
 
@@ -70,12 +69,9 @@ private:
     //==============================================================================
     ScopedPointer<Slider> crossoverLowerSld;
     ScopedPointer<Slider> crossoverUpperSld;
-    ScopedPointer<ToggleButton> switchBand1Btn;
-    ScopedPointer<ToggleButton> switchBand2Btn;
-    ScopedPointer<ToggleButton> switchBand3Btn;
-    ScopedPointer<Slider> width1Sld;
-    ScopedPointer<Slider> width2Sld;
-    ScopedPointer<Slider> width3Sld;
+    ScopedPointer<MONSTRWidthSlider> width1Sld;
+    ScopedPointer<MONSTRWidthSlider> width2Sld;
+    ScopedPointer<MONSTRWidthSlider> width3Sld;
 
 
     //==============================================================================
