@@ -29,7 +29,7 @@
 
 
 const float CROSSOVERLOWER_MIN {40},
-            CROSSOVERLOWER_MAX {1000},
+            CROSSOVERLOWER_MAX {500},
             CROSSOVERLOWER_DEFAULT {100},
 
             CROSSOVERUPPER_MIN {3000},
