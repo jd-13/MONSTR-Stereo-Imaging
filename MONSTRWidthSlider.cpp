@@ -9,12 +9,18 @@
 */
 
 #include "MONSTRWidthSlider.h"
-MONSTRWidthSlider::MONSTRWidthSlider(String name) : Slider(name), isBandActive(true) {
+MONSTRWidthSlider::MONSTRWidthSlider(String name,
+                                     MonstrAudioProcessor* newProcessor,
+                                     int newParameter)
+:  Slider(name),                                                                            ourProcessor(newProcessor),
+    isBandActive(true),
+    parameter(newParameter) {
 }
 
 void MONSTRWidthSlider::mouseDown(const juce::MouseEvent &event) {
     if (event.mods.isRightButtonDown()) {
         isBandActive = !isBandActive;
+        ourProcessor->setParameter(parameter, isBandActive);
     }
     
     Slider::mouseDown(event);
@@ -22,4 +28,8 @@ void MONSTRWidthSlider::mouseDown(const juce::MouseEvent &event) {
 
 bool MONSTRWidthSlider::getIsBandActive() {
     return isBandActive;
+}
+
+void MONSTRWidthSlider::setIsBandActive(bool val) {
+    isBandActive = val;
 }

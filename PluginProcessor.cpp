@@ -97,7 +97,7 @@ void MonstrAudioProcessor::setParameter (int index, float newValue)
 {
     switch (index) {
         case isActiveBand1:
-            mMONSTR.band1.setIsActive(newValue < 0.5);
+            mMONSTR.band1.setIsActive(newValue > 0.5);
             break;
             
         case widthBand1:
@@ -114,7 +114,7 @@ void MonstrAudioProcessor::setParameter (int index, float newValue)
             
             
         case isActiveBand2:
-            mMONSTR.band2.setIsActive(newValue < 0.5);
+            mMONSTR.band2.setIsActive(newValue > 0.5);
             break;
             
         case widthBand2:
@@ -131,7 +131,7 @@ void MonstrAudioProcessor::setParameter (int index, float newValue)
             
             
         case isActiveBand3:
-            mMONSTR.band3.setIsActive(newValue < 0.5);
+            mMONSTR.band3.setIsActive(newValue > 0.5);
             break;
             
         case widthBand3:

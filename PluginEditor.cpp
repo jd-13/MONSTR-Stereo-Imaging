@@ -18,7 +18,6 @@
 */
 
 //[Headers] You can add your own extra header files here...
-#include "MONSTRCrossover.h"
 //[/Headers]
 
 #include "PluginEditor.h"
@@ -32,7 +31,8 @@ MonstrAudioProcessorEditor::MonstrAudioProcessorEditor (MonstrAudioProcessor& ow
     : AudioProcessorEditor(ownerFilter)
 {
     //[Constructor_pre] You can add your own custom stuff here..
-    //[/Constructor_pre]
+    MonstrAudioProcessor* ourProcessor {getProcessor()};
+        //[/Constructor_pre]
 
     addAndMakeVisible (crossoverLowerSld = new Slider ("Crossover Lower Slider"));
     crossoverLowerSld->setRange (0, 1, 0);
@@ -48,19 +48,25 @@ MonstrAudioProcessorEditor::MonstrAudioProcessorEditor (MonstrAudioProcessor& ow
     crossoverUpperSld->addListener (this);
     crossoverUpperSld->setSkewFactor (0.7);
 
-    addAndMakeVisible (width1Sld = new MONSTRWidthSlider ("Band 1 Width Slider"));
+    addAndMakeVisible (width1Sld = new MONSTRWidthSlider ("Band 1 Width Slider",
+                                                          ourProcessor,
+                                                          MonstrAudioProcessor::isActiveBand1));
     width1Sld->setRange (0, 1, 0.01);
     width1Sld->setSliderStyle (Slider::LinearVertical);
     width1Sld->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     width1Sld->addListener (this);
 
-    addAndMakeVisible (width2Sld = new MONSTRWidthSlider ("Band 2 Width Slider"));
+    addAndMakeVisible (width2Sld = new MONSTRWidthSlider ("Band 2 Width Slider",
+                                                          ourProcessor,
+                                                          MonstrAudioProcessor::isActiveBand2));
     width2Sld->setRange (0, 1, 0.01);
     width2Sld->setSliderStyle (Slider::LinearVertical);
     width2Sld->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     width2Sld->addListener (this);
 
-    addAndMakeVisible (width3Sld = new MONSTRWidthSlider ("Band 3 Width Slider"));
+    addAndMakeVisible (width3Sld = new MONSTRWidthSlider ("Band 3 Width Slider",
+                                                          ourProcessor,
+                                                          MonstrAudioProcessor::isActiveBand3));
     width3Sld->setRange (0, 1, 0.01);
     width3Sld->setSliderStyle (Slider::LinearVertical);
     width3Sld->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
@@ -193,8 +199,6 @@ void MonstrAudioProcessorEditor::sliderValueChanged (Slider* sliderThatWasMoved)
 
 void MonstrAudioProcessorEditor::timerCallback() {
 
-
-
     MonstrAudioProcessor* ourProcessor = getProcessor();
 
     if (ourProcessor->NeedsUIUpdate()) {
@@ -204,6 +208,10 @@ void MonstrAudioProcessorEditor::timerCallback() {
         width1Sld->setValue(ourProcessor->getParameter(MonstrAudioProcessor::widthBand1), dontSendNotification);
         width2Sld->setValue(ourProcessor->getParameter(MonstrAudioProcessor::widthBand2), dontSendNotification);
         width3Sld->setValue(ourProcessor->getParameter(MonstrAudioProcessor::widthBand3), dontSendNotification);
+        
+        width1Sld->setIsBandActive(ourProcessor->getParameter(MonstrAudioProcessor::isActiveBand1));
+        width2Sld->setIsBandActive(ourProcessor->getParameter(MonstrAudioProcessor::isActiveBand2));
+        width3Sld->setIsBandActive(ourProcessor->getParameter(MonstrAudioProcessor::isActiveBand3));
 
     }
 }

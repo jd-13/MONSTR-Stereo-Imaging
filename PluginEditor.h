@@ -25,6 +25,7 @@
 #include "PluginProcessor.h"
 #include "MONSTRLookAndFeel.h"
 #include "MONSTRWidthSlider.h"
+#include "MONSTRCrossover.h"
 //[/Headers]
 
 
