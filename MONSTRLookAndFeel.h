@@ -60,7 +60,8 @@ private:
                         green,
                         redTrans,
                         yellowTrans,
-                        greenTrans;
+                        greenTrans,
+                        lightGreyTrans;
     
     static int sliderThumbRadius;
 };
