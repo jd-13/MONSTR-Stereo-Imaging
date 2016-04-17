@@ -31,8 +31,7 @@ MonstrAudioProcessorEditor::MonstrAudioProcessorEditor (MonstrAudioProcessor& ow
     : AudioProcessorEditor(ownerFilter)
 {
     //[Constructor_pre] You can add your own custom stuff here..
-    MonstrAudioProcessor* ourProcessor {getProcessor()};
-        //[/Constructor_pre]
+    //[/Constructor_pre]
 
     addAndMakeVisible (crossoverLowerSld = new Slider ("Crossover Lower Slider"));
     crossoverLowerSld->setRange (0, 1, 0);
@@ -49,7 +48,7 @@ MonstrAudioProcessorEditor::MonstrAudioProcessorEditor (MonstrAudioProcessor& ow
     crossoverUpperSld->setSkewFactor (0.7);
 
     addAndMakeVisible (width1Sld = new MONSTRWidthSlider ("Band 1 Width Slider",
-                                                          ourProcessor,
+                                                          getProcessor(),
                                                           MonstrAudioProcessor::isActiveBand1));
     width1Sld->setRange (0, 1, 0.01);
     width1Sld->setSliderStyle (Slider::LinearVertical);
@@ -57,7 +56,7 @@ MonstrAudioProcessorEditor::MonstrAudioProcessorEditor (MonstrAudioProcessor& ow
     width1Sld->addListener (this);
 
     addAndMakeVisible (width2Sld = new MONSTRWidthSlider ("Band 2 Width Slider",
-                                                          ourProcessor,
+                                                          getProcessor(),
                                                           MonstrAudioProcessor::isActiveBand2));
     width2Sld->setRange (0, 1, 0.01);
     width2Sld->setSliderStyle (Slider::LinearVertical);
@@ -65,7 +64,7 @@ MonstrAudioProcessorEditor::MonstrAudioProcessorEditor (MonstrAudioProcessor& ow
     width2Sld->addListener (this);
 
     addAndMakeVisible (width3Sld = new MONSTRWidthSlider ("Band 3 Width Slider",
-                                                          ourProcessor,
+                                                          getProcessor(),
                                                           MonstrAudioProcessor::isActiveBand3));
     width3Sld->setRange (0, 1, 0.01);
     width3Sld->setSliderStyle (Slider::LinearVertical);
@@ -76,7 +75,7 @@ MonstrAudioProcessorEditor::MonstrAudioProcessorEditor (MonstrAudioProcessor& ow
     //[UserPreSize]
     //[/UserPreSize]
 
-    setSize (600, 250);
+    setSize (640, 290);
 
 
     //[Constructor] You can add your own custom stuff here..
@@ -92,10 +91,10 @@ MonstrAudioProcessorEditor::MonstrAudioProcessorEditor (MonstrAudioProcessor& ow
     width3Sld->setSliderSnapsToMousePosition(false);
 
     // Define a rectangle for the sine wave to be drawn in
-    crossoverBounds = Rectangle<int>(crossoverLowerSld->getX(),
-                                     crossoverLowerSld->getY(),
-                                     crossoverUpperSld->getX() + crossoverUpperSld->getWidth() - crossoverLowerSld->getX(),
-                                     crossoverLowerSld->getHeight());
+    crossoverBounds = Rectangle<int>(40,
+                                     40,
+                                     560,
+                                     210);
     //[/Constructor]
 }
 
@@ -125,7 +124,9 @@ void MonstrAudioProcessorEditor::paint (Graphics& g)
 
     //[UserPaint] Add your own custom painting code here..
 
-
+    Image bg {ImageCache::getFromMemory(BinaryData::MONSTR_Background_png, BinaryData::MONSTR_Background_pngSize)};
+    g.drawImage(bg, 0, 0, 640, 290, 0, 0, 5 * 640, 5 * 290);
+    
     // Then draw the sine
     MONSTRCrossover::update(g,
                             crossoverBounds,
@@ -208,7 +209,7 @@ void MonstrAudioProcessorEditor::timerCallback() {
         width1Sld->setValue(ourProcessor->getParameter(MonstrAudioProcessor::widthBand1), dontSendNotification);
         width2Sld->setValue(ourProcessor->getParameter(MonstrAudioProcessor::widthBand2), dontSendNotification);
         width3Sld->setValue(ourProcessor->getParameter(MonstrAudioProcessor::widthBand3), dontSendNotification);
-        
+
         width1Sld->setIsBandActive(ourProcessor->getParameter(MonstrAudioProcessor::isActiveBand1));
         width2Sld->setIsBandActive(ourProcessor->getParameter(MonstrAudioProcessor::isActiveBand2));
         width3Sld->setIsBandActive(ourProcessor->getParameter(MonstrAudioProcessor::isActiveBand3));
@@ -231,7 +232,7 @@ BEGIN_JUCER_METADATA
                  componentName="" parentClasses="public AudioProcessorEditor, public Timer"
                  constructorParams="MonstrAudioProcessor&amp; ownerFilter" variableInitialisers="AudioProcessorEditor(ownerFilter)"
                  snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330"
-                 fixedSize="1" initialWidth="600" initialHeight="250">
+                 fixedSize="1" initialWidth="640" initialHeight="290">
   <BACKGROUND backgroundColour="ffffffff"/>
   <SLIDER name="Crossover Lower Slider" id="e131cd39bf883688" memberName="crossoverLowerSld"
           virtualName="" explicitFocusOrder="0" pos="16 8 288 200" min="0"
