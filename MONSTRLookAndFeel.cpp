@@ -17,9 +17,9 @@ const Colour MONSTRLookAndFeel::darkGrey(107, 107, 107);
 const Colour MONSTRLookAndFeel::red(250, 0, 0);
 const Colour MONSTRLookAndFeel::yellow(255, 255, 0);
 const Colour MONSTRLookAndFeel::green(30, 255, 0);
-const Colour MONSTRLookAndFeel::redTrans(static_cast<uint8>(250), 0, 0, 100.0f);     // casts to remove constructor ambiguity
-const Colour MONSTRLookAndFeel::yellowTrans(static_cast<uint8>(255), 255, 0, 100.0f);
-const Colour MONSTRLookAndFeel::greenTrans(static_cast<uint8>(30), 255, 0 , 100.0f);
+const Colour MONSTRLookAndFeel::redTrans(static_cast<uint8>(250), 0, 0, 0.5f);     // casts to remove constructor ambiguity
+const Colour MONSTRLookAndFeel::yellowTrans(static_cast<uint8>(255), 255, 0, 0.5f);
+const Colour MONSTRLookAndFeel::greenTrans(static_cast<uint8>(30), 255, 0 , 0.5f);
 
 
 MONSTRLookAndFeel::MONSTRLookAndFeel() : LookAndFeel_V2() {
