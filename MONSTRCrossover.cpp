@@ -203,7 +203,7 @@ void MONSTRCrossover::drawWidthRectangles(Graphics &g,
         if (isBandActive) {
             g.setColour(colour);
         } else {
-            g.setColour(MONSTRLookAndFeel::lightGrey);
+            g.setColour(MONSTRLookAndFeel::lightGreyTrans);
         }
         
         if (widthValue > 0.5) {
