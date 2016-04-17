@@ -310,7 +310,7 @@ void MONSTRCrossover::drawFrequencyText(Graphics &g,
     g.setColour(MONSTRLookAndFeel::yellow);
     g.drawText(String(crossoverLowerHz),
                bounds.getX() + crossoverLowerXPos,
-               bounds.getHeight() * fractionOfHeight,
+               bounds.getY() + bounds.getHeight() * fractionOfHeight,
                50,
                20,
                Justification::centredLeft,
