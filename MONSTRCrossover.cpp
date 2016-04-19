@@ -10,6 +10,16 @@
 
 #include "MONSTRCrossover.h"
 
+const Colour MONSTRCrossover::lightGrey(200, 200, 200);
+const Colour MONSTRCrossover::darkGrey(107, 107, 107);
+const Colour MONSTRCrossover::red(250, 0, 0);
+const Colour MONSTRCrossover::yellow(255, 255, 0);
+const Colour MONSTRCrossover::green(30, 255, 0);
+const Colour MONSTRCrossover::redTrans(static_cast<uint8>(250), 0, 0, 0.5f);     // casts to remove constructor ambiguity
+const Colour MONSTRCrossover::yellowTrans(static_cast<uint8>(255), 255, 0, 0.5f);
+const Colour MONSTRCrossover::greenTrans(static_cast<uint8>(30), 255, 0 , 0.5f);
+const Colour MONSTRCrossover::lightGreyTrans(static_cast<uint8>(200), 200, 200, 0.5f);
+
 MONSTRCrossover::MONSTRCrossover() {
     
 }
@@ -146,7 +156,7 @@ void MONSTRCrossover::drawSine(Graphics &g,
         sineLoop(iii);
     }
     
-    g.setColour(MONSTRLookAndFeel::red);
+    g.setColour(red);
     g.strokePath(p, PathStrokeType(2.0f));
     
     
@@ -160,7 +170,7 @@ void MONSTRCrossover::drawSine(Graphics &g,
         sineLoop(iii);
     }
     
-    g.setColour(MONSTRLookAndFeel::yellow);
+    g.setColour(yellow);
     g.strokePath(p, PathStrokeType(2.0f));
     
     
@@ -173,7 +183,7 @@ void MONSTRCrossover::drawSine(Graphics &g,
         sineLoop(iii);
     }
     
-    g.setColour(MONSTRLookAndFeel::green);
+    g.setColour(green);
     g.strokePath(p, PathStrokeType(2.0f));
     
 
@@ -199,7 +209,7 @@ void MONSTRCrossover::drawWidthRectangles(Graphics &g,
         if (isBandActive) {
             g.setColour(colour);
         } else {
-            g.setColour(MONSTRLookAndFeel::lightGreyTrans);
+            g.setColour(lightGreyTrans);
         }
         
         if (widthValue > 0.5) {
@@ -232,19 +242,19 @@ void MONSTRCrossover::drawWidthRectangles(Graphics &g,
         }
     }};
     
-    drawWidth(MONSTRLookAndFeel::redTrans,
+    drawWidth(redTrans,
               width1Sld.getValue(),
               bounds.getX(),
               crossoverLowerXPos,
               width1Sld.getIsBandActive());
     
-    drawWidth(MONSTRLookAndFeel::yellowTrans,
+    drawWidth(yellowTrans,
               width2Sld.getValue(),
               bounds.getX() + crossoverLowerXPos,
               crossoverUpperXPos - crossoverLowerXPos,
               width2Sld.getIsBandActive());
     
-    drawWidth(MONSTRLookAndFeel::greenTrans,
+    drawWidth(greenTrans,
               width3Sld.getValue(),
               bounds.getX() + crossoverUpperXPos,
               bounds.getWidth() - crossoverUpperXPos,
@@ -268,7 +278,7 @@ void MONSTRCrossover::drawNeutralLine(Graphics &g,
                      1);
     
     
-    g.setColour(MONSTRLookAndFeel::lightGrey);
+    g.setColour(lightGrey);
     g.strokePath(p, PathStrokeType(0.5f));
 }
 
@@ -302,7 +312,7 @@ void MONSTRCrossover::drawFrequencyText(Graphics &g,
                                         float crossoverUpperHz) {
     const float fractionOfHeight {0.9};
     
-    g.setColour(MONSTRLookAndFeel::yellow);
+    g.setColour(yellow);
     g.drawText(String(crossoverLowerHz),
                bounds.getX() + crossoverLowerXPos,
                bounds.getY() + bounds.getHeight() * fractionOfHeight,
@@ -311,7 +321,7 @@ void MONSTRCrossover::drawFrequencyText(Graphics &g,
                Justification::centredLeft,
                false);
     
-    g.setColour(MONSTRLookAndFeel::green);
+    g.setColour(green);
     g.drawText(String(crossoverUpperHz),
                bounds.getX() + crossoverUpperXPos,
                bounds.getY() + bounds.getHeight() * fractionOfHeight,
@@ -351,7 +361,7 @@ void MONSTRCrossover::drawSliderThumbs(Graphics& g,
         g.strokePath(p, PathStrokeType(lineWidth));
         
         p.clear();
-        g.setColour(MONSTRLookAndFeel::darkGrey);
+        g.setColour(darkGrey);
         p.addEllipse(bounds.getX() + crossoverXPos - sliderThumbRadius,
                      bounds.getY() + bounds.getHeight() * 0.5 - sliderThumbRadius,
                      sliderThumbRadius * 2,
@@ -383,6 +393,6 @@ void MONSTRCrossover::drawSliderThumbs(Graphics& g,
         g.strokePath(p, PathStrokeType(lineWidth));
     };
     
-    drawSingleThumb(crossoverLowerXPos, MONSTRLookAndFeel::red, MONSTRLookAndFeel::yellow);
-    drawSingleThumb(crossoverUpperXPos, MONSTRLookAndFeel::yellow, MONSTRLookAndFeel::green);
+    drawSingleThumb(crossoverLowerXPos, red, yellow);
+    drawSingleThumb(crossoverUpperXPos, yellow, green);
 }

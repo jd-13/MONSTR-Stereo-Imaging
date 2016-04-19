@@ -11,15 +11,7 @@
 #include "MONSTRLookAndFeel.h"
 
 // Initialise static members
-const Colour MONSTRLookAndFeel::lightGrey(200, 200, 200);
-const Colour MONSTRLookAndFeel::darkGrey(107, 107, 107);
-const Colour MONSTRLookAndFeel::red(250, 0, 0);
-const Colour MONSTRLookAndFeel::yellow(255, 255, 0);
-const Colour MONSTRLookAndFeel::green(30, 255, 0);
-const Colour MONSTRLookAndFeel::redTrans(static_cast<uint8>(250), 0, 0, 0.5f);     // casts to remove constructor ambiguity
-const Colour MONSTRLookAndFeel::yellowTrans(static_cast<uint8>(255), 255, 0, 0.5f);
-const Colour MONSTRLookAndFeel::greenTrans(static_cast<uint8>(30), 255, 0 , 0.5f);
-const Colour MONSTRLookAndFeel::lightGreyTrans(static_cast<uint8>(200), 200, 200, 0.5f);
+
 
 
 MONSTRLookAndFeel::MONSTRLookAndFeel() : LookAndFeel_V2() {

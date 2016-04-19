@@ -23,9 +23,6 @@ public:
     
     ~MONSTRLookAndFeel();
     
-    // allow friend class access, mostly so it doesn't have to redefine colours
-    friend class MONSTRCrossover;
-    
     virtual void drawLinearSliderThumb(Graphics& g,
                                        int x,
                                        int y,
@@ -50,16 +47,6 @@ public:
     
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MONSTRLookAndFeel)
-    
-    static const Colour lightGrey,
-                        darkGrey,
-                        red,
-                        yellow,
-                        green,
-                        redTrans,
-                        yellowTrans,
-                        greenTrans,
-                        lightGreyTrans;
 };
 
 

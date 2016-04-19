@@ -87,7 +87,15 @@ private:
     
     constexpr static const int sliderThumbRadius {6};
     
-    
+    static const Colour lightGrey,
+                        darkGrey,
+                        red,
+                        yellow,
+                        green,
+                        redTrans,
+                        yellowTrans,
+                        greenTrans,
+                        lightGreyTrans;
 };
 
 #endif  // MONSTRCROSSOVERBACKGROUND_H_INCLUDED
