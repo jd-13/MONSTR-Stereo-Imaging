@@ -330,27 +330,20 @@ void MONSTRCrossover::drawSliderThumbs(Graphics& g,
                                        const Rectangle<int>& bounds,
                                        float crossoverLowerXPos,
                                        float crossoverUpperXPos) {
-    const int sliderThumbRadius {2};
     
-    auto drawSingleThumb = [sliderThumbRadius, &bounds, &g](int crossoverXPos,
+    auto drawSingleThumb = [&bounds, &g](int crossoverXPos,
                                                             Colour topColour,
                                                             Colour bottomColour) -> void {
         Path p;
-        g.setColour(MONSTRLookAndFeel::darkGrey);
-        p.addEllipse(bounds.getX() + crossoverXPos - sliderThumbRadius,
-                     bounds.getY() + bounds.getHeight() * 0.5,
-                     sliderThumbRadius * 2,
-                     sliderThumbRadius * 2);
-        g.fillPath(p);
-        p.clear();
-        
+        const float lineWidth {1.5f};
+
         g.setColour(topColour);
         p.addLineSegment(Line<float>(bounds.getX() + crossoverXPos,
                                      bounds.getY(),
                                      bounds.getX() + crossoverXPos,
                                      bounds.getY() + bounds.getHeight() * 0.5),
                          1);
-        g.strokePath(p, PathStrokeType(1.0f));
+        g.strokePath(p, PathStrokeType(lineWidth));
         
         p.clear();
         
@@ -360,7 +353,40 @@ void MONSTRCrossover::drawSliderThumbs(Graphics& g,
                                      bounds.getX() + crossoverXPos,
                                      bounds.getY() + bounds.getHeight()),
                          1);
-        g.strokePath(p, PathStrokeType(1.0f));
+        g.strokePath(p, PathStrokeType(lineWidth));
+        
+        p.clear();
+        g.setColour(MONSTRLookAndFeel::darkGrey);
+        const int sliderThumbRadius {6};
+        p.addEllipse(bounds.getX() + crossoverXPos - sliderThumbRadius,
+                     bounds.getY() + bounds.getHeight() * 0.5 - sliderThumbRadius,
+                     sliderThumbRadius * 2,
+                     sliderThumbRadius * 2);
+        g.fillPath(p);
+        
+        p.clear();
+        g.setColour(topColour);
+        p.addCentredArc(bounds.getX() + crossoverXPos,
+                        bounds.getY() + bounds.getHeight() * 0.5,
+                        sliderThumbRadius,
+                        sliderThumbRadius,
+                        M_PI,
+                        0,
+                        M_PI,
+                        true);
+        g.strokePath(p, PathStrokeType(lineWidth));
+        
+        p.clear();
+        g.setColour(bottomColour);
+        p.addCentredArc(bounds.getX() + crossoverXPos,
+                        bounds.getY() + bounds.getHeight() * 0.5,
+                        sliderThumbRadius,
+                        sliderThumbRadius,
+                        0,
+                        0,
+                        M_PI,
+                        true);
+        g.strokePath(p, PathStrokeType(lineWidth));
     };
     
     drawSingleThumb(crossoverLowerXPos, MONSTRLookAndFeel::red, MONSTRLookAndFeel::yellow);
