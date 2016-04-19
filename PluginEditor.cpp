@@ -82,8 +82,6 @@ MonstrAudioProcessorEditor::MonstrAudioProcessorEditor (MonstrAudioProcessor& ow
     startTimer(200);
 
     LookAndFeel::setDefaultLookAndFeel(&customLookAndFeel);
-    customLookAndFeel.setSliderThumbRadius(*crossoverLowerSld);
-
     crossoverLowerSld->setSliderSnapsToMousePosition(false);
     crossoverUpperSld->setSliderSnapsToMousePosition(false);
     width1Sld->setSliderSnapsToMousePosition(false);
@@ -127,7 +125,7 @@ void MonstrAudioProcessorEditor::paint (Graphics& g)
     Image bg {ImageCache::getFromMemory(BinaryData::MONSTR_Background_png, BinaryData::MONSTR_Background_pngSize)};
     g.drawImage(bg, 0, 0, 640, 290, 0, 0, 5 * 640, 5 * 290);
     
-    // Then draw the sine
+    // Then draw the crossover
     MONSTRCrossover::update(g,
                             crossoverBounds,
                             *crossoverLowerSld,

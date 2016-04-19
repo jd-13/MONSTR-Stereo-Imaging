@@ -90,21 +90,17 @@ void MONSTRCrossover::resizeWidthSliders(Graphics &g,
                                          MONSTRWidthSlider& width3Sld) {
     // a margin to be applied where the edges of the vertical sliders meet the thumbs
     // of the horizontal sliders to prevent overlap
-    const int margin {10};
-    
-
-    
     width1Sld.setBounds(bounds.getX(),
                         bounds.getY(),
-                        crossoverLowerXPos - margin,
+                        crossoverLowerXPos - sliderThumbRadius,
                         bounds.getHeight());
     
-    width2Sld.setBounds(bounds.getX() + crossoverLowerXPos + margin,
+    width2Sld.setBounds(bounds.getX() + crossoverLowerXPos + sliderThumbRadius,
                         bounds.getY(),
-                        crossoverUpperXPos - crossoverLowerXPos - margin,
+                        crossoverUpperXPos - crossoverLowerXPos - sliderThumbRadius * 2,
                         bounds.getHeight());
     
-    width3Sld.setBounds(bounds.getX() + crossoverUpperXPos + margin,
+    width3Sld.setBounds(bounds.getX() + crossoverUpperXPos + sliderThumbRadius,
                         bounds.getY(),
                         bounds.getWidth() - crossoverUpperXPos,
                         bounds.getHeight());
@@ -287,15 +283,14 @@ void MONSTRCrossover::positionHorizontalSliders(const Rectangle<int> &bounds,
     const double crossoverUpperLogMin {bounds.getWidth() * (log2((CROSSOVERUPPER_MIN + scaleCoefficient) / scaleCoefficient) / log2(20000))};
     const double crossoverUpperLogMax {bounds.getWidth() * (log2((CROSSOVERUPPER_MAX + scaleCoefficient) / scaleCoefficient) / log2(20000))};
     
-    crossoverLowerSld.setBounds(bounds.getX() + crossoverLowerLogMin - MONSTRLookAndFeel::sliderThumbRadius,
+    crossoverLowerSld.setBounds(bounds.getX() + crossoverLowerLogMin - sliderThumbRadius,
                                 bounds.getY(),
-                                crossoverLowerLogMax - crossoverLowerLogMin + 2 *
-                                MONSTRLookAndFeel::sliderThumbRadius,
+                                crossoverLowerLogMax - crossoverLowerLogMin + 2 * sliderThumbRadius,
                                 bounds.getHeight());
     
-    crossoverUpperSld.setBounds(bounds.getX() + crossoverUpperLogMin - MONSTRLookAndFeel::sliderThumbRadius,
+    crossoverUpperSld.setBounds(bounds.getX() + crossoverUpperLogMin - sliderThumbRadius,
                                 bounds.getY(),
-                                bounds.getWidth() - crossoverUpperLogMax + MONSTRLookAndFeel::sliderThumbRadius,
+                                bounds.getWidth() - crossoverUpperLogMax + sliderThumbRadius,
                                 bounds.getHeight());
 }
 
@@ -357,7 +352,6 @@ void MONSTRCrossover::drawSliderThumbs(Graphics& g,
         
         p.clear();
         g.setColour(MONSTRLookAndFeel::darkGrey);
-        const int sliderThumbRadius {6};
         p.addEllipse(bounds.getX() + crossoverXPos - sliderThumbRadius,
                      bounds.getY() + bounds.getHeight() * 0.5 - sliderThumbRadius,
                      sliderThumbRadius * 2,

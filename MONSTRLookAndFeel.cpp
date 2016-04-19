@@ -11,7 +11,6 @@
 #include "MONSTRLookAndFeel.h"
 
 // Initialise static members
-int MONSTRLookAndFeel::sliderThumbRadius {0};
 const Colour MONSTRLookAndFeel::lightGrey(200, 200, 200);
 const Colour MONSTRLookAndFeel::darkGrey(107, 107, 107);
 const Colour MONSTRLookAndFeel::red(250, 0, 0);
@@ -56,14 +55,3 @@ void MONSTRLookAndFeel::drawLinearSliderBackground(Graphics& /*g*/,
                                                    Slider& /*slider*/) {
     // do nothing
 }
-
-void MONSTRLookAndFeel::setSliderThumbRadius(Slider& sld) {
-    sliderThumbRadius = getSliderThumbRadius(sld) - 2;
-}
-
-
-
-
-
-
-

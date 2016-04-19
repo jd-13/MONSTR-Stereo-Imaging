@@ -85,6 +85,8 @@ private:
     // used by the lower frequencies
     constexpr static const int scaleCoefficient {20};
     
+    constexpr static const int sliderThumbRadius {6};
+    
     
 };
 
