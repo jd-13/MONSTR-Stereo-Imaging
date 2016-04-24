@@ -24,8 +24,7 @@
 class MONSTRCrossover {
 public:
     
-    MONSTRCrossover();
-    ~MONSTRCrossover();
+    MONSTRCrossover() = delete;
     
     static void update(Graphics& g,
                        const Rectangle<int>& bounds,

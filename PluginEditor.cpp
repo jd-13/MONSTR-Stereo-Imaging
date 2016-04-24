@@ -87,12 +87,13 @@ MonstrAudioProcessorEditor::MonstrAudioProcessorEditor (MonstrAudioProcessor& ow
     width1Sld->setSliderSnapsToMousePosition(false);
     width2Sld->setSliderSnapsToMousePosition(false);
     width3Sld->setSliderSnapsToMousePosition(false);
-
+        
     // Define a rectangle for the sine wave to be drawn in
     crossoverBounds = Rectangle<int>(40,
                                      40,
                                      560,
                                      210);
+    
     //[/Constructor]
 }
 
@@ -208,9 +209,9 @@ void MonstrAudioProcessorEditor::timerCallback() {
         width2Sld->setValue(ourProcessor->getParameter(MonstrAudioProcessor::widthBand2), dontSendNotification);
         width3Sld->setValue(ourProcessor->getParameter(MonstrAudioProcessor::widthBand3), dontSendNotification);
 
-        width1Sld->setIsBandActive(ourProcessor->getParameter(MonstrAudioProcessor::isActiveBand1));
-        width2Sld->setIsBandActive(ourProcessor->getParameter(MonstrAudioProcessor::isActiveBand2));
-        width3Sld->setIsBandActive(ourProcessor->getParameter(MonstrAudioProcessor::isActiveBand3));
+        width1Sld->setEnabled(ourProcessor->getParameter(MonstrAudioProcessor::isActiveBand1));
+        width2Sld->setEnabled(ourProcessor->getParameter(MonstrAudioProcessor::isActiveBand2));
+        width3Sld->setEnabled(ourProcessor->getParameter(MonstrAudioProcessor::isActiveBand3));
 
     }
 }

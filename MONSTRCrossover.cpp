@@ -22,13 +22,6 @@ const Colour MONSTRCrossover::lightGreyTrans(static_cast<uint8>(200), 200, 200, 
 
 std::array<double, 200> MONSTRCrossover::sineWaveTable;
 
-MONSTRCrossover::MONSTRCrossover() {
-}
-
-MONSTRCrossover::~MONSTRCrossover() {
-    
-}
-
 bool MONSTRCrossover::needsSetup {true};
 
 void MONSTRCrossover::update(Graphics &g,
@@ -99,7 +92,7 @@ void MONSTRCrossover::update(Graphics &g,
     }
 }
 
-void MONSTRCrossover::resizeWidthSliders(Graphics &g,
+void MONSTRCrossover::resizeWidthSliders(Graphics& /*g*/,
                                          const Rectangle<int>& bounds,
                                          float crossoverLowerXPos,
                                          float crossoverUpperXPos,
@@ -235,19 +228,19 @@ void MONSTRCrossover::drawWidthRectangles(Graphics &g,
               width1Sld.getValue(),
               bounds.getX(),
               crossoverLowerXPos,
-              width1Sld.getIsBandActive());
+              width1Sld.isEnabled());
     
     drawWidth(yellowTrans,
               width2Sld.getValue(),
               bounds.getX() + crossoverLowerXPos,
               crossoverUpperXPos - crossoverLowerXPos,
-              width2Sld.getIsBandActive());
+              width2Sld.isEnabled());
     
     drawWidth(greenTrans,
               width3Sld.getValue(),
               bounds.getX() + crossoverUpperXPos,
               bounds.getWidth() - crossoverUpperXPos,
-              width3Sld.getIsBandActive());
+              width3Sld.isEnabled());
 }
 
 // draws the lines representing neutral width

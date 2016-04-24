@@ -13,23 +13,14 @@ MONSTRWidthSlider::MONSTRWidthSlider(String name,
                                      MonstrAudioProcessor* newProcessor,
                                      int newParameter)
 :  Slider(name),                                                                            ourProcessor(newProcessor),
-    isBandActive(true),
     parameter(newParameter) {
 }
 
 void MONSTRWidthSlider::mouseDown(const juce::MouseEvent &event) {
     if (event.mods.isRightButtonDown()) {
-        isBandActive = !isBandActive;
-        ourProcessor->setParameter(parameter, isBandActive);
+        setEnabled(!isEnabled());
+        ourProcessor->setParameter(parameter, isEnabled());
     }
     
     Slider::mouseDown(event);
-}
-
-bool MONSTRWidthSlider::getIsBandActive() {
-    return isBandActive;
-}
-
-void MONSTRWidthSlider::setIsBandActive(bool val) {
-    isBandActive = val;
 }

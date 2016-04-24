@@ -22,15 +22,15 @@ MONSTRLookAndFeel::~MONSTRLookAndFeel() {
 }
 
 
-void MONSTRLookAndFeel::drawLinearSliderThumb(Graphics &g,
+void MONSTRLookAndFeel::drawLinearSliderThumb(Graphics& /*g*/,
                                               int /*x*/,
-                                              int y,
+                                              int /*y*/,
                                               int /*width*/,
-                                              int height,
-                                              float sliderPos,
+                                              int /*height*/,
+                                              float /*sliderPos*/,
                                               float /*minSliderPos*/,
                                               float /*maxSliderPos*/,
-                                              const Slider::SliderStyle style,
+                                              const Slider::SliderStyle /*style*/,
                                               juce::Slider& /*slider*/) {
     // do nothing
 }

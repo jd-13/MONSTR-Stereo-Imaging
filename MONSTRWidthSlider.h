@@ -22,12 +22,8 @@ public:
     
     virtual void mouseDown(const MouseEvent& event) override;
     
-    bool getIsBandActive();
-    void setIsBandActive(bool val);
-    
 private:
     MonstrAudioProcessor* ourProcessor;
-    bool isBandActive;
     int parameter;
 
 };
