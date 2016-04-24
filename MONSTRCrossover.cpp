@@ -20,8 +20,9 @@ const Colour MONSTRCrossover::yellowTrans(static_cast<uint8>(255), 255, 0, 0.5f)
 const Colour MONSTRCrossover::greenTrans(static_cast<uint8>(30), 255, 0 , 0.5f);
 const Colour MONSTRCrossover::lightGreyTrans(static_cast<uint8>(200), 200, 200, 0.5f);
 
+std::array<double, 200> MONSTRCrossover::sineWaveTable;
+
 MONSTRCrossover::MONSTRCrossover() {
-    
 }
 
 MONSTRCrossover::~MONSTRCrossover() {
@@ -51,7 +52,7 @@ void MONSTRCrossover::update(Graphics &g,
     crossoverUpperXPos *= bounds.getWidth() * (log2((CROSSOVERUPPER_MAX + scaleCoefficient) / scaleCoefficient) / log2(20000));
     
     drawSine(g, bounds, crossoverLowerXPos, crossoverUpperXPos);
-
+    
     drawNeutralLine(g, bounds);
     
     drawWidthRectangles(g,
@@ -61,7 +62,6 @@ void MONSTRCrossover::update(Graphics &g,
                         width1Sld,
                         width2Sld,
                         width3Sld);
-    
     
     drawFrequencyText(g,
                       bounds,
@@ -74,6 +74,7 @@ void MONSTRCrossover::update(Graphics &g,
                      bounds,
                      crossoverLowerXPos,
                      crossoverUpperXPos);
+
     
     resizeWidthSliders(g,
                        bounds,
@@ -82,12 +83,19 @@ void MONSTRCrossover::update(Graphics &g,
                        width1Sld,
                        width2Sld,
                        width3Sld);
+
     
     // if update has not been called yet, perform any necessary setup
     if (needsSetup) {
         needsSetup = false;
         
         positionHorizontalSliders(bounds, crossoverLowerSld, crossoverUpperSld);
+        
+        // Generate sine wave table
+        for (size_t iii {0}; iii < sineWaveTable.size(); iii++) {
+            double xVal {(1.0 / sineWaveTable.size()) * iii};
+            sineWaveTable[iii] = sin(pow(M_E, 1.5 * xVal + 1.83)) / 2 + 0.5;
+        }
     }
 }
 
@@ -118,40 +126,27 @@ void MONSTRCrossover::resizeWidthSliders(Graphics &g,
 
 // draws the sine wave behind each band
 void MONSTRCrossover::drawSine(Graphics &g,
-                                         Rectangle<int> bounds,
-                                         float crossoverLowerXPos,
-                                         float crossoverUpperXPos) {
+                               Rectangle<int> bounds,
+                               float crossoverLowerXPos,
+                               float crossoverUpperXPos) {
+    Path p;
+    const int pointsToLowerSliderPos {static_cast<int>(sineWaveTable.size() * static_cast<float>(crossoverLowerXPos / bounds.getWidth()))};
+    const int pointsToUpperSliderPos {static_cast<int>(sineWaveTable.size() * static_cast<float>(crossoverUpperXPos / bounds.getWidth()))};
+    double absXPos {0};
     
-    // define the lambda for the sine function
-    auto SineFunc {[](double x) -> double {
-        return sin(pow(M_E, 1.5 * x + 1.83)) / 2 + 0.5;
+    // define the lambda used in for loops to draw the sine
+    auto sineLoop {[&absXPos, &p, &bounds](int index) -> void {
+        absXPos = {(1.0 / sineWaveTable.size()) * index};
+        p.lineTo(bounds.getX() + absXPos * bounds.getWidth(),
+                 bounds.getY() + sineWaveTable[index] * bounds.getHeight());
     }};
     
-    const int totalPoints {2000}; // sets the resolution of the path
+    p.startNewSubPath(bounds.getX(),
+                      bounds.getY() + sineWaveTable[0] * bounds.getHeight());
 
-    Path p;
-    p.startNewSubPath(bounds.getX(), bounds.getY() + SineFunc(0) * bounds.getHeight());
-    
     // move from left to right calculating the sine wave to draw
     // calculate the half left of the thumb, then change colour and calculate
     // the second half
-
-    
-    // start from 1 since the first point is already drawn (above)
-    const int pointsToLowerSliderPos {static_cast<int>(totalPoints * static_cast<float>(crossoverLowerXPos / bounds.getWidth()))};
-    double absXPos {0};
-    
-    
-    // define the lambda used in for loops to draw the sine
-    auto sineLoop {[totalPoints, &absXPos, &p, &bounds, SineFunc](int index) -> void {
-        absXPos = {(1.0 / totalPoints) * index};
-        
-        double absAmplitude {SineFunc(absXPos)};
-        
-        p.lineTo(bounds.getX() + absXPos * bounds.getWidth(), bounds.getY() + absAmplitude * bounds.getHeight());
-    }};
-    
-    
     for (int iii {1}; iii < pointsToLowerSliderPos; iii++) {
         sineLoop(iii);
     }
@@ -159,12 +154,10 @@ void MONSTRCrossover::drawSine(Graphics &g,
     g.setColour(red);
     g.strokePath(p, PathStrokeType(2.0f));
     
-    
     // start second band
     p.clear();
-    absXPos = (1.0 / totalPoints) * pointsToLowerSliderPos;
-    p.startNewSubPath(bounds.getX() + absXPos * bounds.getWidth(), bounds.getY() + SineFunc(absXPos) * bounds.getHeight());
-    const int pointsToUpperSliderPos {static_cast<int>(totalPoints * static_cast<float>(crossoverUpperXPos / bounds.getWidth()))};
+    p.startNewSubPath(bounds.getX() + absXPos * bounds.getWidth(),
+                      bounds.getY() + sineWaveTable[pointsToLowerSliderPos] * bounds.getHeight());
     
     for (int iii {pointsToLowerSliderPos + 1}; iii < pointsToUpperSliderPos; iii++) {
         sineLoop(iii);
@@ -172,21 +165,17 @@ void MONSTRCrossover::drawSine(Graphics &g,
     
     g.setColour(yellow);
     g.strokePath(p, PathStrokeType(2.0f));
-    
-    
+
     // start final band
     p.clear();
-    absXPos = (1.0 / totalPoints) * pointsToUpperSliderPos;
-    p.startNewSubPath(bounds.getX() + absXPos * bounds.getWidth(), bounds.getY() + SineFunc(absXPos) * bounds.getHeight());
-    
-    for (int iii {pointsToUpperSliderPos + 1}; iii < totalPoints; iii++) {
+    p.startNewSubPath(bounds.getX() + absXPos * bounds.getWidth(),
+                      bounds.getY() + sineWaveTable[pointsToUpperSliderPos] * bounds.getHeight());
+    for (int iii {pointsToUpperSliderPos + 1}; iii < sineWaveTable.size(); iii++) {
         sineLoop(iii);
     }
     
     g.setColour(green);
     g.strokePath(p, PathStrokeType(2.0f));
-    
-
 }
 
 // draws the rectangles showing the width of each band

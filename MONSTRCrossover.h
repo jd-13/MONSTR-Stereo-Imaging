@@ -19,6 +19,7 @@
 #include "ParameterData.h"
 #include "math.h"
 #include <memory>
+#include <array>
 
 class MONSTRCrossover {
 public:
@@ -86,6 +87,8 @@ private:
     constexpr static const int scaleCoefficient {20};
     
     constexpr static const int sliderThumbRadius {6};
+    
+    static std::array<double, 200>sineWaveTable;
     
     static const Colour lightGrey,
                         darkGrey,
