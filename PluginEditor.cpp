@@ -1,17 +1,17 @@
 /*
   ==============================================================================
 
-  This is an automatically generated GUI class created by the Introjucer!
+  This is an automatically generated GUI class created by the Projucer!
 
   Be careful when adding custom code to these files, as only the code within
   the "//[xyz]" and "//[/xyz]" sections will be retained when the file is loaded
   and re-saved.
 
-  Created with Introjucer version: 3.2.0
+  Created with Projucer version: 4.2.1
 
   ------------------------------------------------------------------------------
 
-  The Introjucer is part of the JUCE library - "Jules' Utility Class Extensions"
+  The Projucer is part of the JUCE library - "Jules' Utility Class Extensions"
   Copyright (c) 2015 - ROLI Ltd.
 
   ==============================================================================
@@ -38,7 +38,7 @@ MonstrAudioProcessorEditor::MonstrAudioProcessorEditor (MonstrAudioProcessor& ow
     crossoverLowerSld->setSliderStyle (Slider::LinearHorizontal);
     crossoverLowerSld->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     crossoverLowerSld->addListener (this);
-    crossoverLowerSld->setSkewFactor (0.4);
+    crossoverLowerSld->setSkewFactor (0.7);
 
     addAndMakeVisible (crossoverUpperSld = new Slider ("Crossover Upper Slider"));
     crossoverUpperSld->setRange (0, 1, 0);
@@ -87,13 +87,17 @@ MonstrAudioProcessorEditor::MonstrAudioProcessorEditor (MonstrAudioProcessor& ow
     width1Sld->setSliderSnapsToMousePosition(false);
     width2Sld->setSliderSnapsToMousePosition(false);
     width3Sld->setSliderSnapsToMousePosition(false);
-        
+    
+    crossoverLowerSld->setMouseDragSensitivity(100);
+    crossoverUpperSld->setMouseDragSensitivity(100);
+
+    
     // Define a rectangle for the sine wave to be drawn in
     crossoverBounds = Rectangle<int>(40,
                                      40,
                                      560,
                                      210);
-    
+
     //[/Constructor]
 }
 
@@ -125,7 +129,7 @@ void MonstrAudioProcessorEditor::paint (Graphics& g)
 
     Image bg {ImageCache::getFromMemory(BinaryData::MONSTR_Background_png, BinaryData::MONSTR_Background_pngSize)};
     g.drawImage(bg, 0, 0, 640, 290, 0, 0, 5 * 640, 5 * 290);
-    
+
     // Then draw the crossover
     MONSTRCrossover::update(g,
                             crossoverBounds,
@@ -200,6 +204,7 @@ void MonstrAudioProcessorEditor::sliderValueChanged (Slider* sliderThatWasMoved)
 void MonstrAudioProcessorEditor::timerCallback() {
 
     MonstrAudioProcessor* ourProcessor = getProcessor();
+    repaint();
 
     if (ourProcessor->NeedsUIUpdate()) {
         crossoverLowerSld->setValue(ourProcessor->getParameter(MonstrAudioProcessor::crossoverLower), dontSendNotification);
@@ -220,9 +225,9 @@ void MonstrAudioProcessorEditor::timerCallback() {
 
 //==============================================================================
 #if 0
-/*  -- Introjucer information section --
+/*  -- Projucer information section --
 
-    This is where the Introjucer stores the metadata that describe this GUI layout, so
+    This is where the Projucer stores the metadata that describe this GUI layout, so
     make changes in here at your peril!
 
 BEGIN_JUCER_METADATA
@@ -236,26 +241,28 @@ BEGIN_JUCER_METADATA
   <SLIDER name="Crossover Lower Slider" id="e131cd39bf883688" memberName="crossoverLowerSld"
           virtualName="" explicitFocusOrder="0" pos="16 8 288 200" min="0"
           max="1" int="0" style="LinearHorizontal" textBoxPos="NoTextBox"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="0.4000000000000000222"/>
+          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="0.69999999999999995559"
+          needsCallback="1"/>
   <SLIDER name="Crossover Upper Slider" id="d5eaf01002d1395" memberName="crossoverUpperSld"
           virtualName="" explicitFocusOrder="0" pos="312 8 288 200" min="0"
           max="1" int="0" style="LinearHorizontal" textBoxPos="NoTextBox"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="0.69999999999999995559"/>
+          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="0.69999999999999995559"
+          needsCallback="1"/>
   <SLIDER name="Band 1 Width Slider" id="a19cf5783381f0f4" memberName="width1Sld"
           virtualName="MONSTRWidthSlider" explicitFocusOrder="0" pos="64 8 72 192"
           min="0" max="1" int="0.010000000000000000208" style="LinearVertical"
           textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
-          textBoxHeight="20" skewFactor="1"/>
+          textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="Band 2 Width Slider" id="4c81fe5c3b84dad" memberName="width2Sld"
           virtualName="MONSTRWidthSlider" explicitFocusOrder="0" pos="232 16 72 184"
           min="0" max="1" int="0.010000000000000000208" style="LinearVertical"
           textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
-          textBoxHeight="20" skewFactor="1"/>
+          textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="Band 3 Width Slider" id="f1626a0c5e7a4180" memberName="width3Sld"
           virtualName="MONSTRWidthSlider" explicitFocusOrder="0" pos="432 8 72 208"
           min="0" max="1" int="0.010000000000000000208" style="LinearVertical"
           textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
-          textBoxHeight="20" skewFactor="1"/>
+          textBoxHeight="20" skewFactor="1" needsCallback="1"/>
 </JUCER_COMPONENT>
 
 END_JUCER_METADATA

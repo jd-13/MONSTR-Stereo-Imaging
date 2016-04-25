@@ -140,7 +140,7 @@ void MONSTRCrossover::drawSine(Graphics &g,
     // move from left to right calculating the sine wave to draw
     // calculate the half left of the thumb, then change colour and calculate
     // the second half
-    for (int iii {1}; iii < pointsToLowerSliderPos; iii++) {
+    for (int iii {1}; iii <= pointsToLowerSliderPos; iii++) {
         sineLoop(iii);
     }
     
@@ -152,7 +152,7 @@ void MONSTRCrossover::drawSine(Graphics &g,
     p.startNewSubPath(bounds.getX() + absXPos * bounds.getWidth(),
                       bounds.getY() + sineWaveTable[pointsToLowerSliderPos] * bounds.getHeight());
     
-    for (int iii {pointsToLowerSliderPos + 1}; iii < pointsToUpperSliderPos; iii++) {
+    for (int iii {pointsToLowerSliderPos + 1}; iii <= pointsToUpperSliderPos; iii++) {
         sineLoop(iii);
     }
     
@@ -293,10 +293,11 @@ void MONSTRCrossover::drawFrequencyText(Graphics &g,
                                         float crossoverUpperXPos,
                                         float crossoverUpperHz) {
     const float fractionOfHeight {0.9};
+    const float spacing {5};
     
     g.setColour(yellow);
-    g.drawText(String(crossoverLowerHz),
-               bounds.getX() + crossoverLowerXPos,
+    g.drawText(String(static_cast<int>(crossoverLowerHz)),
+               bounds.getX() + crossoverLowerXPos + spacing,
                bounds.getY() + bounds.getHeight() * fractionOfHeight,
                50,
                20,
@@ -304,8 +305,8 @@ void MONSTRCrossover::drawFrequencyText(Graphics &g,
                false);
     
     g.setColour(green);
-    g.drawText(String(crossoverUpperHz),
-               bounds.getX() + crossoverUpperXPos,
+    g.drawText(String(static_cast<int>(crossoverUpperHz)),
+               bounds.getX() + crossoverUpperXPos + spacing,
                bounds.getY() + bounds.getHeight() * fractionOfHeight,
                50,
                20,
