@@ -26,6 +26,24 @@ public:
     
     MONSTRCrossover() = delete;
     
+    /* update
+     *
+     * Performs the effect processing on inLeftSample and inRightSample. Use for
+     * stereo in->stereo out signals.
+     *
+     * args: g              Graphics object to use to draw the crossover
+     *       bounds         Int rectangle defining the area to draw within
+     *       lowerSlider    The (horizontal) slider to determine the lower
+     *                      frequency of the crossover
+     *       upperSlider    The (horizontal) slider to determine the upper
+     *                      frequency of the crossover
+     *       width1Sld      The (vertical) slider to determine the stereo width
+     *                      of the lower band
+     *       width2Sld      The (vertical) slider to determine the stereo width
+     *                      of the middle band
+     *       width3Sld      The (vertical) slider to determine the stereo width
+     *                      of the upper band
+     */
     static void update(Graphics& g,
                        const Rectangle<int>& bounds,
                        Slider& lowerSlider,

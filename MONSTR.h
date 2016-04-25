@@ -23,6 +23,15 @@ public:
                 band2,
                 band3;
     
+    /* ClockProcess2in2out
+     *
+     * Performs the effect processing on inLeftSample and inRightSample. Use for
+     * stereo in->stereo out signals.
+     *
+     * args: inLeftSample    Pointer to the left sample to be processed
+     *       inRightSample   Pointer to the right sample to be processed
+     *       index           Current position in the current buffer of samples
+     */
     void ClockProcess(float* leftSample, float* rightSample, size_t numSamples);
     
     void setSampleRate(double newSampleRate);

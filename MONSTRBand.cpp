@@ -109,19 +109,16 @@ float MONSTRBand::getIsActive() const {
 }
 
 void MONSTRBand::makeBandLower() {
-    // lets the band know if it covers the lowest frequencies
     isLower = true;
     isUpper = false;
 }
 
 void MONSTRBand::makeBandMiddle() {
-    // lets the band know if it covers the middle frequencies
     isLower = false;
     isUpper = false;
 }
 
 void MONSTRBand::makeBandUpper() {
-    // lets the band know if it covers the highest frequencies
     isLower = false;
     isUpper = true;
 }
@@ -155,18 +152,19 @@ void MONSTRBand::filterSamples(float *inLeftSamples, float *inRightSamples, int 
 }
 
 void MONSTRBand::process2in2out(std::vector<float>& inLeftSamples,
-                                std::vector<float>& inRightSamples,
-                                int numSamples) {
+                                std::vector<float>& inRightSamples) {
+    
+    assert(inLeftSamples.size() == inRightSamples.size());
     
     // Apply the filtering before processing
-    filterSamples(&inLeftSamples[0], &inRightSamples[0], numSamples);
+    filterSamples(&inLeftSamples[0], &inRightSamples[0], inLeftSamples.size());
     
     if (isActive) {
         // Do the actual stereo widening or narrowing
         // Based on: http://musicdsp.org/showArchiveComment.php?ArchiveID=256
         double coef_S {width * 0.5};
         
-        for (size_t iii {0}; iii < numSamples; iii++) {
+        for (size_t iii {0}; iii < inLeftSamples.size(); iii++) {
             
             double mid {(inLeftSamples[iii] + inRightSamples[iii]) * 0.5};
             double side {(inRightSamples[iii] - inLeftSamples[iii]) * coef_S};

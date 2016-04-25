@@ -48,14 +48,45 @@ public:
     float getWidth() const;
     float getIsActive() const;
     
+    
+    /* makeBandLower
+     *
+     * Lets the band know if it covers the lowest frequencies, so will
+     * apply only a high cut filter.
+     */
     void makeBandLower();
+    
+    /* makeBandMiddle
+     *
+     * Lets the band know if it covers the middle frequencies, so will
+     * apply both a low and high cut filter.
+     */
     void makeBandMiddle();
+    
+    /* makeBandUpper
+     *
+     * Lets the band know if it covers the highest frequencies, so will
+     * apply only a low cut filter.
+     */
     void makeBandUpper();
     
+    /* reset
+     *
+     * Resets filter states. Call before beginning a new buffer of
+     * samples.
+     */
     void reset();
     
+    /* process2in2out
+     *
+     * Performs the effect processing on inLeftSample and inRightSample. Use for
+     * stereo in->stereo out signals.
+     *
+     * args: inLeftSamples    Reference to a vector of left samples to be processed
+     *       inRightSamples   Reference to a vector of right samples to be processed
+     */
     void process2in2out(std::vector<float>& inLeftSamples,
-                        std::vector<float>& inRightSamples, int numSamples);
+                        std::vector<float>& inRightSamples);
     
 private:
     bool    isActive,
