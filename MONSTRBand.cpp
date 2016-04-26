@@ -1,7 +1,7 @@
 /*
  *	File:		MONSTRBand.cpp
  *
- *	Version:	0.01.00
+ *	Version:	1.0.0
  *
  *	Created:	21/01/2016
  *
