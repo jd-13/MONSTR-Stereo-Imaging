@@ -11,7 +11,8 @@
 #include "MONSTRLookAndFeel.h"
 
 // Initialise static members
-
+const Colour MONSTRLookAndFeel::lightGrey(200, 200, 200);
+const Colour MONSTRLookAndFeel::darkGrey(107, 107, 107);
 
 
 MONSTRLookAndFeel::MONSTRLookAndFeel() : LookAndFeel_V2() {
@@ -46,4 +47,15 @@ void MONSTRLookAndFeel::drawLinearSliderBackground(Graphics& /*g*/,
                                                    const Slider::SliderStyle /*style*/,
                                                    Slider& /*slider*/) {
     // do nothing
+}
+
+void MONSTRLookAndFeel::drawTooltip(Graphics& g,
+                                     const String& text,
+                                     int width,
+                                     int height) {
+    g.setColour(lightGrey);
+    g.fillRect(0, 0, width, height);
+    
+    g.setColour(darkGrey);
+    g.drawFittedText(text, 0, 0, width, height, Justification::centred, 3);
 }

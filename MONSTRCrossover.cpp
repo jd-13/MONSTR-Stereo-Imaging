@@ -310,19 +310,19 @@ void MONSTRCrossover::drawFrequencyText(Graphics &g,
     const float spacing {5};
     
     g.setColour(yellow);
-    g.drawText(String(static_cast<int>(crossoverLowerHz)),
+    g.drawText(String(static_cast<int>(crossoverLowerHz)) + " Hz",
                bounds.getX() + crossoverLowerXPos + spacing,
                bounds.getY() + bounds.getHeight() * fractionOfHeight,
-               50,
+               60,
                20,
                Justification::centredLeft,
                false);
     
     g.setColour(green);
-    g.drawText(String(static_cast<int>(crossoverUpperHz)),
+    g.drawText(String(static_cast<int>(crossoverUpperHz)) + " Hz",
                bounds.getX() + crossoverUpperXPos + spacing,
                bounds.getY() + bounds.getHeight() * fractionOfHeight,
-               50,
+               60,
                20,
                Justification::centredLeft,
                false);

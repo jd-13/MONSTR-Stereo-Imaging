@@ -34,6 +34,11 @@ MonstrAudioProcessorEditor::MonstrAudioProcessorEditor (MonstrAudioProcessor& ow
     //[/Constructor_pre]
 
     addAndMakeVisible (crossoverLowerSld = new Slider ("Crossover Lower Slider"));
+    crossoverLowerSld->setTooltip (TRANS("Drag the horizontal sliders left or right to change the crossover frequencies of each band.\n"
+    "\n"
+    "Drag up or down near the middle of a band to increase or decrease that band\'s stereo width.\n"
+    "\n"
+    "Right click near the middle of a band to bypass its stereo processing."));
     crossoverLowerSld->setRange (0, 1, 0);
     crossoverLowerSld->setSliderStyle (Slider::LinearHorizontal);
     crossoverLowerSld->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
@@ -41,6 +46,11 @@ MonstrAudioProcessorEditor::MonstrAudioProcessorEditor (MonstrAudioProcessor& ow
     crossoverLowerSld->setSkewFactor (0.7);
 
     addAndMakeVisible (crossoverUpperSld = new Slider ("Crossover Upper Slider"));
+    crossoverUpperSld->setTooltip (TRANS("Drag the horizontal sliders left or right to change the crossover freqencies of each band.\n"
+    "\n"
+    "Drag up or down near the middle of a band to increase or decrease that band\'s stereo width.\n"
+    "\n"
+    "Right click near the middle of a band to bypass its stereo processing."));
     crossoverUpperSld->setRange (0, 1, 0);
     crossoverUpperSld->setSliderStyle (Slider::LinearHorizontal);
     crossoverUpperSld->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
@@ -50,6 +60,11 @@ MonstrAudioProcessorEditor::MonstrAudioProcessorEditor (MonstrAudioProcessor& ow
     addAndMakeVisible (width1Sld = new MONSTRWidthSlider ("Band 1 Width Slider",
                                                           getProcessor(),
                                                           MonstrAudioProcessor::isActiveBand1));
+    width1Sld->setTooltip (TRANS("Drag the horizontal sliders left or right to change the crossover frequencies of each band.\n"
+    "\n"
+    "Drag up or down near the middle of a band to increase or decrease that band\'s stereo width.\n"
+    "\n"
+    "Right click near the middle of a band to bypass its stereo processing."));
     width1Sld->setRange (0, 1, 0.01);
     width1Sld->setSliderStyle (Slider::LinearVertical);
     width1Sld->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
@@ -58,6 +73,11 @@ MonstrAudioProcessorEditor::MonstrAudioProcessorEditor (MonstrAudioProcessor& ow
     addAndMakeVisible (width2Sld = new MONSTRWidthSlider ("Band 2 Width Slider",
                                                           getProcessor(),
                                                           MonstrAudioProcessor::isActiveBand2));
+    width2Sld->setTooltip (TRANS("Drag the horizontal sliders left or right to change the crossover frequencies of each band.\n"
+    "\n"
+    "Drag up or down near the middle of a band to increase or decrease that band\'s stereo width.\n"
+    "\n"
+    "Right click near the middle of a band to bypass its stereo processing."));
     width2Sld->setRange (0, 1, 0.01);
     width2Sld->setSliderStyle (Slider::LinearVertical);
     width2Sld->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
@@ -66,6 +86,11 @@ MonstrAudioProcessorEditor::MonstrAudioProcessorEditor (MonstrAudioProcessor& ow
     addAndMakeVisible (width3Sld = new MONSTRWidthSlider ("Band 3 Width Slider",
                                                           getProcessor(),
                                                           MonstrAudioProcessor::isActiveBand3));
+    width3Sld->setTooltip (TRANS("Drag the horizontal sliders left or right to change the crossover frequencies of each band.\n"
+    "\n"
+    "Drag up or down near the middle of a band to increase or decrease that band\'s stereo width.\n"
+    "\n"
+    "Right click near the middle of a band to bypass its stereo processing."));
     width3Sld->setRange (0, 1, 0.01);
     width3Sld->setSliderStyle (Slider::LinearVertical);
     width3Sld->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
@@ -87,11 +112,13 @@ MonstrAudioProcessorEditor::MonstrAudioProcessorEditor (MonstrAudioProcessor& ow
     width1Sld->setSliderSnapsToMousePosition(false);
     width2Sld->setSliderSnapsToMousePosition(false);
     width3Sld->setSliderSnapsToMousePosition(false);
-    
+
     crossoverLowerSld->setMouseDragSensitivity(100);
     crossoverUpperSld->setMouseDragSensitivity(100);
+    crossoverLowerSld->setVelocityBasedMode(false);
+    crossoverUpperSld->setVelocityBasedMode(false);
 
-    
+
     // Define a rectangle for the sine wave to be drawn in
     crossoverBounds = Rectangle<int>(40,
                                      40,
@@ -239,27 +266,30 @@ BEGIN_JUCER_METADATA
                  fixedSize="1" initialWidth="640" initialHeight="290">
   <BACKGROUND backgroundColour="ffffffff"/>
   <SLIDER name="Crossover Lower Slider" id="e131cd39bf883688" memberName="crossoverLowerSld"
-          virtualName="" explicitFocusOrder="0" pos="16 8 288 200" min="0"
-          max="1" int="0" style="LinearHorizontal" textBoxPos="NoTextBox"
+          virtualName="" explicitFocusOrder="0" pos="16 8 288 200" tooltip="Drag the horizontal sliders left or right to change the crossover frequencies of each band.&#10;&#10;Drag up or down near the middle of a band to increase or decrease that band's stereo width.&#10;&#10;Right click near the middle of a band to bypass its stereo processing."
+          min="0" max="1" int="0" style="LinearHorizontal" textBoxPos="NoTextBox"
           textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="0.69999999999999995559"
           needsCallback="1"/>
   <SLIDER name="Crossover Upper Slider" id="d5eaf01002d1395" memberName="crossoverUpperSld"
-          virtualName="" explicitFocusOrder="0" pos="312 8 288 200" min="0"
-          max="1" int="0" style="LinearHorizontal" textBoxPos="NoTextBox"
+          virtualName="" explicitFocusOrder="0" pos="312 8 288 200" tooltip="Drag the horizontal sliders left or right to change the crossover freqencies of each band.&#10;&#10;Drag up or down near the middle of a band to increase or decrease that band's stereo width.&#10;&#10;Right click near the middle of a band to bypass its stereo processing."
+          min="0" max="1" int="0" style="LinearHorizontal" textBoxPos="NoTextBox"
           textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="0.69999999999999995559"
           needsCallback="1"/>
   <SLIDER name="Band 1 Width Slider" id="a19cf5783381f0f4" memberName="width1Sld"
           virtualName="MONSTRWidthSlider" explicitFocusOrder="0" pos="64 8 72 192"
+          tooltip="Drag the horizontal sliders left or right to change the crossover frequencies of each band.&#10;&#10;Drag up or down near the middle of a band to increase or decrease that band's stereo width.&#10;&#10;Right click near the middle of a band to bypass its stereo processing."
           min="0" max="1" int="0.010000000000000000208" style="LinearVertical"
           textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
           textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="Band 2 Width Slider" id="4c81fe5c3b84dad" memberName="width2Sld"
           virtualName="MONSTRWidthSlider" explicitFocusOrder="0" pos="232 16 72 184"
+          tooltip="Drag the horizontal sliders left or right to change the crossover frequencies of each band.&#10;&#10;Drag up or down near the middle of a band to increase or decrease that band's stereo width.&#10;&#10;Right click near the middle of a band to bypass its stereo processing."
           min="0" max="1" int="0.010000000000000000208" style="LinearVertical"
           textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
           textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="Band 3 Width Slider" id="f1626a0c5e7a4180" memberName="width3Sld"
           virtualName="MONSTRWidthSlider" explicitFocusOrder="0" pos="432 8 72 208"
+          tooltip="Drag the horizontal sliders left or right to change the crossover frequencies of each band.&#10;&#10;Drag up or down near the middle of a band to increase or decrease that band's stereo width.&#10;&#10;Right click near the middle of a band to bypass its stereo processing."
           min="0" max="1" int="0.010000000000000000208" style="LinearVertical"
           textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
           textBoxHeight="20" skewFactor="1" needsCallback="1"/>

@@ -39,9 +39,9 @@ void MONSTR::ClockProcess(float* leftSample, float* rightSample, size_t numSampl
     }
     
     // let each band do its processing
-    band1.process2in2out(band1LeftBuffer, band1RightBuffer, numSamples);
-    band2.process2in2out(band2LeftBuffer, band2RightBuffer, numSamples);
-    band3.process2in2out(band3LeftBuffer, band3RightBuffer, numSamples);
+    band1.process2in2out(band1LeftBuffer, band1RightBuffer);
+    band2.process2in2out(band2LeftBuffer, band2RightBuffer);
+    band3.process2in2out(band3LeftBuffer, band3RightBuffer);
     
     // combine the output from each band, and write to output
     for (size_t iii {0}; iii < numSamples; iii++) {
