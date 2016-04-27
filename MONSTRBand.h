@@ -28,7 +28,7 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include <vector>
 #include "ParameterData.h"
-#include "DSPFilters/Butterworth.h"
+#include "DspFilters/Butterworth.h"
 
 class MONSTRBand {
 public:

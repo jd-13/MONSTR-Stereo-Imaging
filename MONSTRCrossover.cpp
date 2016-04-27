@@ -29,10 +29,10 @@ const Colour MONSTRCrossover::darkGrey(107, 107, 107);
 const Colour MONSTRCrossover::red(250, 0, 0);
 const Colour MONSTRCrossover::yellow(255, 255, 0);
 const Colour MONSTRCrossover::green(30, 255, 0);
-const Colour MONSTRCrossover::redTrans(static_cast<uint8>(250), 0, 0, 0.5f);     // casts to remove constructor ambiguity
-const Colour MONSTRCrossover::yellowTrans(static_cast<uint8>(255), 255, 0, 0.5f);
-const Colour MONSTRCrossover::greenTrans(static_cast<uint8>(30), 255, 0 , 0.5f);
-const Colour MONSTRCrossover::lightGreyTrans(static_cast<uint8>(200), 200, 200, 0.5f);
+const Colour MONSTRCrossover::redTrans(static_cast<uint8_t>(250), 0, 0, 0.5f);     // casts to remove constructor ambiguity
+const Colour MONSTRCrossover::yellowTrans(static_cast<uint8_t>(255), 255, 0, 0.5f);
+const Colour MONSTRCrossover::greenTrans(static_cast<uint8_t>(30), 255, 0 , 0.5f);
+const Colour MONSTRCrossover::lightGreyTrans(static_cast<uint8_t>(200), 200, 200, 0.5f);
 
 std::array<double, 200> MONSTRCrossover::sineWaveTable;
 
@@ -306,8 +306,8 @@ void MONSTRCrossover::drawFrequencyText(Graphics &g,
                                         float crossoverLowerHz,
                                         float crossoverUpperXPos,
                                         float crossoverUpperHz) {
-    const float fractionOfHeight {0.9};
-    const float spacing {5};
+    const double fractionOfHeight {0.9};
+    const int spacing {5};
     
     g.setColour(yellow);
     g.drawText(String(static_cast<int>(crossoverLowerHz)) + " Hz",
