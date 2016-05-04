@@ -142,11 +142,11 @@ void MONSTRCrossover::drawSine(Graphics &g,
     double absXPos {0};
     
     // define the lambda used in for loops to draw the sine
-    auto sineLoop {[&absXPos, &p, &bounds](int index) -> void {
+    auto sineLoop = [&absXPos, &p, &bounds](int index) -> void {
         absXPos = {(1.0 / sineWaveTable.size()) * index};
         p.lineTo(bounds.getX() + absXPos * bounds.getWidth(),
                  bounds.getY() + sineWaveTable[index] * bounds.getHeight());
-    }};
+    };
     
     p.startNewSubPath(bounds.getX(),
                       bounds.getY() + sineWaveTable[0] * bounds.getHeight());
@@ -196,7 +196,7 @@ void MONSTRCrossover::drawWidthRectangles(Graphics &g,
     const float range {0.25};
     
     // lambda to draw the width rectangles for each band
-    auto drawWidth {[&g, &bounds, &range](const Colour& colour,
+    auto drawWidth = [&g, &bounds, &range](const Colour& colour,
                                           float widthValue,
                                           float x,
                                           float bandWidth,
@@ -236,7 +236,7 @@ void MONSTRCrossover::drawWidthRectangles(Graphics &g,
                        bandWidth,
                        (bounds.getY() + bounds.getHeight() * (1 - neutralPos)) - (bounds.getY() + bounds.getHeight() * (1 - neutralPos) - bounds.getHeight() * range * (0.5 - widthValue)));
         }
-    }};
+    };
     
     drawWidth(redTrans,
               width1Sld.getValue(),
