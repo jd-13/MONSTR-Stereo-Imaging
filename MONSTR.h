@@ -30,7 +30,7 @@ public:
      *
      * args: inLeftSample    Pointer to the left sample to be processed
      *       inRightSample   Pointer to the right sample to be processed
-     *       index           Current position in the current buffer of samples
+     *       numSamples      Number of samples loaded into the buffer
      */
     void ClockProcess(float* leftSample, float* rightSample, size_t numSamples);
     

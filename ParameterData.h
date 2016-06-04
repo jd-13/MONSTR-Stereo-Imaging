@@ -57,11 +57,13 @@ const String    SWITCHBAND1_STR {"Band1Bypass"},
 
 
 // Translates betweeen the normalised 0 - 1 range used by VSTs and the ranges used by the plugin internally
-inline float TranslateParam_Norm2Inter(float val, float min, float max) {
+template <typename T>
+inline T TranslateParam_Norm2Inter(T val, T min, T max) {
     return val * (max - min) + min;
 }
 
-inline float TranslateParam_Inter2Norm(float val, float min, float max) {
+template <typename T>
+inline T TranslateParam_Inter2Norm(T val, T min, T max) {
     return (val - min) / (max - min);
 }
 

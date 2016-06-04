@@ -47,16 +47,31 @@ void MONSTRCrossover::update(Graphics &g,
                              MONSTRWidthSlider& width3Sld) {
     
     // calculate the crossover values in Hz from the sliders
-    const double crossoverLowerHz {TranslateParam_Norm2Inter(crossoverLowerSld.getValue(), CROSSOVERLOWER_MIN, CROSSOVERLOWER_MAX)};
-    const double crossoverUpperHz {TranslateParam_Norm2Inter(crossoverUpperSld.getValue(), CROSSOVERUPPER_MIN, CROSSOVERUPPER_MAX)};
+    const float crossoverLowerHz {
+        TranslateParam_Norm2Inter(static_cast<float>(crossoverLowerSld.getValue()),
+                                  CROSSOVERLOWER_MIN,
+                                  CROSSOVERLOWER_MAX)
+    };
+    
+    const float crossoverUpperHz {
+        TranslateParam_Norm2Inter(static_cast<float>(crossoverUpperSld.getValue()),
+                                  CROSSOVERUPPER_MIN,
+                                  CROSSOVERUPPER_MAX)
+    };
     
     // calculate the raw logarithmic values
-    double crossoverLowerXPos {log2((crossoverLowerHz + scaleCoefficient) / scaleCoefficient) / log2((CROSSOVERLOWER_MAX + scaleCoefficient) / scaleCoefficient)};
-    double crossoverUpperXPos {log2((crossoverUpperHz + scaleCoefficient) / scaleCoefficient) / log2((CROSSOVERUPPER_MAX + scaleCoefficient) / scaleCoefficient)};
+    float crossoverLowerXPos {
+        log2f((crossoverLowerHz + scaleCoefficient) / scaleCoefficient) / log2f((CROSSOVERLOWER_MAX + scaleCoefficient) / scaleCoefficient)
+    };
+    float crossoverUpperXPos {
+        log2f((crossoverUpperHz + scaleCoefficient) / scaleCoefficient) / log2f((CROSSOVERUPPER_MAX + scaleCoefficient) / scaleCoefficient)
+    };
     
     // normalise so that they correspond to actual coordinates
-    crossoverLowerXPos *= bounds.getWidth() * (log2((CROSSOVERLOWER_MAX + scaleCoefficient) / scaleCoefficient) / log2(20000));
-    crossoverUpperXPos *= bounds.getWidth() * (log2((CROSSOVERUPPER_MAX + scaleCoefficient) / scaleCoefficient) / log2(20000));
+    crossoverLowerXPos *=   bounds.getWidth()
+                            * (log2((CROSSOVERLOWER_MAX + scaleCoefficient) / scaleCoefficient) / log2(20000));
+    crossoverUpperXPos *=   bounds.getWidth()
+                            * (log2((CROSSOVERUPPER_MAX + scaleCoefficient) / scaleCoefficient) / log2(20000));
     
     drawSine(g, bounds, crossoverLowerXPos, crossoverUpperXPos);
     
@@ -108,8 +123,8 @@ void MONSTRCrossover::update(Graphics &g,
 
 void MONSTRCrossover::resizeWidthSliders(Graphics& /*g*/,
                                          const Rectangle<int>& bounds,
-                                         float crossoverLowerXPos,
-                                         float crossoverUpperXPos,
+                                         int crossoverLowerXPos,
+                                         int crossoverUpperXPos,
                                          MONSTRWidthSlider& width1Sld,
                                          MONSTRWidthSlider& width2Sld,
                                          MONSTRWidthSlider& width3Sld) {
@@ -188,8 +203,8 @@ void MONSTRCrossover::drawSine(Graphics &g,
 // draws the rectangles showing the width of each band
 void MONSTRCrossover::drawWidthRectangles(Graphics &g,
                                                    const Rectangle<int>& bounds,
-                                                   float crossoverLowerXPos,
-                                                   float crossoverUpperXPos,
+                                                   int crossoverLowerXPos,
+                                                   int crossoverUpperXPos,
                                                    MONSTRWidthSlider& width1Sld,
                                                    MONSTRWidthSlider& width2Sld,
                                                    MONSTRWidthSlider& width3Sld) {
@@ -302,9 +317,9 @@ void MONSTRCrossover::positionHorizontalSliders(const Rectangle<int> &bounds,
 
 void MONSTRCrossover::drawFrequencyText(Graphics &g,
                                         const Rectangle<int> &bounds,
-                                        float crossoverLowerXPos,
+                                        int crossoverLowerXPos,
                                         float crossoverLowerHz,
-                                        float crossoverUpperXPos,
+                                        int crossoverUpperXPos,
                                         float crossoverUpperHz) {
     const double fractionOfHeight {0.9};
     const int spacing {5};

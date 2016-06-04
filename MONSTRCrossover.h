@@ -42,8 +42,7 @@ public:
     
     /* update
      *
-     * Performs the effect processing on inLeftSample and inRightSample. Use for
-     * stereo in->stereo out signals.
+     * Updates the graphics being drawn behind the crossover.
      *
      * args: g              Graphics object to use to draw the crossover
      *       bounds         Int rectangle defining the area to draw within
@@ -69,8 +68,8 @@ public:
 private:
     static void resizeWidthSliders(Graphics& g,
                                    const Rectangle<int>& bounds,
-                                   float crossoverLowerXPos,
-                                   float crossoverUpperXPos,
+                                   int crossoverLowerXPos,
+                                   int crossoverUpperXPos,
                                    MONSTRWidthSlider& width1Sld,
                                    MONSTRWidthSlider& width2Sld,
                                    MONSTRWidthSlider& width3Sld);
@@ -82,8 +81,8 @@ private:
     
     static void drawWidthRectangles(Graphics& g,
                                     const Rectangle<int>& bounds,
-                                    float crossoverLowerXPos,
-                                    float crossoverUpperXPos,
+                                    int crossoverLowerXPos,
+                                    int crossoverUpperXPos,
                                     MONSTRWidthSlider& width1Sld,
                                     MONSTRWidthSlider& width2Sld,
                                     MONSTRWidthSlider& width3Sld);
@@ -96,9 +95,9 @@ private:
                                           Slider& crossoverUpperSld);
     static void drawFrequencyText(Graphics& g,
                                   const Rectangle<int>& bounds,
-                                  float crossoverLowerXPos,
+                                  int crossoverLowerXPos,
                                   float crossoverLowerHz,
-                                  float crossoverUpperXPos,
+                                  int crossoverUpperXPos,
                                   float crossoverUpperHz);
     
     static void drawSliderThumbs(Graphics& g,
