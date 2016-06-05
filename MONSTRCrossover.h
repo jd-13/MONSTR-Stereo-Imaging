@@ -35,79 +35,44 @@
 #include <memory>
 #include <array>
 
-class MONSTRCrossover {
+class MONSTRCrossover : public Component {
 public:
     
-    MONSTRCrossover() = delete;
+    MONSTRCrossover(Slider* newCrossoverLowerSld,
+                    Slider* newCrossoverUpperSld,
+                    MONSTRWidthSlider* newWidth1Sld,
+                    MONSTRWidthSlider* newWidth2Sld,
+                    MONSTRWidthSlider* newWidth3Sld);
     
-    /* update
-     *
-     * Updates the graphics being drawn behind the crossover.
-     *
-     * args: g              Graphics object to use to draw the crossover
-     *       bounds         Int rectangle defining the area to draw within
-     *       lowerSlider    The (horizontal) slider to determine the lower
-     *                      frequency of the crossover
-     *       upperSlider    The (horizontal) slider to determine the upper
-     *                      frequency of the crossover
-     *       width1Sld      The (vertical) slider to determine the stereo width
-     *                      of the lower band
-     *       width2Sld      The (vertical) slider to determine the stereo width
-     *                      of the middle band
-     *       width3Sld      The (vertical) slider to determine the stereo width
-     *                      of the upper band
-     */
-    static void update(Graphics& g,
-                       const Rectangle<int>& bounds,
-                       Slider& lowerSlider,
-                       Slider& upperSlider,
-                       MONSTRWidthSlider& width1Sld,
-                       MONSTRWidthSlider& width2Sld,
-                       MONSTRWidthSlider& width3Sld);
+    void paint(Graphics& g) override;
     
 private:
-    static void resizeWidthSliders(Graphics& g,
-                                   const Rectangle<int>& bounds,
-                                   int crossoverLowerXPos,
-                                   int crossoverUpperXPos,
-                                   MONSTRWidthSlider& width1Sld,
-                                   MONSTRWidthSlider& width2Sld,
-                                   MONSTRWidthSlider& width3Sld);
+    void resizeWidthSliders(int crossoverLowerXPos,
+                            int crossoverUpperXPos);
     
-    static void drawSine(Graphics& g,
-                         Rectangle<int> bounds,
-                         float crossoverLowerHz,
-                         float crossoverUpperHz);
+    void drawSine(Graphics& g,
+                  float crossoverLowerHz,
+                  float crossoverUpperHz);
     
-    static void drawWidthRectangles(Graphics& g,
-                                    const Rectangle<int>& bounds,
-                                    int crossoverLowerXPos,
-                                    int crossoverUpperXPos,
-                                    MONSTRWidthSlider& width1Sld,
-                                    MONSTRWidthSlider& width2Sld,
-                                    MONSTRWidthSlider& width3Sld);
+    void drawWidthRectangles(Graphics& g,
+                             int crossoverLowerXPos,
+                             int crossoverUpperXPos);
     
-    static void drawNeutralLine(Graphics& g,
-                                Rectangle<int> bounds);
+    void drawNeutralLine(Graphics& g);
     
-    static void positionHorizontalSliders(const Rectangle<int>& bounds,
-                                          Slider& crossoverLowerSld,
-                                          Slider& crossoverUpperSld);
-    static void drawFrequencyText(Graphics& g,
-                                  const Rectangle<int>& bounds,
-                                  int crossoverLowerXPos,
-                                  float crossoverLowerHz,
-                                  int crossoverUpperXPos,
-                                  float crossoverUpperHz);
+    void positionHorizontalSliders();
     
-    static void drawSliderThumbs(Graphics& g,
-                                 const Rectangle<int>& bounds,
-                                 float crossoverLowerXPos,
-                                 float crossoverUpperXPos);
+    void drawFrequencyText(Graphics& g,
+                           int crossoverLowerXPos,
+                           float crossoverLowerHz,
+                           int crossoverUpperXPos,
+                           float crossoverUpperHz);
     
+    void drawSliderThumbs(Graphics& g,
+                          float crossoverLowerXPos,
+                          float crossoverUpperXPos);
     
-    static bool needsSetup;
-    
+        
     // defines the fraction of the distance from the top and bottom
     // of the crossover GUI element which represents neutral stereo width
     constexpr static const float neutralPos {0.25};
@@ -118,7 +83,7 @@ private:
     
     constexpr static const int sliderThumbRadius {6};
     
-    static std::array<double, 200>sineWaveTable;
+    std::array<double, 200>sineWaveTable;
     
     static const Colour lightGrey,
                         darkGrey,
@@ -129,6 +94,12 @@ private:
                         yellowTrans,
                         greenTrans,
                         lightGreyTrans;
+    
+    ScopedPointer<Slider>   crossoverLowerSld,
+                            crossoverUpperSld,
+                            width1Sld,
+                            width2Sld,
+                            width3Sld;
 };
 
 #endif  // MONSTRCROSSOVERBACKGROUND_H_INCLUDED

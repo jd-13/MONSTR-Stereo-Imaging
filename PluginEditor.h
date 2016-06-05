@@ -66,6 +66,7 @@ private:
     MONSTRLookAndFeel customLookAndFeel;
     SharedResourcePointer<TooltipWindow> tooltipWindow;
     Rectangle<int> crossoverBounds;
+    ScopedPointer<MONSTRCrossover> mCrossover;
     //[/UserVariables]
 
     //==============================================================================

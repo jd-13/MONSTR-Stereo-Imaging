@@ -117,13 +117,19 @@ MonstrAudioProcessorEditor::MonstrAudioProcessorEditor (MonstrAudioProcessor& ow
     crossoverUpperSld->setMouseDragSensitivity(100);
     crossoverLowerSld->setVelocityBasedMode(false);
     crossoverUpperSld->setVelocityBasedMode(false);
-
-
+    
     // Define a rectangle for the sine wave to be drawn in
     crossoverBounds = Rectangle<int>(40,
                                      40,
                                      560,
                                      210);
+    
+    addAndMakeVisible(mCrossover = new MONSTRCrossover(crossoverLowerSld,
+                                                       crossoverUpperSld,
+                                                       width1Sld,
+                                                       width2Sld,
+                                                       width3Sld));
+    
 
     //[/Constructor]
 }
@@ -157,15 +163,6 @@ void MonstrAudioProcessorEditor::paint (Graphics& g)
     Image bg {ImageCache::getFromMemory(BinaryData::MONSTR_Background_png, BinaryData::MONSTR_Background_pngSize)};
     g.drawImage(bg, 0, 0, 640, 290, 0, 0, 5 * 640, 5 * 290);
 
-    // Then draw the crossover
-    MONSTRCrossover::update(g,
-                            crossoverBounds,
-                            *crossoverLowerSld,
-                            *crossoverUpperSld,
-                            *width1Sld,
-                            *width2Sld,
-                            *width3Sld);
-
     //[/UserPaint]
 }
 
@@ -180,6 +177,7 @@ void MonstrAudioProcessorEditor::resized()
     width2Sld->setBounds (232, 16, 72, 184);
     width3Sld->setBounds (432, 8, 72, 208);
     //[UserResized] Add your own custom resize handling here..
+    mCrossover->setBounds(crossoverBounds);
     //[/UserResized]
 }
 

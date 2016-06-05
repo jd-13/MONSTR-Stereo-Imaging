@@ -34,27 +34,38 @@ const Colour MONSTRCrossover::yellowTrans(static_cast<uint8_t>(255), 255, 0, 0.5
 const Colour MONSTRCrossover::greenTrans(static_cast<uint8_t>(30), 255, 0 , 0.5f);
 const Colour MONSTRCrossover::lightGreyTrans(static_cast<uint8_t>(200), 200, 200, 0.5f);
 
-std::array<double, 200> MONSTRCrossover::sineWaveTable;
+MONSTRCrossover::MONSTRCrossover(Slider* newCrossoverLowerSld,
+                                 Slider* newCrossoverUpperSld,
+                                 MONSTRWidthSlider* newWidth1Sld,
+                                 MONSTRWidthSlider* newWidth2Sld,
+                                 MONSTRWidthSlider* newWidth3Sld)
+                                    :   crossoverLowerSld(newCrossoverLowerSld),
+                                        crossoverUpperSld(newCrossoverUpperSld),
+                                        width1Sld(newWidth1Sld),
+                                        width2Sld(newWidth2Sld),
+                                        width3Sld(newWidth3Sld),
+                                        Component() {
+    // if update has not been called yet, perform any necessary setup
+    positionHorizontalSliders();
+        
+    // Generate sine wave table
+    for (size_t iii {0}; iii < sineWaveTable.size(); iii++) {
+        double xVal {(1.0 / sineWaveTable.size()) * iii};
+        sineWaveTable[iii] = sin(pow(M_E, 1.5 * xVal + 1.83)) / 2 + 0.5;
+    }
+}
 
-bool MONSTRCrossover::needsSetup {true};
-
-void MONSTRCrossover::update(Graphics &g,
-                             const Rectangle<int>& bounds,
-                             Slider& crossoverLowerSld,
-                             Slider& crossoverUpperSld,
-                             MONSTRWidthSlider& width1Sld,
-                             MONSTRWidthSlider& width2Sld,
-                             MONSTRWidthSlider& width3Sld) {
+void MONSTRCrossover::paint(Graphics &g) {
     
     // calculate the crossover values in Hz from the sliders
     const float crossoverLowerHz {
-        TranslateParam_Norm2Inter(static_cast<float>(crossoverLowerSld.getValue()),
+        TranslateParam_Norm2Inter(static_cast<float>(crossoverLowerSld->getValue()),
                                   CROSSOVERLOWER_MIN,
                                   CROSSOVERLOWER_MAX)
     };
     
     const float crossoverUpperHz {
-        TranslateParam_Norm2Inter(static_cast<float>(crossoverUpperSld.getValue()),
+        TranslateParam_Norm2Inter(static_cast<float>(crossoverUpperSld->getValue()),
                                   CROSSOVERUPPER_MIN,
                                   CROSSOVERUPPER_MAX)
     };
@@ -68,103 +79,72 @@ void MONSTRCrossover::update(Graphics &g,
     };
     
     // normalise so that they correspond to actual coordinates
-    crossoverLowerXPos *=   bounds.getWidth()
+    crossoverLowerXPos *=   getWidth()
                             * (log2((CROSSOVERLOWER_MAX + scaleCoefficient) / scaleCoefficient) / log2(20000));
-    crossoverUpperXPos *=   bounds.getWidth()
+    crossoverUpperXPos *=   getWidth()
                             * (log2((CROSSOVERUPPER_MAX + scaleCoefficient) / scaleCoefficient) / log2(20000));
     
-    drawSine(g, bounds, crossoverLowerXPos, crossoverUpperXPos);
+    drawSine(g, crossoverLowerXPos, crossoverUpperXPos);
     
-    drawNeutralLine(g, bounds);
+    drawNeutralLine(g);
     
     drawWidthRectangles(g,
-                        bounds,
                         crossoverLowerXPos,
-                        crossoverUpperXPos,
-                        width1Sld,
-                        width2Sld,
-                        width3Sld);
+                        crossoverUpperXPos);
     
     drawFrequencyText(g,
-                      bounds,
                       crossoverLowerXPos,
                       crossoverLowerHz,
                       crossoverUpperXPos,
                       crossoverUpperHz);
     
     drawSliderThumbs(g,
-                     bounds,
                      crossoverLowerXPos,
                      crossoverUpperXPos);
 
     
-    resizeWidthSliders(g,
-                       bounds,
-                       crossoverLowerXPos,
-                       crossoverUpperXPos,
-                       width1Sld,
-                       width2Sld,
-                       width3Sld);
-
-    
-    // if update has not been called yet, perform any necessary setup
-    if (needsSetup) {
-        needsSetup = false;
-        
-        positionHorizontalSliders(bounds, crossoverLowerSld, crossoverUpperSld);
-        
-        // Generate sine wave table
-        for (size_t iii {0}; iii < sineWaveTable.size(); iii++) {
-            double xVal {(1.0 / sineWaveTable.size()) * iii};
-            sineWaveTable[iii] = sin(pow(M_E, 1.5 * xVal + 1.83)) / 2 + 0.5;
-        }
-    }
+    resizeWidthSliders(crossoverLowerXPos,
+                       crossoverUpperXPos);
 }
 
-void MONSTRCrossover::resizeWidthSliders(Graphics& /*g*/,
-                                         const Rectangle<int>& bounds,
-                                         int crossoverLowerXPos,
-                                         int crossoverUpperXPos,
-                                         MONSTRWidthSlider& width1Sld,
-                                         MONSTRWidthSlider& width2Sld,
-                                         MONSTRWidthSlider& width3Sld) {
+void MONSTRCrossover::resizeWidthSliders(int crossoverLowerXPos,
+                                         int crossoverUpperXPos) {
     // a margin to be applied where the edges of the vertical sliders meet the thumbs
     // of the horizontal sliders to prevent overlap
-    width1Sld.setBounds(bounds.getX(),
-                        bounds.getY(),
+    width1Sld->setBounds(getX(),
+                        getY(),
                         crossoverLowerXPos - sliderThumbRadius,
-                        bounds.getHeight());
+                        getHeight());
     
-    width2Sld.setBounds(bounds.getX() + crossoverLowerXPos + sliderThumbRadius,
-                        bounds.getY(),
+    width2Sld->setBounds(getX() + crossoverLowerXPos + sliderThumbRadius,
+                        getY(),
                         crossoverUpperXPos - crossoverLowerXPos - sliderThumbRadius * 2,
-                        bounds.getHeight());
+                        getHeight());
     
-    width3Sld.setBounds(bounds.getX() + crossoverUpperXPos + sliderThumbRadius,
-                        bounds.getY(),
-                        bounds.getWidth() - crossoverUpperXPos,
-                        bounds.getHeight());
+    width3Sld->setBounds(getX() + crossoverUpperXPos + sliderThumbRadius,
+                        getY(),
+                        getWidth() - crossoverUpperXPos,
+                        getHeight());
 }
 
 // draws the sine wave behind each band
 void MONSTRCrossover::drawSine(Graphics &g,
-                               Rectangle<int> bounds,
                                float crossoverLowerXPos,
                                float crossoverUpperXPos) {
     Path p;
-    const int pointsToLowerSliderPos {static_cast<int>(sineWaveTable.size() * static_cast<float>(crossoverLowerXPos / bounds.getWidth()))};
-    const int pointsToUpperSliderPos {static_cast<int>(sineWaveTable.size() * static_cast<float>(crossoverUpperXPos / bounds.getWidth()))};
+    const int pointsToLowerSliderPos {static_cast<int>(sineWaveTable.size() * static_cast<float>(crossoverLowerXPos / getWidth()))};
+    const int pointsToUpperSliderPos {static_cast<int>(sineWaveTable.size() * static_cast<float>(crossoverUpperXPos / getWidth()))};
     double absXPos {0};
     
     // define the lambda used in for loops to draw the sine
-    auto sineLoop = [&absXPos, &p, &bounds](int index) -> void {
+    auto sineLoop = [&absXPos, &p, this](int index) -> void {
         absXPos = {(1.0 / sineWaveTable.size()) * index};
-        p.lineTo(bounds.getX() + absXPos * bounds.getWidth(),
-                 bounds.getY() + sineWaveTable[index] * bounds.getHeight());
+        p.lineTo(getX() + absXPos * getWidth(),
+                 getY() + sineWaveTable[index] * getHeight());
     };
     
-    p.startNewSubPath(bounds.getX(),
-                      bounds.getY() + sineWaveTable[0] * bounds.getHeight());
+    p.startNewSubPath(getX(),
+                      getY() + sineWaveTable[0] * getHeight());
 
     // move from left to right calculating the sine wave to draw
     // calculate the half left of the thumb, then change colour and calculate
@@ -178,8 +158,8 @@ void MONSTRCrossover::drawSine(Graphics &g,
     
     // start second band
     p.clear();
-    p.startNewSubPath(bounds.getX() + absXPos * bounds.getWidth(),
-                      bounds.getY() + sineWaveTable[pointsToLowerSliderPos] * bounds.getHeight());
+    p.startNewSubPath(getX() + absXPos * getWidth(),
+                      getY() + sineWaveTable[pointsToLowerSliderPos] * getHeight());
     
     for (int iii {pointsToLowerSliderPos + 1}; iii <= pointsToUpperSliderPos; iii++) {
         sineLoop(iii);
@@ -190,8 +170,8 @@ void MONSTRCrossover::drawSine(Graphics &g,
 
     // start final band
     p.clear();
-    p.startNewSubPath(bounds.getX() + absXPos * bounds.getWidth(),
-                      bounds.getY() + sineWaveTable[pointsToUpperSliderPos] * bounds.getHeight());
+    p.startNewSubPath(getX() + absXPos * getWidth(),
+                      getY() + sineWaveTable[pointsToUpperSliderPos] * getHeight());
     for (int iii {pointsToUpperSliderPos + 1}; iii < sineWaveTable.size(); iii++) {
         sineLoop(iii);
     }
@@ -202,16 +182,12 @@ void MONSTRCrossover::drawSine(Graphics &g,
 
 // draws the rectangles showing the width of each band
 void MONSTRCrossover::drawWidthRectangles(Graphics &g,
-                                                   const Rectangle<int>& bounds,
-                                                   int crossoverLowerXPos,
-                                                   int crossoverUpperXPos,
-                                                   MONSTRWidthSlider& width1Sld,
-                                                   MONSTRWidthSlider& width2Sld,
-                                                   MONSTRWidthSlider& width3Sld) {
+                                          int crossoverLowerXPos,
+                                          int crossoverUpperXPos) {
     const float range {0.25};
     
     // lambda to draw the width rectangles for each band
-    auto drawWidth = [&g, &bounds, &range](const Colour& colour,
+    auto drawWidth = [&g, &range, this](const Colour& colour,
                                           float widthValue,
                                           float x,
                                           float bandWidth,
@@ -232,60 +208,59 @@ void MONSTRCrossover::drawWidthRectangles(Graphics &g,
              */
             
             g.fillRect(x,
-                       bounds.getY() + bounds.getHeight() * neutralPos - bounds.getHeight() * range * (widthValue - 0.5),
+                       getY() + getHeight() * neutralPos - getHeight() * range * (widthValue - 0.5),
                        bandWidth,
-                       (bounds.getY() + bounds.getHeight() * neutralPos) - (bounds.getY() + bounds.getHeight() * neutralPos - bounds.getHeight() * range * (widthValue - 0.5)));
+                       (getY() + getHeight() * neutralPos) - (getY() + getHeight() * neutralPos - getHeight() * range * (widthValue - 0.5)));
             
             g.fillRect(x,
-                       bounds.getY() + bounds.getHeight() * (1 - neutralPos),
+                       getY() + getHeight() * (1 - neutralPos),
                        bandWidth,
-                       bounds.getHeight() * range * (widthValue - 0.5));
+                       getHeight() * range * (widthValue - 0.5));
         } else {
             g.fillRect(x,
-                       bounds.getY() + bounds.getHeight() * neutralPos,
+                       getY() + getHeight() * neutralPos,
                        bandWidth,
-                       bounds.getHeight() * range * (0.5 - widthValue));
+                       getHeight() * range * (0.5 - widthValue));
             
             g.fillRect(x,
-                       bounds.getY() + bounds.getHeight() * (1 - neutralPos) - bounds.getHeight() * range * (0.5 - widthValue),
+                       getY() + getHeight() * (1 - neutralPos) - getHeight() * range * (0.5 - widthValue),
                        bandWidth,
-                       (bounds.getY() + bounds.getHeight() * (1 - neutralPos)) - (bounds.getY() + bounds.getHeight() * (1 - neutralPos) - bounds.getHeight() * range * (0.5 - widthValue)));
+                       (getY() + getHeight() * (1 - neutralPos)) - (getY() + getHeight() * (1 - neutralPos) - getHeight() * range * (0.5 - widthValue)));
         }
     };
     
     drawWidth(redTrans,
-              width1Sld.getValue(),
-              bounds.getX(),
+              width1Sld->getValue(),
+              getX(),
               crossoverLowerXPos,
-              width1Sld.isEnabled());
+              width1Sld->isEnabled());
     
     drawWidth(yellowTrans,
-              width2Sld.getValue(),
-              bounds.getX() + crossoverLowerXPos,
+              width2Sld->getValue(),
+              getX() + crossoverLowerXPos,
               crossoverUpperXPos - crossoverLowerXPos,
-              width2Sld.isEnabled());
+              width2Sld->isEnabled());
     
     drawWidth(greenTrans,
-              width3Sld.getValue(),
-              bounds.getX() + crossoverUpperXPos,
-              bounds.getWidth() - crossoverUpperXPos,
-              width3Sld.isEnabled());
+              width3Sld->getValue(),
+              getX() + crossoverUpperXPos,
+              getWidth() - crossoverUpperXPos,
+              width3Sld->isEnabled());
 }
 
 // draws the lines representing neutral width
-void MONSTRCrossover::drawNeutralLine(Graphics &g,
-                                      Rectangle<int> bounds) {
+void MONSTRCrossover::drawNeutralLine(Graphics &g) {
     
     Path p;
-    p.addLineSegment(Line<float>(bounds.getX(),
-                                 bounds.getY() + bounds.getHeight() * neutralPos,
-                                 bounds.getX() + bounds.getWidth(),
-                                 bounds.getY() + bounds.getHeight() * neutralPos),
+    p.addLineSegment(Line<float>(getX(),
+                                 getY() + getHeight() * neutralPos,
+                                 getX() + getWidth(),
+                                 getY() + getHeight() * neutralPos),
                      1);
-    p.addLineSegment(Line<float>(bounds.getX(),
-                                 bounds.getY() + bounds.getHeight() * (1 - neutralPos),
-                                 bounds.getX() + bounds.getWidth(),
-                                 bounds.getY() + bounds.getHeight() * (1 - neutralPos)),
+    p.addLineSegment(Line<float>(getX(),
+                                 getY() + getHeight() * (1 - neutralPos),
+                                 getX() + getWidth(),
+                                 getY() + getHeight() * (1 - neutralPos)),
                      1);
     
     
@@ -295,28 +270,27 @@ void MONSTRCrossover::drawNeutralLine(Graphics &g,
 
 
 // calculates the positions of the horizontal crossover sliders
-void MONSTRCrossover::positionHorizontalSliders(const Rectangle<int> &bounds,
-                                                juce::Slider &crossoverLowerSld,
-                                                juce::Slider &crossoverUpperSld) {
+void MONSTRCrossover::positionHorizontalSliders() {
     // calculate the positions of the vertical edges of the sliders on the logarithmic scale
-    const double crossoverLowerLogMin {bounds.getWidth() * (log2((CROSSOVERLOWER_MIN + scaleCoefficient) / scaleCoefficient) / log2(20000))};
-    const double crossoverLowerLogMax {bounds.getWidth() * (log2((CROSSOVERLOWER_MAX + scaleCoefficient) / scaleCoefficient) / log2(20000))};
-    const double crossoverUpperLogMin {bounds.getWidth() * (log2((CROSSOVERUPPER_MIN + scaleCoefficient) / scaleCoefficient) / log2(20000))};
-    const double crossoverUpperLogMax {bounds.getWidth() * (log2((CROSSOVERUPPER_MAX + scaleCoefficient) / scaleCoefficient) / log2(20000))};
+    const double crossoverLowerLogMin {getWidth() * (log2((CROSSOVERLOWER_MIN + scaleCoefficient) / scaleCoefficient) / log2(20000))};
+    const double crossoverLowerLogMax {getWidth() * (log2((CROSSOVERLOWER_MAX + scaleCoefficient) / scaleCoefficient) / log2(20000))};
+    const double crossoverUpperLogMin {getWidth() * (log2((CROSSOVERUPPER_MIN + scaleCoefficient) / scaleCoefficient) / log2(20000))};
+    const double crossoverUpperLogMax {getWidth() * (log2((CROSSOVERUPPER_MAX + scaleCoefficient) / scaleCoefficient) / log2(20000))};
     
-    crossoverLowerSld.setBounds(bounds.getX() + crossoverLowerLogMin - sliderThumbRadius,
-                                bounds.getY(),
+    Logger::outputDebugString(String(__func__));
+    
+    crossoverLowerSld->setBounds(getX() + crossoverLowerLogMin - sliderThumbRadius,
+                                getY(),
                                 crossoverLowerLogMax - crossoverLowerLogMin + 2 * sliderThumbRadius,
-                                bounds.getHeight());
+                                getHeight());
     
-    crossoverUpperSld.setBounds(bounds.getX() + crossoverUpperLogMin - sliderThumbRadius,
-                                bounds.getY(),
-                                bounds.getWidth() - crossoverUpperLogMax + sliderThumbRadius,
-                                bounds.getHeight());
+    crossoverUpperSld->setBounds(getX() + crossoverUpperLogMin - sliderThumbRadius,
+                                getY(),
+                                getWidth() - crossoverUpperLogMax + sliderThumbRadius,
+                                getHeight());
 }
 
 void MONSTRCrossover::drawFrequencyText(Graphics &g,
-                                        const Rectangle<int> &bounds,
                                         int crossoverLowerXPos,
                                         float crossoverLowerHz,
                                         int crossoverUpperXPos,
@@ -326,8 +300,8 @@ void MONSTRCrossover::drawFrequencyText(Graphics &g,
     
     g.setColour(yellow);
     g.drawText(String(static_cast<int>(crossoverLowerHz)) + " Hz",
-               bounds.getX() + crossoverLowerXPos + spacing,
-               bounds.getY() + bounds.getHeight() * fractionOfHeight,
+               getX() + crossoverLowerXPos + spacing,
+               getY() + getHeight() * fractionOfHeight,
                60,
                20,
                Justification::centredLeft,
@@ -335,8 +309,8 @@ void MONSTRCrossover::drawFrequencyText(Graphics &g,
     
     g.setColour(green);
     g.drawText(String(static_cast<int>(crossoverUpperHz)) + " Hz",
-               bounds.getX() + crossoverUpperXPos + spacing,
-               bounds.getY() + bounds.getHeight() * fractionOfHeight,
+               getX() + crossoverUpperXPos + spacing,
+               getY() + getHeight() * fractionOfHeight,
                60,
                20,
                Justification::centredLeft,
@@ -344,46 +318,45 @@ void MONSTRCrossover::drawFrequencyText(Graphics &g,
 }
 
 void MONSTRCrossover::drawSliderThumbs(Graphics& g,
-                                       const Rectangle<int>& bounds,
                                        float crossoverLowerXPos,
                                        float crossoverUpperXPos) {
     
-    auto drawSingleThumb = [&bounds, &g](int crossoverXPos,
-                                                            Colour topColour,
-                                                            Colour bottomColour) -> void {
+    auto drawSingleThumb = [&g, this](int crossoverXPos,
+                                      Colour topColour,
+                                      Colour bottomColour) -> void {
         Path p;
         const float lineWidth {1.5f};
 
         g.setColour(topColour);
-        p.addLineSegment(Line<float>(bounds.getX() + crossoverXPos,
-                                     bounds.getY(),
-                                     bounds.getX() + crossoverXPos,
-                                     bounds.getY() + bounds.getHeight() * 0.5),
+        p.addLineSegment(Line<float>(getX() + crossoverXPos,
+                                     getY(),
+                                     getX() + crossoverXPos,
+                                     getY() + getHeight() * 0.5),
                          1);
         g.strokePath(p, PathStrokeType(lineWidth));
         
         p.clear();
         
         g.setColour(bottomColour);
-        p.addLineSegment(Line<float>(bounds.getX() + crossoverXPos,
-                                     bounds.getY() + bounds.getHeight() * 0.5,
-                                     bounds.getX() + crossoverXPos,
-                                     bounds.getY() + bounds.getHeight()),
+        p.addLineSegment(Line<float>(getX() + crossoverXPos,
+                                     getY() + getHeight() * 0.5,
+                                     getX() + crossoverXPos,
+                                     getY() + getHeight()),
                          1);
         g.strokePath(p, PathStrokeType(lineWidth));
         
         p.clear();
         g.setColour(darkGrey);
-        p.addEllipse(bounds.getX() + crossoverXPos - sliderThumbRadius,
-                     bounds.getY() + bounds.getHeight() * 0.5 - sliderThumbRadius,
+        p.addEllipse(getX() + crossoverXPos - sliderThumbRadius,
+                     getY() + getHeight() * 0.5 - sliderThumbRadius,
                      sliderThumbRadius * 2,
                      sliderThumbRadius * 2);
         g.fillPath(p);
         
         p.clear();
         g.setColour(topColour);
-        p.addCentredArc(bounds.getX() + crossoverXPos,
-                        bounds.getY() + bounds.getHeight() * 0.5,
+        p.addCentredArc(getX() + crossoverXPos,
+                        getY() + getHeight() * 0.5,
                         sliderThumbRadius,
                         sliderThumbRadius,
                         M_PI,
@@ -394,8 +367,8 @@ void MONSTRCrossover::drawSliderThumbs(Graphics& g,
         
         p.clear();
         g.setColour(bottomColour);
-        p.addCentredArc(bounds.getX() + crossoverXPos,
-                        bounds.getY() + bounds.getHeight() * 0.5,
+        p.addCentredArc(getX() + crossoverXPos,
+                        getY() + getHeight() * 0.5,
                         sliderThumbRadius,
                         sliderThumbRadius,
                         0,
