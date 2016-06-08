@@ -49,7 +49,7 @@ public:
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
-    void timerCallback();
+    void timerCallback() override;
     MonstrAudioProcessor* getProcessor() const {
         return static_cast<MonstrAudioProcessor*>(getAudioProcessor());
     }

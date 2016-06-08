@@ -98,6 +98,16 @@ MonstrAudioProcessorEditor::MonstrAudioProcessorEditor (MonstrAudioProcessor& ow
 
 
     //[UserPreSize]
+    addAndMakeVisible(mCrossover = new MONSTRCrossover("mCrossover",
+                                                       crossoverLowerSld,
+                                                       crossoverUpperSld,
+                                                       width1Sld,
+                                                       width2Sld,
+                                                       width3Sld));
+    crossoverBounds = Rectangle<int>(40,
+                                     40,
+                                     560,
+                                     210);
     //[/UserPreSize]
 
     setSize (640, 290);
@@ -118,19 +128,11 @@ MonstrAudioProcessorEditor::MonstrAudioProcessorEditor (MonstrAudioProcessor& ow
     crossoverLowerSld->setVelocityBasedMode(false);
     crossoverUpperSld->setVelocityBasedMode(false);
     
+    mCrossover->toBack();
+    
     // Define a rectangle for the sine wave to be drawn in
-    crossoverBounds = Rectangle<int>(40,
-                                     40,
-                                     560,
-                                     210);
-    
-    addAndMakeVisible(mCrossover = new MONSTRCrossover(crossoverLowerSld,
-                                                       crossoverUpperSld,
-                                                       width1Sld,
-                                                       width2Sld,
-                                                       width3Sld));
-    
 
+    
     //[/Constructor]
 }
 
@@ -147,6 +149,7 @@ MonstrAudioProcessorEditor::~MonstrAudioProcessorEditor()
 
 
     //[Destructor]. You can add your own custom destruction code here..
+    mCrossover = nullptr;
     //[/Destructor]
 }
 
@@ -178,6 +181,7 @@ void MonstrAudioProcessorEditor::resized()
     width3Sld->setBounds (432, 8, 72, 208);
     //[UserResized] Add your own custom resize handling here..
     mCrossover->setBounds(crossoverBounds);
+    mCrossover->positionHorizontalSliders();
     //[/UserResized]
 }
 
@@ -229,8 +233,8 @@ void MonstrAudioProcessorEditor::sliderValueChanged (Slider* sliderThatWasMoved)
 void MonstrAudioProcessorEditor::timerCallback() {
 
     MonstrAudioProcessor* ourProcessor = getProcessor();
-    repaint();
-
+    
+    
     if (ourProcessor->NeedsUIUpdate()) {
         crossoverLowerSld->setValue(ourProcessor->getParameter(MonstrAudioProcessor::crossoverLower), dontSendNotification);
         crossoverUpperSld->setValue(ourProcessor->getParameter(MonstrAudioProcessor::crossoverUpper), dontSendNotification);
@@ -242,7 +246,8 @@ void MonstrAudioProcessorEditor::timerCallback() {
         width1Sld->setEnabled(ourProcessor->getParameter(MonstrAudioProcessor::isActiveBand1));
         width2Sld->setEnabled(ourProcessor->getParameter(MonstrAudioProcessor::isActiveBand2));
         width3Sld->setEnabled(ourProcessor->getParameter(MonstrAudioProcessor::isActiveBand3));
-
+        
+        mCrossover->repaint();        
     }
 }
 //[/MiscUserCode]

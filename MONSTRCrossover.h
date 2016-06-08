@@ -38,7 +38,8 @@
 class MONSTRCrossover : public Component {
 public:
     
-    MONSTRCrossover(Slider* newCrossoverLowerSld,
+    MONSTRCrossover(String name,
+                    Slider* newCrossoverLowerSld,
                     Slider* newCrossoverUpperSld,
                     MONSTRWidthSlider* newWidth1Sld,
                     MONSTRWidthSlider* newWidth2Sld,
@@ -46,6 +47,8 @@ public:
     
     void paint(Graphics& g) override;
     
+    void positionHorizontalSliders();
+        
 private:
     void resizeWidthSliders(int crossoverLowerXPos,
                             int crossoverUpperXPos);
@@ -59,8 +62,6 @@ private:
                              int crossoverUpperXPos);
     
     void drawNeutralLine(Graphics& g);
-    
-    void positionHorizontalSliders();
     
     void drawFrequencyText(Graphics& g,
                            int crossoverLowerXPos,
@@ -95,11 +96,11 @@ private:
                         greenTrans,
                         lightGreyTrans;
     
-    ScopedPointer<Slider>   crossoverLowerSld,
-                            crossoverUpperSld,
-                            width1Sld,
-                            width2Sld,
-                            width3Sld;
+    Slider  *crossoverLowerSld,
+            *crossoverUpperSld,
+            *width1Sld,
+            *width2Sld,
+            *width3Sld;
 };
 
 #endif  // MONSTRCROSSOVERBACKGROUND_H_INCLUDED
