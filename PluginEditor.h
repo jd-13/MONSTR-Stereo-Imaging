@@ -70,8 +70,6 @@ private:
     //[/UserVariables]
 
     //==============================================================================
-    ScopedPointer<Slider> crossoverLowerSld;
-    ScopedPointer<Slider> crossoverUpperSld;
     ScopedPointer<MONSTRWidthSlider> width1Sld;
     ScopedPointer<MONSTRWidthSlider> width2Sld;
     ScopedPointer<MONSTRWidthSlider> width3Sld;

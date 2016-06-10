@@ -35,14 +35,11 @@ const Colour MONSTRCrossover::greenTrans(static_cast<uint8_t>(30), 255, 0 , 0.5f
 const Colour MONSTRCrossover::lightGreyTrans(static_cast<uint8_t>(200), 200, 200, 0.5f);
 
 MONSTRCrossover::MONSTRCrossover(String name,
-                                 Slider* newCrossoverLowerSld,
-                                 Slider* newCrossoverUpperSld,
+                                 Slider::Listener* newListener,
                                  MONSTRWidthSlider* newWidth1Sld,
                                  MONSTRWidthSlider* newWidth2Sld,
                                  MONSTRWidthSlider* newWidth3Sld)
                                     :   Component(name),
-                                        crossoverLowerSld(newCrossoverLowerSld),
-                                        crossoverUpperSld(newCrossoverUpperSld),
                                         width1Sld(newWidth1Sld),
                                         width2Sld(newWidth2Sld),
                                         width3Sld(newWidth3Sld) {
@@ -51,7 +48,54 @@ MONSTRCrossover::MONSTRCrossover(String name,
     for (size_t iii {0}; iii < sineWaveTable.size(); iii++) {
         double xVal {(1.0 / sineWaveTable.size()) * iii};
         sineWaveTable[iii] = sin(pow(M_E, 1.5 * xVal + 1.83)) / 2 + 0.5;
-    }                                            
+    }
+    
+                                            
+    // Add Sliders
+    addAndMakeVisible (crossoverLowerSld = new Slider ("Crossover Lower Slider"));
+    crossoverLowerSld->setTooltip (TRANS("Drag the horizontal sliders left or right to change the crossover frequencies of each band.\n"
+                                         "\n"
+                                         "Drag up or down near the middle of a band to increase or decrease that band\'s stereo width.\n"
+                                         "\n"
+                                         "Right click near the middle of a band to bypass its stereo processing."));
+    crossoverLowerSld->setRange (0, 1, 0);
+    crossoverLowerSld->setSliderStyle (Slider::LinearHorizontal);
+    crossoverLowerSld->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
+    crossoverLowerSld->addListener (newListener);
+    crossoverLowerSld->setSkewFactor (0.7);
+    
+    addAndMakeVisible (crossoverUpperSld = new Slider ("Crossover Upper Slider"));
+    crossoverUpperSld->setTooltip (TRANS("Drag the horizontal sliders left or right to change the crossover freqencies of each band.\n"
+                                         "\n"
+                                         "Drag up or down near the middle of a band to increase or decrease that band\'s stereo width.\n"
+                                         "\n"
+                                         "Right click near the middle of a band to bypass its stereo processing."));
+    crossoverUpperSld->setRange (0, 1, 0);
+    crossoverUpperSld->setSliderStyle (Slider::LinearHorizontal);
+    crossoverUpperSld->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
+    crossoverUpperSld->addListener (newListener);
+    crossoverUpperSld->setSkewFactor (0.7);
+                                            
+                                            
+                                            
+                                            
+    // Configure sliders
+    crossoverLowerSld->setSliderSnapsToMousePosition(false);
+    crossoverUpperSld->setSliderSnapsToMousePosition(false);
+                                            
+    crossoverLowerSld->setMouseDragSensitivity(100);
+    crossoverUpperSld->setMouseDragSensitivity(100);
+    crossoverLowerSld->setVelocityBasedMode(false);
+    crossoverUpperSld->setVelocityBasedMode(false);
+}
+
+MONSTRCrossover::~MONSTRCrossover() {
+    crossoverLowerSld = nullptr;
+    crossoverUpperSld = nullptr;
+}
+
+void MONSTRCrossover::resized() {
+    positionHorizontalSliders();
 }
 
 void MONSTRCrossover::paint(Graphics &g) {
@@ -276,15 +320,15 @@ void MONSTRCrossover::positionHorizontalSliders() {
     const double crossoverUpperLogMin {getWidth() * (log2((CROSSOVERUPPER_MIN + scaleCoefficient) / scaleCoefficient) / log2(20000))};
     const double crossoverUpperLogMax {getWidth() * (log2((CROSSOVERUPPER_MAX + scaleCoefficient) / scaleCoefficient) / log2(20000))};
     
-    crossoverLowerSld->setBounds(getX() + crossoverLowerLogMin - sliderThumbRadius,
-                                getY(),
-                                crossoverLowerLogMax - crossoverLowerLogMin + 2 * sliderThumbRadius,
-                                getHeight());
+    crossoverLowerSld->setBounds(crossoverLowerLogMin - sliderThumbRadius,
+                                 0,
+                                 crossoverLowerLogMax - crossoverLowerLogMin + 2 * sliderThumbRadius,
+                                 getHeight());
     
-    crossoverUpperSld->setBounds(getX() + crossoverUpperLogMin - sliderThumbRadius,
-                                getY(),
-                                getWidth() - crossoverUpperLogMax + sliderThumbRadius,
-                                getHeight());
+    crossoverUpperSld->setBounds(crossoverUpperLogMin - sliderThumbRadius,
+                                 0,
+                                 getWidth() - crossoverUpperLogMax + sliderThumbRadius,
+                                 getHeight());
 }
 
 void MONSTRCrossover::drawFrequencyText(Graphics &g,
