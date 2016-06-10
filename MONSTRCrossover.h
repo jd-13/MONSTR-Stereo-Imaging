@@ -39,19 +39,17 @@ class MONSTRCrossover : public Component {
 public:
     
     MONSTRCrossover(String name,
-                    Slider::Listener* newListener,
+                    AudioProcessor* newAudioProcessor,
                     MONSTRWidthSlider* newWidth1Sld,
                     MONSTRWidthSlider* newWidth2Sld,
                     MONSTRWidthSlider* newWidth3Sld);
     
-    ~MONSTRCrossover();
+    virtual ~MONSTRCrossover();
     
     void paint(Graphics& g) override;
     
     void resized() override;
     
-    ScopedPointer<Slider>   crossoverLowerSld,
-                            crossoverUpperSld;
     
 private:
     void resizeWidthSliders(int crossoverLowerXPos,
@@ -78,7 +76,8 @@ private:
                           float crossoverUpperXPos);
     
     void positionHorizontalSliders();
-
+    
+    void updateSliders();
         
     // defines the fraction of the distance from the top and bottom
     // of the crossover GUI element which represents neutral stereo width
@@ -102,11 +101,30 @@ private:
                         greenTrans,
                         lightGreyTrans;
     
-
+    AudioProcessor* ourProcessor;
+    
+    ScopedPointer<Slider>   crossoverLowerSld,
+                            crossoverUpperSld;
     
     MONSTRWidthSlider   *width1Sld,
                         *width2Sld,
                         *width3Sld;
+    
+    class MONSTRCrossoverListener : public Slider::Listener {
+    public:
+        MONSTRCrossoverListener(MONSTRCrossover* crossover) :   Slider::Listener(),
+                                                                parent(crossover) {
+            
+        }
+        
+        void sliderValueChanged(Slider* sliderThatWasMoved) override;
+        
+    private:
+        MONSTRCrossover* parent;
+    };
+    
+    ScopedPointer<MONSTRCrossoverListener> mListener;
+    
 };
 
 #endif  // MONSTRCROSSOVERBACKGROUND_H_INCLUDED

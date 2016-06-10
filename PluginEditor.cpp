@@ -75,7 +75,7 @@ MonstrAudioProcessorEditor::MonstrAudioProcessorEditor (MonstrAudioProcessor& ow
 
     //[UserPreSize]
     addAndMakeVisible(mCrossover = new MONSTRCrossover("mCrossover",
-                                                       this,
+                                                       getProcessor(),
                                                        width1Sld,
                                                        width2Sld,
                                                        width3Sld));
@@ -156,19 +156,7 @@ void MonstrAudioProcessorEditor::sliderValueChanged (Slider* sliderThatWasMoved)
     MonstrAudioProcessor* ourProcessor {getProcessor()};
     //[/UsersliderValueChanged_Pre]
 
-    if (sliderThatWasMoved == mCrossover->crossoverLowerSld)
-    {
-        //[UserSliderCode_crossoverLowerSld] -- add your slider handling code here..
-        ourProcessor->setParameter(MonstrAudioProcessor::crossoverLower, static_cast<float>(mCrossover->crossoverLowerSld->getValue()));
-        //[/UserSliderCode_crossoverLowerSld]
-    }
-    else if (sliderThatWasMoved == mCrossover->crossoverUpperSld)
-    {
-        //[UserSliderCode_crossoverUpperSld] -- add your slider handling code here..
-        ourProcessor->setParameter(MonstrAudioProcessor::crossoverUpper, static_cast<float>(mCrossover->crossoverUpperSld->getValue()));
-        //[/UserSliderCode_crossoverUpperSld]
-    }
-    else if (sliderThatWasMoved == width1Sld)
+    if (sliderThatWasMoved == width1Sld)
     {
         //[UserSliderCode_width1Sld] -- add your slider handling code here..
         ourProcessor->setParameter(MonstrAudioProcessor::widthBand1, static_cast<float>(width1Sld->getValue()));
@@ -199,11 +187,7 @@ void MonstrAudioProcessorEditor::timerCallback() {
 
     MonstrAudioProcessor* ourProcessor = getProcessor();
     
-    
     if (ourProcessor->NeedsUIUpdate()) {
-        mCrossover->crossoverLowerSld->setValue(ourProcessor->getParameter(MonstrAudioProcessor::crossoverLower), dontSendNotification);
-        mCrossover->crossoverUpperSld->setValue(ourProcessor->getParameter(MonstrAudioProcessor::crossoverUpper), dontSendNotification);
-
         width1Sld->setValue(ourProcessor->getParameter(MonstrAudioProcessor::widthBand1), dontSendNotification);
         width2Sld->setValue(ourProcessor->getParameter(MonstrAudioProcessor::widthBand2), dontSendNotification);
         width3Sld->setValue(ourProcessor->getParameter(MonstrAudioProcessor::widthBand3), dontSendNotification);
@@ -212,7 +196,7 @@ void MonstrAudioProcessorEditor::timerCallback() {
         width2Sld->setEnabled(ourProcessor->getParameter(MonstrAudioProcessor::isActiveBand2));
         width3Sld->setEnabled(ourProcessor->getParameter(MonstrAudioProcessor::isActiveBand3));
         
-        mCrossover->repaint();        
+        mCrossover->repaint();
     }
 }
 //[/MiscUserCode]

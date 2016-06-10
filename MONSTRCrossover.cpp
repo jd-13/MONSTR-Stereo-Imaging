@@ -35,11 +35,12 @@ const Colour MONSTRCrossover::greenTrans(static_cast<uint8_t>(30), 255, 0 , 0.5f
 const Colour MONSTRCrossover::lightGreyTrans(static_cast<uint8_t>(200), 200, 200, 0.5f);
 
 MONSTRCrossover::MONSTRCrossover(String name,
-                                 Slider::Listener* newListener,
+                                 AudioProcessor* newAudioProcessor,
                                  MONSTRWidthSlider* newWidth1Sld,
                                  MONSTRWidthSlider* newWidth2Sld,
                                  MONSTRWidthSlider* newWidth3Sld)
                                     :   Component(name),
+                                        ourProcessor(newAudioProcessor),
                                         width1Sld(newWidth1Sld),
                                         width2Sld(newWidth2Sld),
                                         width3Sld(newWidth3Sld) {
@@ -52,6 +53,8 @@ MONSTRCrossover::MONSTRCrossover(String name,
     
                                             
     // Add Sliders
+    mListener = new MONSTRCrossoverListener(this);
+                                            
     addAndMakeVisible (crossoverLowerSld = new Slider ("Crossover Lower Slider"));
     crossoverLowerSld->setTooltip (TRANS("Drag the horizontal sliders left or right to change the crossover frequencies of each band.\n"
                                          "\n"
@@ -61,7 +64,7 @@ MONSTRCrossover::MONSTRCrossover(String name,
     crossoverLowerSld->setRange (0, 1, 0);
     crossoverLowerSld->setSliderStyle (Slider::LinearHorizontal);
     crossoverLowerSld->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
-    crossoverLowerSld->addListener (newListener);
+    crossoverLowerSld->addListener (mListener);
     crossoverLowerSld->setSkewFactor (0.7);
     
     addAndMakeVisible (crossoverUpperSld = new Slider ("Crossover Upper Slider"));
@@ -73,7 +76,7 @@ MONSTRCrossover::MONSTRCrossover(String name,
     crossoverUpperSld->setRange (0, 1, 0);
     crossoverUpperSld->setSliderStyle (Slider::LinearHorizontal);
     crossoverUpperSld->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
-    crossoverUpperSld->addListener (newListener);
+    crossoverUpperSld->addListener (mListener);
     crossoverUpperSld->setSkewFactor (0.7);
                                             
                                             
@@ -94,11 +97,9 @@ MONSTRCrossover::~MONSTRCrossover() {
     crossoverUpperSld = nullptr;
 }
 
-void MONSTRCrossover::resized() {
-    positionHorizontalSliders();
-}
-
 void MONSTRCrossover::paint(Graphics &g) {
+    
+    updateSliders();
     
     // calculate the crossover values in Hz from the sliders
     const float crossoverLowerHz {
@@ -148,6 +149,10 @@ void MONSTRCrossover::paint(Graphics &g) {
     
     resizeWidthSliders(crossoverLowerXPos,
                        crossoverUpperXPos);
+}
+
+void MONSTRCrossover::resized() {
+    positionHorizontalSliders();
 }
 
 void MONSTRCrossover::resizeWidthSliders(int crossoverLowerXPos,
@@ -421,4 +426,24 @@ void MONSTRCrossover::drawSliderThumbs(Graphics& g,
     
     drawSingleThumb(crossoverLowerXPos, red, yellow);
     drawSingleThumb(crossoverUpperXPos, yellow, green);
+}
+
+void MONSTRCrossover::updateSliders() {
+    crossoverLowerSld->setValue(ourProcessor->getParameter(MonstrAudioProcessor::crossoverLower), dontSendNotification);
+    crossoverUpperSld->setValue(ourProcessor->getParameter(MonstrAudioProcessor::crossoverUpper), dontSendNotification);
+}
+
+void MONSTRCrossover::MONSTRCrossoverListener::sliderValueChanged(Slider* sliderThatWasMoved) {
+    if (sliderThatWasMoved == parent->crossoverLowerSld)
+    {
+        //[UserSliderCode_crossoverLowerSld] -- add your slider handling code here..
+        parent->ourProcessor->setParameter(MonstrAudioProcessor::crossoverLower, static_cast<float>(parent->crossoverLowerSld->getValue()));
+        //[/UserSliderCode_crossoverLowerSld]
+    }
+    else if (sliderThatWasMoved == parent->crossoverUpperSld)
+    {
+        //[UserSliderCode_crossoverUpperSld] -- add your slider handling code here..
+        parent->ourProcessor->setParameter(MonstrAudioProcessor::crossoverUpper, static_cast<float>(parent->crossoverUpperSld->getValue()));
+        //[/UserSliderCode_crossoverUpperSld]
+    }
 }
