@@ -30,6 +30,7 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "MONSTRLookAndFeel.h"
 #include "MONSTRWidthSlider.h"
+#include "PluginProcessor.h"
 #include "ParameterData.h"
 #include "math.h"
 #include <memory>
@@ -39,10 +40,7 @@ class MONSTRCrossover : public Component {
 public:
     
     MONSTRCrossover(String name,
-                    AudioProcessor* newAudioProcessor,
-                    MONSTRWidthSlider* newWidth1Sld,
-                    MONSTRWidthSlider* newWidth2Sld,
-                    MONSTRWidthSlider* newWidth3Sld);
+                    MonstrAudioProcessor* newAudioProcessor);
     
     virtual ~MONSTRCrossover();
     
@@ -101,14 +99,14 @@ private:
                         greenTrans,
                         lightGreyTrans;
     
-    AudioProcessor* ourProcessor;
+    MonstrAudioProcessor* ourProcessor;
     
     ScopedPointer<Slider>   crossoverLowerSld,
                             crossoverUpperSld;
     
-    MONSTRWidthSlider   *width1Sld,
-                        *width2Sld,
-                        *width3Sld;
+    ScopedPointer<MONSTRWidthSlider>    width1Sld,
+                                        width2Sld,
+                                        width3Sld;
     
     class MONSTRCrossoverListener : public Slider::Listener {
     public:

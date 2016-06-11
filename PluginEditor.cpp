@@ -33,52 +33,9 @@ MonstrAudioProcessorEditor::MonstrAudioProcessorEditor (MonstrAudioProcessor& ow
     //[Constructor_pre] You can add your own custom stuff here..
     //[/Constructor_pre]
 
-    addAndMakeVisible (width1Sld = new MONSTRWidthSlider ("Band 1 Width Slider",
-                                                          getProcessor(),
-                                                          MonstrAudioProcessor::isActiveBand1));
-    width1Sld->setTooltip (TRANS("Drag the horizontal sliders left or right to change the crossover frequencies of each band.\n"
-    "\n"
-    "Drag up or down near the middle of a band to increase or decrease that band\'s stereo width.\n"
-    "\n"
-    "Right click near the middle of a band to bypass its stereo processing."));
-    width1Sld->setRange (0, 1, 0.01);
-    width1Sld->setSliderStyle (Slider::LinearVertical);
-    width1Sld->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
-    width1Sld->addListener (this);
-
-    addAndMakeVisible (width2Sld = new MONSTRWidthSlider ("Band 2 Width Slider",
-                                                          getProcessor(),
-                                                          MonstrAudioProcessor::isActiveBand2));
-    width2Sld->setTooltip (TRANS("Drag the horizontal sliders left or right to change the crossover frequencies of each band.\n"
-    "\n"
-    "Drag up or down near the middle of a band to increase or decrease that band\'s stereo width.\n"
-    "\n"
-    "Right click near the middle of a band to bypass its stereo processing."));
-    width2Sld->setRange (0, 1, 0.01);
-    width2Sld->setSliderStyle (Slider::LinearVertical);
-    width2Sld->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
-    width2Sld->addListener (this);
-
-    addAndMakeVisible (width3Sld = new MONSTRWidthSlider ("Band 3 Width Slider",
-                                                          getProcessor(),
-                                                          MonstrAudioProcessor::isActiveBand3));
-    width3Sld->setTooltip (TRANS("Drag the horizontal sliders left or right to change the crossover frequencies of each band.\n"
-    "\n"
-    "Drag up or down near the middle of a band to increase or decrease that band\'s stereo width.\n"
-    "\n"
-    "Right click near the middle of a band to bypass its stereo processing."));
-    width3Sld->setRange (0, 1, 0.01);
-    width3Sld->setSliderStyle (Slider::LinearVertical);
-    width3Sld->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
-    width3Sld->addListener (this);
-
-
     //[UserPreSize]
     addAndMakeVisible(mCrossover = new MONSTRCrossover("mCrossover",
-                                                       getProcessor(),
-                                                       width1Sld,
-                                                       width2Sld,
-                                                       width3Sld));
+                                                       getProcessor()));
     crossoverBounds = Rectangle<int>(40,
                                      40,
                                      560,
@@ -92,13 +49,6 @@ MonstrAudioProcessorEditor::MonstrAudioProcessorEditor (MonstrAudioProcessor& ow
     startTimer(200);
 
     LookAndFeel::setDefaultLookAndFeel(&customLookAndFeel);
-    width1Sld->setSliderSnapsToMousePosition(false);
-    width2Sld->setSliderSnapsToMousePosition(false);
-    width3Sld->setSliderSnapsToMousePosition(false);
-
-
-    
-    mCrossover->toBack();
     
     // Define a rectangle for the sine wave to be drawn in
 
@@ -110,11 +60,6 @@ MonstrAudioProcessorEditor::~MonstrAudioProcessorEditor()
 {
     //[Destructor_pre]. You can add your own custom destruction code here..
     //[/Destructor_pre]
-
-    width1Sld = nullptr;
-    width2Sld = nullptr;
-    width3Sld = nullptr;
-
 
     //[Destructor]. You can add your own custom destruction code here..
     mCrossover = nullptr;
@@ -142,9 +87,6 @@ void MonstrAudioProcessorEditor::resized()
     //[UserPreResize] Add your own custom resize code here..
     //[/UserPreResize]
 
-    width1Sld->setBounds (64, 8, 72, 192);
-    width2Sld->setBounds (232, 16, 72, 184);
-    width3Sld->setBounds (432, 8, 72, 208);
     //[UserResized] Add your own custom resize handling here..
     mCrossover->setBounds(crossoverBounds);
     //[/UserResized]
@@ -153,27 +95,7 @@ void MonstrAudioProcessorEditor::resized()
 void MonstrAudioProcessorEditor::sliderValueChanged (Slider* sliderThatWasMoved)
 {
     //[UsersliderValueChanged_Pre]
-    MonstrAudioProcessor* ourProcessor {getProcessor()};
     //[/UsersliderValueChanged_Pre]
-
-    if (sliderThatWasMoved == width1Sld)
-    {
-        //[UserSliderCode_width1Sld] -- add your slider handling code here..
-        ourProcessor->setParameter(MonstrAudioProcessor::widthBand1, static_cast<float>(width1Sld->getValue()));
-        //[/UserSliderCode_width1Sld]
-    }
-    else if (sliderThatWasMoved == width2Sld)
-    {
-        //[UserSliderCode_width2Sld] -- add your slider handling code here..
-        ourProcessor->setParameter(MonstrAudioProcessor::widthBand2, static_cast<float>(width2Sld->getValue()));
-        //[/UserSliderCode_width2Sld]
-    }
-    else if (sliderThatWasMoved == width3Sld)
-    {
-        //[UserSliderCode_width3Sld] -- add your slider handling code here..
-        ourProcessor->setParameter(MonstrAudioProcessor::widthBand3, static_cast<float>(width3Sld->getValue()));
-        //[/UserSliderCode_width3Sld]
-    }
 
     //[UsersliderValueChanged_Post]
     //[/UsersliderValueChanged_Post]
@@ -188,14 +110,6 @@ void MonstrAudioProcessorEditor::timerCallback() {
     MonstrAudioProcessor* ourProcessor = getProcessor();
     
     if (ourProcessor->NeedsUIUpdate()) {
-        width1Sld->setValue(ourProcessor->getParameter(MonstrAudioProcessor::widthBand1), dontSendNotification);
-        width2Sld->setValue(ourProcessor->getParameter(MonstrAudioProcessor::widthBand2), dontSendNotification);
-        width3Sld->setValue(ourProcessor->getParameter(MonstrAudioProcessor::widthBand3), dontSendNotification);
-
-        width1Sld->setEnabled(ourProcessor->getParameter(MonstrAudioProcessor::isActiveBand1));
-        width2Sld->setEnabled(ourProcessor->getParameter(MonstrAudioProcessor::isActiveBand2));
-        width3Sld->setEnabled(ourProcessor->getParameter(MonstrAudioProcessor::isActiveBand3));
-        
         mCrossover->repaint();
     }
 }
