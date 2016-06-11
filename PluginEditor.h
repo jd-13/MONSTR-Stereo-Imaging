@@ -39,8 +39,7 @@
                                                                     //[/Comments]
 */
 class MonstrAudioProcessorEditor  : public AudioProcessorEditor,
-                                    public Timer,
-                                    public SliderListener
+                                    public Timer
 {
 public:
     //==============================================================================
@@ -57,7 +56,6 @@ public:
 
     void paint (Graphics& g) override;
     void resized() override;
-    void sliderValueChanged (Slider* sliderThatWasMoved) override;
 
 
 
