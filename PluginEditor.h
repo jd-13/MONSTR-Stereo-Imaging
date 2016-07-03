@@ -39,8 +39,7 @@
                                                                     //[/Comments]
 */
 class MonstrAudioProcessorEditor  : public AudioProcessorEditor,
-                                    public Timer,
-                                    public SliderListener
+                                    public Timer
 {
 public:
     //==============================================================================
@@ -49,7 +48,7 @@ public:
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
-    void timerCallback();
+    void timerCallback() override;
     MonstrAudioProcessor* getProcessor() const {
         return static_cast<MonstrAudioProcessor*>(getAudioProcessor());
     }
@@ -57,7 +56,6 @@ public:
 
     void paint (Graphics& g) override;
     void resized() override;
-    void sliderValueChanged (Slider* sliderThatWasMoved) override;
 
 
 
@@ -66,14 +64,10 @@ private:
     MONSTRLookAndFeel customLookAndFeel;
     SharedResourcePointer<TooltipWindow> tooltipWindow;
     Rectangle<int> crossoverBounds;
+    ScopedPointer<MONSTRCrossover> mCrossover;
     //[/UserVariables]
 
     //==============================================================================
-    ScopedPointer<Slider> crossoverLowerSld;
-    ScopedPointer<Slider> crossoverUpperSld;
-    ScopedPointer<MONSTRWidthSlider> width1Sld;
-    ScopedPointer<MONSTRWidthSlider> width2Sld;
-    ScopedPointer<MONSTRWidthSlider> width3Sld;
 
 
     //==============================================================================
