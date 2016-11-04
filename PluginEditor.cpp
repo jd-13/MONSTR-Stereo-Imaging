@@ -35,7 +35,7 @@ MonstrAudioProcessorEditor::MonstrAudioProcessorEditor (MonstrAudioProcessor& ow
 
 
     //[UserPreSize]
-    addAndMakeVisible(mCrossover = new MONSTRCrossover("mCrossover",
+    addAndMakeVisible(mCrossover = new MONSTRCrossoverComponent("mCrossover",
                                                        getProcessor()));
     crossoverBounds = Rectangle<int>(40,
                                      40,
