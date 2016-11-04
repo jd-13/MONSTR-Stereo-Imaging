@@ -49,7 +49,7 @@ public:
         highCut2.setup(FILTER_ORDER, sampleRate, highCutoffHz);
     }
     
-    virtual ~MONSTRBand();
+    virtual ~MONSTRBand() {}
     
     
     void setLowCutoff(float val) {
