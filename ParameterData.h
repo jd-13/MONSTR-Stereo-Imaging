@@ -28,16 +28,6 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "ParameterDefinition.h"
 
-const ParameterDefinition::RangedParameter<float>   CROSSOVERLOWER(40, 500, 100),
-                                                    CROSSOVERUPPER(3000, 19500, 5000),
-                                                    WIDTH(0, 2, 1);
-
-
-const bool  BANDSWITCH_OFF {false},
-            BANDSWITCH_ON {true},
-            BANDSWITCH_DEFAULT {BANDSWITCH_ON};
-
-
 const String    SWITCHBAND1_STR {"Band1Bypass"},
                 SWITCHBAND2_STR {"Band2Bypass"},
                 SWITCHBAND3_STR {"Band3Bypass"},
