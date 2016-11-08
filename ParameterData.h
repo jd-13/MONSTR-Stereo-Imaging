@@ -26,19 +26,11 @@
 #define PARAMETERDATA_H_INCLUDED
 
 #include "../JuceLibraryCode/JuceHeader.h"
+#include "ParameterDefinition.h"
 
-
-const float CROSSOVERLOWER_MIN {40},
-            CROSSOVERLOWER_MAX {500},
-            CROSSOVERLOWER_DEFAULT {100},
-
-            CROSSOVERUPPER_MIN {3000},
-            CROSSOVERUPPER_MAX {19500},
-            CROSSOVERUPPER_DEFAULT {5000},
-
-            WIDTH_MIN {0},
-            WIDTH_MAX {2},
-            WIDTH_DEFAULT {1};
+const ParameterDefinition::RangedParameter<float>   CROSSOVERLOWER(40, 500, 100),
+                                                    CROSSOVERUPPER(3000, 19500, 5000),
+                                                    WIDTH(0, 2, 1);
 
 
 const bool  BANDSWITCH_OFF {false},
@@ -55,16 +47,5 @@ const String    SWITCHBAND1_STR {"Band1Bypass"},
                 CROSSOVERLOWER_STR {"LowerCrossover"},
                 CROSSOVERUPPER_STR {"UpperCrossover"};
 
-
-// Translates betweeen the normalised 0 - 1 range used by VSTs and the ranges used by the plugin internally
-template <typename T>
-inline T TranslateParam_Norm2Inter(T val, T min, T max) {
-    return val * (max - min) + min;
-}
-
-template <typename T>
-inline T TranslateParam_Inter2Norm(T val, T min, T max) {
-    return (val - min) / (max - min);
-}
 
 #endif  // PARAMETERDATA_H_INCLUDED
