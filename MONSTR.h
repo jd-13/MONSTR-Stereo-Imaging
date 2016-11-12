@@ -25,19 +25,17 @@
 #ifndef MONSTR_H_INCLUDED
 #define MONSTR_H_INCLUDED
 
-#include "MONSTRBand.h"
+#include "MONSTRCrossover.h"
 #include "../JuceLibraryCode/JuceHeader.h"
 
 class MONSTR {
 public:
     MONSTR();
     ~MONSTR();
-        
-    MONSTRBand  band1,
-                band2,
-                band3;
     
-    /* ClockProcess2in2out
+    MONSTRCrossover mCrossover;
+    
+    /* Process2in2out
      *
      * Performs the effect processing on inLeftSample and inRightSample. Use for
      * stereo in->stereo out signals.
@@ -46,7 +44,7 @@ public:
      *       inRightSample   Pointer to the right sample to be processed
      *       numSamples      Number of samples loaded into the buffer
      */
-    void ClockProcess(float* leftSample, float* rightSample, size_t numSamples);
+    void Process2in2out(float* leftSample, float* rightSample, size_t numSamples);
     
     void setSampleRate(double newSampleRate);
     

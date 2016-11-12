@@ -15,23 +15,17 @@
 //==============================================================================
 MonstrAudioProcessor::MonstrAudioProcessor()
 {
-    mMONSTR.band1.makeBandLower();
-    mMONSTR.band1.setLowCutoff(20);
-    mMONSTR.band1.setHighCutoff(CROSSOVERLOWER.defaultValue);
-    mMONSTR.band1.setWidth(WIDTH.defaultValue);
-    mMONSTR.band1.setIsActive(BANDSWITCH_DEFAULT);
+    mMONSTR.mCrossover.setCrossoverLower(CROSSOVERLOWER.defaultValue);
+    mMONSTR.mCrossover.setCrossoverUpper(CROSSOVERUPPER.defaultValue);
     
-    mMONSTR.band2.makeBandMiddle();
-    mMONSTR.band2.setLowCutoff(CROSSOVERLOWER.defaultValue);
-    mMONSTR.band2.setHighCutoff(CROSSOVERUPPER.defaultValue);
-    mMONSTR.band2.setWidth(WIDTH.defaultValue);
-    mMONSTR.band2.setIsActive(BANDSWITCH_DEFAULT);
+    mMONSTR.mCrossover.band1.setWidth(WIDTH.defaultValue);
+    mMONSTR.mCrossover.band1.setIsActive(BANDSWITCH_DEFAULT);
     
-    mMONSTR.band3.makeBandUpper();
-    mMONSTR.band3.setLowCutoff(CROSSOVERUPPER.defaultValue);
-    mMONSTR.band3.setHighCutoff(20000);
-    mMONSTR.band3.setWidth(WIDTH.defaultValue);
-    mMONSTR.band3.setIsActive(BANDSWITCH_DEFAULT);
+    mMONSTR.mCrossover.band2.setWidth(WIDTH.defaultValue);
+    mMONSTR.mCrossover.band2.setIsActive(BANDSWITCH_DEFAULT);
+    
+    mMONSTR.mCrossover.band3.setWidth(WIDTH.defaultValue);
+    mMONSTR.mCrossover.band3.setIsActive(BANDSWITCH_DEFAULT);
     
     UIUpdateFlag = true;
 }
@@ -55,36 +49,36 @@ float MonstrAudioProcessor::getParameter (int index)
 {
     switch (index) {
         case isActiveBand1:
-            return mMONSTR.band1.getIsActive();
+            return mMONSTR.mCrossover.band1.getIsActive();
             
         case widthBand1:
-            return WIDTH.InteralToNormalised(mMONSTR.band1.getWidth());
+            return WIDTH.InteralToNormalised(mMONSTR.mCrossover.band1.getWidth());
             
         
         
         case crossoverLower:
-            return CROSSOVERLOWER.InteralToNormalised(mMONSTR.band1.getHighCutoff());
+            return CROSSOVERLOWER.InteralToNormalised(mMONSTR.mCrossover.getCrossoverLower());
             
         
         
         case isActiveBand2:
-            return mMONSTR.band2.getIsActive();
+            return mMONSTR.mCrossover.band2.getIsActive();
             
         case widthBand2:
-            return WIDTH.InteralToNormalised(mMONSTR.band2.getWidth());
+            return WIDTH.InteralToNormalised(mMONSTR.mCrossover.band2.getWidth());
             
         
         
         case crossoverUpper:
-            return CROSSOVERUPPER.InteralToNormalised(mMONSTR.band2.getHighCutoff());
+            return CROSSOVERUPPER.InteralToNormalised(mMONSTR.mCrossover.getCrossoverUpper());
             
         
         
         case isActiveBand3:
-            return mMONSTR.band3.getIsActive();
+            return mMONSTR.mCrossover.band3.getIsActive();
             
         case widthBand3:
-            return WIDTH.InteralToNormalised(mMONSTR.band3.getWidth());
+            return WIDTH.InteralToNormalised(mMONSTR.mCrossover.band3.getWidth());
             
         
         
@@ -97,45 +91,43 @@ void MonstrAudioProcessor::setParameter (int index, float newValue)
 {
     switch (index) {
         case isActiveBand1:
-            mMONSTR.band1.setIsActive(newValue > 0.5);
+            mMONSTR.mCrossover.band1.setIsActive(newValue > 0.5);
             break;
             
         case widthBand1:
-            mMONSTR.band1.setWidth(WIDTH.NormalisedToInteral(newValue));
+            mMONSTR.mCrossover.band1.setWidth(WIDTH.NormalisedToInteral(newValue));
             break;
             
             
             
         case crossoverLower:
-            mMONSTR.band1.setHighCutoff(CROSSOVERLOWER.NormalisedToInteral(newValue));
-            mMONSTR.band2.setLowCutoff(CROSSOVERLOWER.NormalisedToInteral(newValue));
+            mMONSTR.mCrossover.setCrossoverLower(CROSSOVERLOWER.NormalisedToInteral(newValue));
             break;
             
             
             
         case isActiveBand2:
-            mMONSTR.band2.setIsActive(newValue > 0.5);
+            mMONSTR.mCrossover.band2.setIsActive(newValue > 0.5);
             break;
             
         case widthBand2:
-            mMONSTR.band2.setWidth(WIDTH.NormalisedToInteral(newValue));
+            mMONSTR.mCrossover.band2.setWidth(WIDTH.NormalisedToInteral(newValue));
             break;
             
             
             
         case crossoverUpper:
-            mMONSTR.band2.setHighCutoff(CROSSOVERUPPER.NormalisedToInteral(newValue));
-            mMONSTR.band3.setLowCutoff(CROSSOVERUPPER.NormalisedToInteral(newValue));
+            mMONSTR.mCrossover.setCrossoverUpper(CROSSOVERUPPER.NormalisedToInteral(newValue));
             break;
             
             
             
         case isActiveBand3:
-            mMONSTR.band3.setIsActive(newValue > 0.5);
+            mMONSTR.mCrossover.band3.setIsActive(newValue > 0.5);
             break;
             
         case widthBand3:
-            mMONSTR.band3.setWidth(WIDTH.NormalisedToInteral(newValue));
+            mMONSTR.mCrossover.band3.setWidth(WIDTH.NormalisedToInteral(newValue));
             
         default:
             break;
@@ -186,36 +178,36 @@ const String MonstrAudioProcessor::getParameterText (int index)
 {
     switch (index) {
         case isActiveBand1:
-            return String(mMONSTR.band1.getIsActive());
+            return String(mMONSTR.mCrossover.band1.getIsActive());
             
         case widthBand1:
-            return String(WIDTH.InteralToNormalised(mMONSTR.band1.getWidth()));
+            return String(WIDTH.InteralToNormalised(mMONSTR.mCrossover.band1.getWidth()));
             
             
             
         case crossoverLower:
-            return String(CROSSOVERLOWER.InteralToNormalised(mMONSTR.band1.getHighCutoff()));
+            return String(CROSSOVERLOWER.InteralToNormalised(mMONSTR.mCrossover.getCrossoverLower()));
             
             
             
         case isActiveBand2:
-            return String(mMONSTR.band2.getIsActive());
+            return String(mMONSTR.mCrossover.band2.getIsActive());
             
         case widthBand2:
-            return String(WIDTH.InteralToNormalised(mMONSTR.band2.getWidth()));
+            return String(WIDTH.InteralToNormalised(mMONSTR.mCrossover.band2.getWidth()));
             
             
             
         case crossoverUpper:
-            return String(CROSSOVERUPPER.InteralToNormalised(mMONSTR.band2.getHighCutoff()));
+            return String(CROSSOVERUPPER.InteralToNormalised(mMONSTR.mCrossover.getCrossoverUpper()));
             
             
             
         case isActiveBand3:
-            return String(mMONSTR.band3.getIsActive());
+            return String(mMONSTR.mCrossover.band3.getIsActive());
             
         case widthBand3:
-            return String(WIDTH.InteralToNormalised(mMONSTR.band3.getWidth()));
+            return String(WIDTH.InteralToNormalised(mMONSTR.mCrossover.band3.getWidth()));
             
         default:
             return String::empty;
@@ -310,9 +302,7 @@ void MonstrAudioProcessor::changeProgramName (int index, const String& newName)
 void MonstrAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     // Use this method as the place to do any pre-playback
-    mMONSTR.band1.reset();
-    mMONSTR.band2.reset();
-    mMONSTR.band3.reset();
+    mMONSTR.mCrossover.reset();
     // initialisation that you need..
 }
 
@@ -341,7 +331,7 @@ void MonstrAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& 
         
     mMONSTR.setSampleRate(getSampleRate());
     
-    mMONSTR.ClockProcess(inLeftSample, inRightSample, buffer.getNumSamples());
+    mMONSTR.Process2in2out(inLeftSample, inRightSample, buffer.getNumSamples());
 }
 
 //==============================================================================
