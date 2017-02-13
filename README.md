@@ -3,7 +3,8 @@ MONSTR is a multiband stereo imaging plugin, available in VST, VST3 and Audio Un
 
 For more details and a free download of the compiled plugin: https://whiteelephantaudio.com/plugins/monstr/  
 
-The master branch reflects the latest release available on the website, the dev branch reflects the latest updates before they get released.  
+![alt tag](https://whiteelephantaudio.com/wp/wp-content/uploads/2016/01/MONSTR-v1.0.0-Screenshot.png)
+
 
 ## Built using:  
 
