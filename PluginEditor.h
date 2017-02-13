@@ -25,7 +25,7 @@
 #include "PluginProcessor.h"
 #include "MONSTRLookAndFeel.h"
 #include "MONSTRWidthSlider.h"
-#include "MONSTRCrossover.h"
+#include "MONSTRCrossoverComponent.h"
 //[/Headers]
 
 
@@ -64,7 +64,7 @@ private:
     MONSTRLookAndFeel customLookAndFeel;
     SharedResourcePointer<TooltipWindow> tooltipWindow;
     Rectangle<int> crossoverBounds;
-    ScopedPointer<MONSTRCrossover> mCrossover;
+    ScopedPointer<MONSTRCrossoverComponent> mCrossover;
     //[/UserVariables]
 
     //==============================================================================

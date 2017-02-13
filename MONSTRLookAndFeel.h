@@ -14,7 +14,7 @@
 #define _USE_MATH_DEFINES
 
 #include "../JuceLibraryCode/JuceHeader.h"
-#include "MONSTRCrossover.h"
+#include "MONSTRCrossoverComponent.h"
 #include "math.h"
 
 class MONSTRLookAndFeel : public LookAndFeel_V2 {

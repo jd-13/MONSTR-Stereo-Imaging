@@ -36,13 +36,13 @@
 #include <memory>
 #include <array>
 
-class MONSTRCrossover : public Component {
+class MONSTRCrossoverComponent : public Component {
 public:
     
-    MONSTRCrossover(String name,
+    MONSTRCrossoverComponent(String name,
                     MonstrAudioProcessor* newAudioProcessor);
     
-    virtual ~MONSTRCrossover();
+    virtual ~MONSTRCrossoverComponent();
     
     void paint(Graphics& g) override;
     
@@ -110,7 +110,7 @@ private:
     
     class MONSTRCrossoverListener : public Slider::Listener {
     public:
-        MONSTRCrossoverListener(MONSTRCrossover* crossover) :   Slider::Listener(),
+        MONSTRCrossoverListener(MONSTRCrossoverComponent* crossover) :   Slider::Listener(),
                                                                 parent(crossover) {
             
         }
@@ -118,7 +118,7 @@ private:
         void sliderValueChanged(Slider* sliderThatWasMoved) override;
         
     private:
-        MONSTRCrossover* parent;
+        MONSTRCrossoverComponent* parent;
     };
     
     ScopedPointer<MONSTRCrossoverListener> mListener;
