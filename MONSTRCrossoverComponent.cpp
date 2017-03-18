@@ -439,9 +439,9 @@ void MONSTRCrossoverComponent::drawSliderThumbs(Graphics& g,
                         getHeight() * 0.5,
                         sliderThumbRadius,
                         sliderThumbRadius,
-                        M_PI,
+                        CoreMath::DOUBLE_PI,
                         0,
-                        M_PI,
+                        CoreMath::DOUBLE_PI,
                         true);
         g.strokePath(p, PathStrokeType(lineWidth));
         
@@ -453,7 +453,7 @@ void MONSTRCrossoverComponent::drawSliderThumbs(Graphics& g,
                         sliderThumbRadius,
                         0,
                         0,
-                        M_PI,
+                        CoreMath::DOUBLE_PI,
                         true);
         g.strokePath(p, PathStrokeType(lineWidth));
     };

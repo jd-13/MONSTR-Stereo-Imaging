@@ -25,14 +25,12 @@
 #ifndef MONSTRCROSSOVERBACKGROUND_H_INCLUDED
 #define MONSTRCROSSOVERBACKGROUND_H_INCLUDED
 
-#define _USE_MATH_DEFINES
-
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "MONSTRLookAndFeel.h"
 #include "MONSTRWidthSlider.h"
 #include "PluginProcessor.h"
 #include "ParameterData.h"
-#include "math.h"
+#include "General/CoreMath.h"
 #include <memory>
 #include <array>
 
