@@ -25,7 +25,7 @@
 #ifndef MONSTR_H_INCLUDED
 #define MONSTR_H_INCLUDED
 
-#include "MONSTRCrossover.h"
+#include "MONSTRFilters/MONSTRCrossover.h"
 #include "../JuceLibraryCode/JuceHeader.h"
 
 class MONSTR {

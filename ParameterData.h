@@ -26,7 +26,7 @@
 #define PARAMETERDATA_H_INCLUDED
 
 #include "../JuceLibraryCode/JuceHeader.h"
-#include "ParameterDefinition.h"
+#include "General/ParameterDefinition.h"
 
 const String    SWITCHBAND1_STR {"Band1Bypass"},
                 SWITCHBAND2_STR {"Band2Bypass"},
