@@ -7,7 +7,7 @@
   the "//[xyz]" and "//[/xyz]" sections will be retained when the file is loaded
   and re-saved.
 
-  Created with Projucer version: 4.2.1
+  Created with Projucer version: 4.3.0
 
   ------------------------------------------------------------------------------
 
@@ -28,7 +28,7 @@
 
 //==============================================================================
 MonstrAudioProcessorEditor::MonstrAudioProcessorEditor (MonstrAudioProcessor& ownerFilter)
-    : AudioProcessorEditor(ownerFilter)
+    : CoreProcessorEditor(ownerFilter)
 {
     //[Constructor_pre] You can add your own custom stuff here..
     //[/Constructor_pre]
@@ -49,7 +49,7 @@ MonstrAudioProcessorEditor::MonstrAudioProcessorEditor (MonstrAudioProcessor& ow
     //[Constructor] You can add your own custom stuff here..
     startTimer(200);
 
-    LookAndFeel::setDefaultLookAndFeel(&customLookAndFeel);
+    _assignLookAndFeelToAllChildren(customLookAndFeel);
 
     // Define a rectangle for the sine wave to be drawn in
 
@@ -120,8 +120,8 @@ void MonstrAudioProcessorEditor::timerCallback() {
 BEGIN_JUCER_METADATA
 
 <JUCER_COMPONENT documentType="Component" className="MonstrAudioProcessorEditor"
-                 componentName="" parentClasses="public AudioProcessorEditor, public Timer"
-                 constructorParams="MonstrAudioProcessor&amp; ownerFilter" variableInitialisers="AudioProcessorEditor(ownerFilter)"
+                 componentName="" parentClasses="public CoreProcessorEditor, public Timer"
+                 constructorParams="MonstrAudioProcessor&amp; ownerFilter" variableInitialisers="CoreProcessorEditor(ownerFilter)"
                  snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330"
                  fixedSize="1" initialWidth="640" initialHeight="290">
   <BACKGROUND backgroundColour="ffffffff"/>

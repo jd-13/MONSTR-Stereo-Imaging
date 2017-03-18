@@ -7,7 +7,7 @@
   the "//[xyz]" and "//[/xyz]" sections will be retained when the file is loaded
   and re-saved.
 
-  Created with Projucer version: 4.2.1
+  Created with Projucer version: 4.3.0
 
   ------------------------------------------------------------------------------
 
@@ -26,6 +26,7 @@
 #include "MONSTRLookAndFeel.h"
 #include "MONSTRWidthSlider.h"
 #include "MONSTRCrossoverComponent.h"
+#include "CoreJUCEPlugin/CoreProcessorEditor.h"
 //[/Headers]
 
 
@@ -38,7 +39,7 @@
     Describe your class and how it works here!
                                                                     //[/Comments]
 */
-class MonstrAudioProcessorEditor  : public AudioProcessorEditor,
+class MonstrAudioProcessorEditor  : public CoreProcessorEditor,
                                     public Timer
 {
 public:
@@ -62,7 +63,6 @@ public:
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
     MONSTRLookAndFeel customLookAndFeel;
-    SharedResourcePointer<TooltipWindow> tooltipWindow;
     Rectangle<int> crossoverBounds;
     ScopedPointer<MONSTRCrossoverComponent> mCrossover;
     //[/UserVariables]
