@@ -3,7 +3,7 @@ MONSTR is a multiband stereo imaging plugin, available in VST, VST3 and Audio Un
 
 For more details and a free download of the compiled plugin: https://whiteelephantaudio.com/plugins/monstr/  
 
-![alt tag](https://whiteelephantaudio.com/wp/wp-content/uploads/2016/01/MONSTR-v1.0.0-Screenshot.png)
+![](https://whiteelephantaudio.com/thumbs/monstrThumbOriginal.png)
 
 
 ## Built using:  
@@ -13,3 +13,5 @@ JUCE: https://www.juce.com/
 A Collection of Useful C++ Classes for Digital Signal Processing: https://github.com/vinniefalco/DSPFilters  
 
 WECore: https://github.com/jd-13/WE-Core  
+
+VST SDK: https://www.steinberg.net/en/company/developers.html  
