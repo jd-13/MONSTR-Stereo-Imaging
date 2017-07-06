@@ -1,5 +1,5 @@
 /*
- *	File:		MONSTRCrossover.h
+ *	File:		MONSTRCrossoverComponent.h
  *
  *	Version:	1.0.0
  *
