@@ -178,7 +178,7 @@ const String MonstrAudioProcessor::getParameterText (int index)
 {
     switch (index) {
         case isActiveBand1:
-            return String(mMONSTR.mCrossover.band1.getIsActive());
+            return String(static_cast<int>(mMONSTR.mCrossover.band1.getIsActive()));
             
         case widthBand1:
             return String(WIDTH.InteralToNormalised(mMONSTR.mCrossover.band1.getWidth()));
@@ -191,7 +191,7 @@ const String MonstrAudioProcessor::getParameterText (int index)
             
             
         case isActiveBand2:
-            return String(mMONSTR.mCrossover.band2.getIsActive());
+            return String(static_cast<int>(mMONSTR.mCrossover.band2.getIsActive()));
             
         case widthBand2:
             return String(WIDTH.InteralToNormalised(mMONSTR.mCrossover.band2.getWidth()));
@@ -204,7 +204,7 @@ const String MonstrAudioProcessor::getParameterText (int index)
             
             
         case isActiveBand3:
-            return String(mMONSTR.mCrossover.band3.getIsActive());
+            return String(static_cast<int>(mMONSTR.mCrossover.band3.getIsActive()));
             
         case widthBand3:
             return String(WIDTH.InteralToNormalised(mMONSTR.mCrossover.band3.getWidth()));
