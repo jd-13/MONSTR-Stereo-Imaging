@@ -66,6 +66,7 @@ MonstrAudioProcessorEditor::~MonstrAudioProcessorEditor()
 
     //[Destructor]. You can add your own custom destruction code here..
     mCrossover = nullptr;
+    _removeLookAndFeelFromAllChildren();
     //[/Destructor]
 }
 
