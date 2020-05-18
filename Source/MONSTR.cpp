@@ -31,17 +31,7 @@ MONSTR::MONSTR() {}
 MONSTR::~MONSTR() {}
 
 void MONSTR::Process2in2out(float* leftSample, float* rightSample, size_t numSamples) {
-    // convert to double pointers
-    double* leftDoubles {new double[numSamples]};
-    double* rightDoubles {new double[numSamples]};
-    std::copy(leftSample, leftSample + numSamples, leftDoubles);
-    std::copy(rightSample, rightSample + numSamples, rightDoubles);
-    
-    mCrossover.Process2in2out(leftDoubles, rightDoubles, numSamples);
-    
-    // convert back to float pointers
-    std::copy(leftDoubles, leftDoubles + numSamples, leftSample);
-    std::copy(rightDoubles, rightDoubles + numSamples, rightSample);
+    mCrossover.Process2in2out(leftSample, rightSample, numSamples);
 }
 
 void MONSTR::setSampleRate(double newSampleRate) {

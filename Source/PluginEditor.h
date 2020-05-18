@@ -38,7 +38,7 @@
     Describe your class and how it works here!
                                                                     //[/Comments]
 */
-class MonstrAudioProcessorEditor  : public CoreProcessorEditor,
+class MonstrAudioProcessorEditor  : public WECore::JUCEPlugin::CoreProcessorEditor,
                                     public Timer
 {
 public:

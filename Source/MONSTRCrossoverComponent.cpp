@@ -140,23 +140,29 @@ void MONSTRCrossoverComponent::paint(Graphics &g) {
     updateSliders();
     
     // calculate the crossover values in Hz from the sliders
-    const float crossoverLowerHz {CROSSOVERLOWER.NormalisedToInteral(crossoverLowerSld->getValue())};
+    const double crossoverLowerHz {
+        WECore::MONSTR::Parameters::CROSSOVERLOWER.NormalisedToInteral(
+                                                                    crossoverLowerSld->getValue())};
     
-    const float crossoverUpperHz {CROSSOVERUPPER.NormalisedToInteral(crossoverUpperSld->getValue())};
+    const double crossoverUpperHz {
+        WECore::MONSTR::Parameters::CROSSOVERUPPER.NormalisedToInteral(
+                                                                    crossoverUpperSld->getValue())};
     
     // calculate the raw logarithmic values
     float crossoverLowerXPos {
-        log2f((crossoverLowerHz + scaleCoefficient) / scaleCoefficient) / log2f((CROSSOVERLOWER.maxValue + scaleCoefficient) / scaleCoefficient)
+        log2f((crossoverLowerHz + scaleCoefficient) / scaleCoefficient)
+        / log2f((WECore::MONSTR::Parameters::CROSSOVERLOWER.maxValue + scaleCoefficient) / scaleCoefficient)
     };
     float crossoverUpperXPos {
-        log2f((crossoverUpperHz + scaleCoefficient) / scaleCoefficient) / log2f((CROSSOVERUPPER.maxValue + scaleCoefficient) / scaleCoefficient)
+        log2f((crossoverUpperHz + scaleCoefficient) / scaleCoefficient)
+        / log2f((WECore::MONSTR::Parameters::CROSSOVERUPPER.maxValue + scaleCoefficient) / scaleCoefficient)
     };
     
     // normalise so that they correspond to actual coordinates
-    crossoverLowerXPos *=   getWidth()
-                            * (log2((CROSSOVERLOWER.maxValue + scaleCoefficient) / scaleCoefficient) / log2(20000));
-    crossoverUpperXPos *=   getWidth()
-                            * (log2((CROSSOVERUPPER.maxValue + scaleCoefficient) / scaleCoefficient) / log2(20000));
+    crossoverLowerXPos *= getWidth()
+                          * (log2((WECore::MONSTR::Parameters::CROSSOVERLOWER.maxValue + scaleCoefficient) / scaleCoefficient) / log2(20000));
+    crossoverUpperXPos *= getWidth()
+                       * (log2((WECore::MONSTR::Parameters::CROSSOVERUPPER.maxValue + scaleCoefficient) / scaleCoefficient) / log2(20000));
     
     drawSine(g, crossoverLowerXPos, crossoverUpperXPos);
     
@@ -354,10 +360,10 @@ void MONSTRCrossoverComponent::drawNeutralLine(Graphics &g) {
 // calculates the positions of the horizontal crossover sliders
 void MONSTRCrossoverComponent::positionHorizontalSliders() {
     // calculate the positions of the vertical edges of the sliders on the logarithmic scale
-    const double crossoverLowerLogMin {getWidth() * (log2((CROSSOVERLOWER.minValue + scaleCoefficient) / scaleCoefficient) / log2(20000))};
-    const double crossoverLowerLogMax {getWidth() * (log2((CROSSOVERLOWER.maxValue + scaleCoefficient) / scaleCoefficient) / log2(20000))};
-    const double crossoverUpperLogMin {getWidth() * (log2((CROSSOVERUPPER.minValue + scaleCoefficient) / scaleCoefficient) / log2(20000))};
-    const double crossoverUpperLogMax {getWidth() * (log2((CROSSOVERUPPER.maxValue + scaleCoefficient) / scaleCoefficient) / log2(20000))};
+    const double crossoverLowerLogMin {getWidth() * (log2((WECore::MONSTR::Parameters::CROSSOVERLOWER.minValue + scaleCoefficient) / scaleCoefficient) / log2(20000))};
+    const double crossoverLowerLogMax {getWidth() * (log2((WECore::MONSTR::Parameters::CROSSOVERLOWER.maxValue + scaleCoefficient) / scaleCoefficient) / log2(20000))};
+    const double crossoverUpperLogMin {getWidth() * (log2((WECore::MONSTR::Parameters::CROSSOVERUPPER.minValue + scaleCoefficient) / scaleCoefficient) / log2(20000))};
+    const double crossoverUpperLogMax {getWidth() * (log2((WECore::MONSTR::Parameters::CROSSOVERUPPER.maxValue + scaleCoefficient) / scaleCoefficient) / log2(20000))};
     
     crossoverLowerSld->setBounds(crossoverLowerLogMin - sliderThumbRadius,
                                  0,

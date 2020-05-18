@@ -33,7 +33,7 @@ public:
     MONSTR();
     ~MONSTR();
     
-    MONSTRCrossover mCrossover;
+    WECore::MONSTR::MONSTRCrossover<float> mCrossover;
     
     /* Process2in2out
      *
