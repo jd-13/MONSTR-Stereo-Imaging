@@ -1,1 +1,4 @@
-Graphics/MONSTR\ Background.xcf
+Source/Graphics/MONSTR\ Background.xcf
+Builds/*
+JuceLibraryCode/*
+.DS_Store
