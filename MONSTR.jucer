@@ -70,7 +70,7 @@
                vstFolder="~/SDKs/VST3 SDK" postbuildCommand="">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" osxArchitecture="64BitIntel" isDebug="0" optimisation="3"
-                       targetName="MONSTR" customXcodeFlags="" headerPath="/Users/jack/AudioPlugins/WEA/UsefulStuff/DSPFiltersComplete/shared/DSPFilters/include/&#10;/Users/jack/AudioPlugins/WEA/Releases/SecondGen_JUCE/WECore/Source/WECore"
+                       targetName="MONSTR" customXcodeFlags="" headerPath="../../../DSPFiltersComplete/shared/DSPFilters/include/&#10;$(WECORE_SRC)"
                        libraryPath="" linkTimeOptimisation="1"/>
         <CONFIGURATION name="Release" isDebug="0" optimisation="3" targetName="MONSTR"/>
       </CONFIGURATIONS>
