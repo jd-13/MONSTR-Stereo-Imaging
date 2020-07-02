@@ -2,7 +2,7 @@
 
 <JUCERPROJECT id="hCIed0" name="MONSTR" projectType="audioplug" version="1.0.3"
               bundleIdentifier="com.whiteelephantaudio.MONSTR" includeBinaryInAppConfig="1"
-              buildVST="1" buildVST3="1" buildAU="1" buildRTAS="0" buildAAX="0"
+              buildVST="0" buildVST3="1" buildAU="1" buildRTAS="0" buildAAX="0"
               pluginName="MONSTR" pluginDesc="MONSTR" pluginManufacturer="White Elephant Audio"
               pluginManufacturerCode="WEle" pluginCode="Mnsr" pluginChannelConfigs="{2, 2}"
               pluginIsSynth="0" pluginWantsMidiIn="0" pluginProducesMidiOut="0"
@@ -12,7 +12,7 @@
               companyWebsite="www.whiteelephantaudio.com" companyEmail="info@whiteelephantaudio.com"
               buildAUv3="0" pluginIsMidiEffectPlugin="0" displaySplashScreen="0"
               reportAppUsage="0" splashScreenColour="Dark" buildStandalone="0"
-              enableIAA="0" pluginFormats="buildVST,buildVST3,buildAU">
+              enableIAA="0" pluginFormats="buildAU,buildVST3">
   <MAINGROUP id="ZkK3BH" name="MONSTR">
     <GROUP id="{1E402055-9A34-3AEA-FE15-FACE7D5D6E2D}" name="Graphics">
       <FILE id="skGThj" name="MONSTR Background.png" compile="0" resource="1"

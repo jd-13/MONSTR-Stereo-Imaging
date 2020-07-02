@@ -17,6 +17,7 @@
 // [BEGIN_USER_CODE_SECTION]
 
 // (You can add your own code in this section, and the Projucer will not overwrite it)
+#define JUCE_VST3_CAN_REPLACE_VST2 0
 
 // [END_USER_CODE_SECTION]
 
