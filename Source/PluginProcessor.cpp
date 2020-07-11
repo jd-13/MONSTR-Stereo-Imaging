@@ -27,7 +27,7 @@ MonstrAudioProcessor::MonstrAudioProcessor()
     mMONSTR.mCrossover.band3.setWidth(WECore::MONSTR::Parameters::WIDTH.defaultValue);
     mMONSTR.mCrossover.band3.setIsActive(WECore::MONSTR::Parameters::BANDSWITCH_DEFAULT);
 
-    UIUpdateFlag = true;
+    _UIUpdateFlag = true;
 }
 
 MonstrAudioProcessor::~MonstrAudioProcessor()
@@ -387,37 +387,8 @@ void MonstrAudioProcessor::setStateInformation (const void* data, int sizeInByte
         setParameter(isActiveBand2, getParameter(isActiveBand2));
         setParameter(isActiveBand3, getParameter(isActiveBand3));
 
-        UIUpdateFlag = true;
+        _UIUpdateFlag = true;
     }
-}
-
-
-String MonstrAudioProcessor::floatVectorToString(const std::vector<float>& fData) const {
-    String result {""};
-
-    if (fData.size() < 1) {
-        return result;
-    }
-
-    for (int iii {0}; iii < (fData.size() - 1); iii++) {
-        result << String(fData[iii])<<",";
-    }
-
-    result << String(fData[fData.size() - 1]);
-
-    return result;
-}
-
-int MonstrAudioProcessor::stringToFloatVector(const String sFloatCSV, std::vector<float>& fData, int maxNumFloat) const {
-    StringArray tokenizer;
-    int tokenCount {tokenizer.addTokens(sFloatCSV, ",","")};
-    int resultCount {(maxNumFloat <= tokenCount) ? maxNumFloat : tokenCount};
-
-    for (int iii {0}; iii < resultCount; iii++) {
-        fData.push_back(tokenizer[iii].getFloatValue());
-    }
-
-    return ((tokenCount <= maxNumFloat) ? resultCount : -1);
 }
 
 //==============================================================================

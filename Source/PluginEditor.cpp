@@ -104,7 +104,7 @@ void MonstrAudioProcessorEditor::timerCallback() {
 
     MonstrAudioProcessor* ourProcessor = getProcessor();
 
-    if (ourProcessor->NeedsUIUpdate()) {
+    if (ourProcessor->needsUIUpdate()) {
         mCrossover->repaint();
     }
 }

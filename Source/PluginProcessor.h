@@ -14,12 +14,13 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "MONSTR.h"
 #include "ParameterData.h"
+#include "CoreJUCEPlugin/CoreAudioProcessor.h"
 
 
 //==============================================================================
 /**
 */
-class MonstrAudioProcessor  : public AudioProcessor
+class MonstrAudioProcessor  : public WECore::JUCEPlugin::CoreAudioProcessor
 {
 public:
     //==============================================================================
@@ -67,43 +68,27 @@ public:
     //==============================================================================
     void getStateInformation (MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
-    
+
     enum Parameters {
         isActiveBand1 = 0,
         widthBand1,
-        
+
         crossoverLower,
-        
+
         isActiveBand2,
         widthBand2,
-        
+
         crossoverUpper,
-        
+
         isActiveBand3,
         widthBand3,
-        
+
         totalNumParams
     };
-    
-    bool NeedsUIUpdate() {
-        return UIUpdateFlag;
-    }
-    
-    void RequestUIUpdate() {
-        UIUpdateFlag = true;
-    }
-    
-    void ClearUIUpdate() {
-        UIUpdateFlag = false;
-    }
 
 private:
     MONSTR mMONSTR;
-    bool UIUpdateFlag;
-    
-    String floatVectorToString(const std::vector<float>& fData) const;
-    
-    int stringToFloatVector(const String sFloatCSV, std::vector<float>& fData, int maxNumFloat) const;
+
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MonstrAudioProcessor)
 };
