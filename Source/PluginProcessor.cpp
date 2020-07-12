@@ -382,11 +382,6 @@ void MonstrAudioProcessor::setStateInformation (const void* data, int sizeInByte
             }
         }
 
-        // Slightly hacky fix to prevent inverted button settings on startup
-        setParameter(isActiveBand1, getParameter(isActiveBand1));
-        setParameter(isActiveBand2, getParameter(isActiveBand2));
-        setParameter(isActiveBand3, getParameter(isActiveBand3));
-
         _UIUpdateFlag = true;
     }
 }
