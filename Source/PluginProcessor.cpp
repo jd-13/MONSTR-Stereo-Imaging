@@ -15,18 +15,6 @@
 //==============================================================================
 MonstrAudioProcessor::MonstrAudioProcessor()
 {
-    mMONSTR.mCrossover.setCrossoverLower(WECore::MONSTR::Parameters::CROSSOVERLOWER.defaultValue);
-    mMONSTR.mCrossover.setCrossoverUpper(WECore::MONSTR::Parameters::CROSSOVERUPPER.defaultValue);
-
-    mMONSTR.mCrossover.band1.setWidth(WECore::MONSTR::Parameters::WIDTH.defaultValue);
-    mMONSTR.mCrossover.band1.setIsActive(WECore::MONSTR::Parameters::BANDSWITCH_DEFAULT);
-
-    mMONSTR.mCrossover.band2.setWidth(WECore::MONSTR::Parameters::WIDTH.defaultValue);
-    mMONSTR.mCrossover.band2.setIsActive(WECore::MONSTR::Parameters::BANDSWITCH_DEFAULT);
-
-    mMONSTR.mCrossover.band3.setWidth(WECore::MONSTR::Parameters::WIDTH.defaultValue);
-    mMONSTR.mCrossover.band3.setIsActive(WECore::MONSTR::Parameters::BANDSWITCH_DEFAULT);
-
     _UIUpdateFlag = true;
 }
 
