@@ -36,57 +36,57 @@
 
 class MONSTRCrossoverComponent : public Component {
 public:
-    
+
     MONSTRCrossoverComponent(String name,
                     MonstrAudioProcessor* newAudioProcessor);
-    
+
     virtual ~MONSTRCrossoverComponent();
-    
+
     void paint(Graphics& g) override;
-    
+
     void resized() override;
-    
-    
+
+
 private:
     void resizeWidthSliders(int crossoverLowerXPos,
                             int crossoverUpperXPos);
-    
+
     void drawSine(Graphics& g,
                   float crossoverLowerHz,
                   float crossoverUpperHz);
-    
+
     void drawWidthRectangles(Graphics& g,
                              int crossoverLowerXPos,
                              int crossoverUpperXPos);
-    
+
     void drawNeutralLine(Graphics& g);
-    
+
     void drawFrequencyText(Graphics& g,
                            int crossoverLowerXPos,
                            float crossoverLowerHz,
                            int crossoverUpperXPos,
                            float crossoverUpperHz);
-    
+
     void drawSliderThumbs(Graphics& g,
                           float crossoverLowerXPos,
                           float crossoverUpperXPos);
-    
+
     void positionHorizontalSliders();
-    
+
     void updateSliders();
-        
+
     // defines the fraction of the distance from the top and bottom
     // of the crossover GUI element which represents neutral stereo width
     constexpr static const float neutralPos {0.25};
-    
+
     // decrease the scaling coefficient to increase the on-screen space
     // used by the lower frequencies
     constexpr static const int scaleCoefficient {20};
-    
+
     constexpr static const int sliderThumbRadius {6};
-    
+
     std::array<double, 200>sineWaveTable;
-    
+
     static const Colour lightGrey,
                         darkGrey,
                         red,
@@ -96,31 +96,33 @@ private:
                         yellowTrans,
                         greenTrans,
                         lightGreyTrans;
-    
+
     MonstrAudioProcessor* ourProcessor;
-    
+
     ScopedPointer<Slider>   crossoverLowerSld,
                             crossoverUpperSld;
-    
+
     ScopedPointer<MONSTRWidthSlider>    width1Sld,
                                         width2Sld,
                                         width3Sld;
-    
+
+    void _enableDoubleClickToDefault();
+
     class MONSTRCrossoverListener : public Slider::Listener {
     public:
         MONSTRCrossoverListener(MONSTRCrossoverComponent* crossover) :   Slider::Listener(),
                                                                 parent(crossover) {
-            
+
         }
-        
+
         void sliderValueChanged(Slider* sliderThatWasMoved) override;
-        
+
     private:
         MONSTRCrossoverComponent* parent;
     };
-    
+
     ScopedPointer<MONSTRCrossoverListener> mListener;
-    
+
 };
 
 #endif  // MONSTRCROSSOVERBACKGROUND_H_INCLUDED
