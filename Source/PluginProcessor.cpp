@@ -40,12 +40,12 @@ float MonstrAudioProcessor::getParameter (int index)
             return mMONSTR.mCrossover.band1.getIsActive();
 
         case widthBand1:
-            return WECore::MONSTR::Parameters::WIDTH.InteralToNormalised(mMONSTR.mCrossover.band1.getWidth());
+            return WECore::MONSTR::Parameters::WIDTH.InternalToNormalised(mMONSTR.mCrossover.band1.getWidth());
 
 
 
         case crossoverLower:
-            return WECore::MONSTR::Parameters::CROSSOVERLOWER.InteralToNormalised(mMONSTR.mCrossover.getCrossoverLower());
+            return WECore::MONSTR::Parameters::CROSSOVERLOWER.InternalToNormalised(mMONSTR.mCrossover.getCrossoverLower());
 
 
 
@@ -53,12 +53,12 @@ float MonstrAudioProcessor::getParameter (int index)
             return mMONSTR.mCrossover.band2.getIsActive();
 
         case widthBand2:
-            return WECore::MONSTR::Parameters::WIDTH.InteralToNormalised(mMONSTR.mCrossover.band2.getWidth());
+            return WECore::MONSTR::Parameters::WIDTH.InternalToNormalised(mMONSTR.mCrossover.band2.getWidth());
 
 
 
         case crossoverUpper:
-            return WECore::MONSTR::Parameters::CROSSOVERUPPER.InteralToNormalised(mMONSTR.mCrossover.getCrossoverUpper());
+            return WECore::MONSTR::Parameters::CROSSOVERUPPER.InternalToNormalised(mMONSTR.mCrossover.getCrossoverUpper());
 
 
 
@@ -66,7 +66,7 @@ float MonstrAudioProcessor::getParameter (int index)
             return mMONSTR.mCrossover.band3.getIsActive();
 
         case widthBand3:
-            return WECore::MONSTR::Parameters::WIDTH.InteralToNormalised(mMONSTR.mCrossover.band3.getWidth());
+            return WECore::MONSTR::Parameters::WIDTH.InternalToNormalised(mMONSTR.mCrossover.band3.getWidth());
 
 
 
@@ -83,13 +83,13 @@ void MonstrAudioProcessor::setParameter (int index, float newValue)
             break;
 
         case widthBand1:
-            mMONSTR.mCrossover.band1.setWidth(WECore::MONSTR::Parameters::WIDTH.NormalisedToInteral(newValue));
+            mMONSTR.mCrossover.band1.setWidth(WECore::MONSTR::Parameters::WIDTH.NormalisedToInternal(newValue));
             break;
 
 
 
         case crossoverLower:
-            mMONSTR.mCrossover.setCrossoverLower(WECore::MONSTR::Parameters::CROSSOVERLOWER.NormalisedToInteral(newValue));
+            mMONSTR.mCrossover.setCrossoverLower(WECore::MONSTR::Parameters::CROSSOVERLOWER.NormalisedToInternal(newValue));
             break;
 
 
@@ -99,13 +99,13 @@ void MonstrAudioProcessor::setParameter (int index, float newValue)
             break;
 
         case widthBand2:
-            mMONSTR.mCrossover.band2.setWidth(WECore::MONSTR::Parameters::WIDTH.NormalisedToInteral(newValue));
+            mMONSTR.mCrossover.band2.setWidth(WECore::MONSTR::Parameters::WIDTH.NormalisedToInternal(newValue));
             break;
 
 
 
         case crossoverUpper:
-            mMONSTR.mCrossover.setCrossoverUpper(WECore::MONSTR::Parameters::CROSSOVERUPPER.NormalisedToInteral(newValue));
+            mMONSTR.mCrossover.setCrossoverUpper(WECore::MONSTR::Parameters::CROSSOVERUPPER.NormalisedToInternal(newValue));
             break;
 
 
@@ -115,7 +115,7 @@ void MonstrAudioProcessor::setParameter (int index, float newValue)
             break;
 
         case widthBand3:
-            mMONSTR.mCrossover.band3.setWidth(WECore::MONSTR::Parameters::WIDTH.NormalisedToInteral(newValue));
+            mMONSTR.mCrossover.band3.setWidth(WECore::MONSTR::Parameters::WIDTH.NormalisedToInternal(newValue));
 
         default:
             break;
@@ -169,12 +169,12 @@ const String MonstrAudioProcessor::getParameterText (int index)
             return String(static_cast<int>(mMONSTR.mCrossover.band1.getIsActive()));
 
         case widthBand1:
-            return String(WECore::MONSTR::Parameters::WIDTH.InteralToNormalised(mMONSTR.mCrossover.band1.getWidth()));
+            return String(WECore::MONSTR::Parameters::WIDTH.InternalToNormalised(mMONSTR.mCrossover.band1.getWidth()));
 
 
 
         case crossoverLower:
-            return String(WECore::MONSTR::Parameters::CROSSOVERLOWER.InteralToNormalised(mMONSTR.mCrossover.getCrossoverLower()));
+            return String(WECore::MONSTR::Parameters::CROSSOVERLOWER.InternalToNormalised(mMONSTR.mCrossover.getCrossoverLower()));
 
 
 
@@ -182,12 +182,12 @@ const String MonstrAudioProcessor::getParameterText (int index)
             return String(static_cast<int>(mMONSTR.mCrossover.band2.getIsActive()));
 
         case widthBand2:
-            return String(WECore::MONSTR::Parameters::WIDTH.InteralToNormalised(mMONSTR.mCrossover.band2.getWidth()));
+            return String(WECore::MONSTR::Parameters::WIDTH.InternalToNormalised(mMONSTR.mCrossover.band2.getWidth()));
 
 
 
         case crossoverUpper:
-            return String(WECore::MONSTR::Parameters::CROSSOVERUPPER.InteralToNormalised(mMONSTR.mCrossover.getCrossoverUpper()));
+            return String(WECore::MONSTR::Parameters::CROSSOVERUPPER.InternalToNormalised(mMONSTR.mCrossover.getCrossoverUpper()));
 
 
 
@@ -195,7 +195,7 @@ const String MonstrAudioProcessor::getParameterText (int index)
             return String(static_cast<int>(mMONSTR.mCrossover.band3.getIsActive()));
 
         case widthBand3:
-            return String(WECore::MONSTR::Parameters::WIDTH.InteralToNormalised(mMONSTR.mCrossover.band3.getWidth()));
+            return String(WECore::MONSTR::Parameters::WIDTH.InternalToNormalised(mMONSTR.mCrossover.band3.getWidth()));
 
         default:
             return String();
