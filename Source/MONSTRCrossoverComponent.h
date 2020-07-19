@@ -99,12 +99,12 @@ private:
 
     MonstrAudioProcessor* ourProcessor;
 
-    ScopedPointer<Slider>   crossoverLowerSld,
+    std::unique_ptr<Slider> crossoverLowerSld,
                             crossoverUpperSld;
 
-    ScopedPointer<MONSTRWidthSlider>    width1Sld,
-                                        width2Sld,
-                                        width3Sld;
+    std::unique_ptr<MONSTRWidthSlider> width1Sld,
+                                       width2Sld,
+                                       width3Sld;
 
     void _enableDoubleClickToDefault();
 

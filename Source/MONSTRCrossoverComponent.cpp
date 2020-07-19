@@ -49,7 +49,8 @@ MONSTRCrossoverComponent::MONSTRCrossoverComponent(String name,
     // Add Sliders
     mListener = new MONSTRCrossoverListener(this);
 
-    addAndMakeVisible (crossoverLowerSld = new Slider ("Crossover Lower Slider"));
+    crossoverLowerSld.reset(new Slider("Crossover Lower Slider"));
+    addAndMakeVisible(crossoverLowerSld.get());
     crossoverLowerSld->setTooltip (TRANS("Drag the horizontal sliders left or right to change the crossover frequencies of each band.\n"
                                          "\n"
                                          "Drag up or down near the middle of a band to increase or decrease that band\'s stereo width.\n"
@@ -61,7 +62,8 @@ MONSTRCrossoverComponent::MONSTRCrossoverComponent(String name,
     crossoverLowerSld->addListener (mListener);
     crossoverLowerSld->setSkewFactor (0.7);
 
-    addAndMakeVisible (crossoverUpperSld = new Slider ("Crossover Upper Slider"));
+    crossoverUpperSld.reset(new Slider("Crossover Upper Slider"));
+    addAndMakeVisible(crossoverUpperSld.get());
     crossoverUpperSld->setTooltip (TRANS("Drag the horizontal sliders left or right to change the crossover freqencies of each band.\n"
                                          "\n"
                                          "Drag up or down near the middle of a band to increase or decrease that band\'s stereo width.\n"
@@ -73,9 +75,10 @@ MONSTRCrossoverComponent::MONSTRCrossoverComponent(String name,
     crossoverUpperSld->addListener (mListener);
     crossoverUpperSld->setSkewFactor (0.7);
 
-    addAndMakeVisible (width1Sld = new MONSTRWidthSlider ("Band 1 Width Slider",
-                                                          ourProcessor,
-                                                          MonstrAudioProcessor::isActiveBand1));
+    width1Sld.reset(new MONSTRWidthSlider("Band 1 Width Slider",
+                                          ourProcessor,
+                                          MonstrAudioProcessor::isActiveBand1));
+    addAndMakeVisible(width1Sld.get());
     width1Sld->setTooltip (TRANS("Drag the horizontal sliders left or right to change the crossover frequencies of each band.\n"
                                  "\n"
                                  "Drag up or down near the middle of a band to increase or decrease that band\'s stereo width.\n"
@@ -86,9 +89,10 @@ MONSTRCrossoverComponent::MONSTRCrossoverComponent(String name,
     width1Sld->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     width1Sld->addListener (mListener);
 
-    addAndMakeVisible (width2Sld = new MONSTRWidthSlider ("Band 2 Width Slider",
-                                                          ourProcessor,
-                                                          MonstrAudioProcessor::isActiveBand2));
+    width2Sld.reset(new MONSTRWidthSlider("Band 2 Width Slider",
+                                          ourProcessor,
+                                          MonstrAudioProcessor::isActiveBand2));
+    addAndMakeVisible(width2Sld.get());
     width2Sld->setTooltip (TRANS("Drag the horizontal sliders left or right to change the crossover frequencies of each band.\n"
                                  "\n"
                                  "Drag up or down near the middle of a band to increase or decrease that band\'s stereo width.\n"
@@ -99,9 +103,10 @@ MONSTRCrossoverComponent::MONSTRCrossoverComponent(String name,
     width2Sld->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     width2Sld->addListener (mListener);
 
-    addAndMakeVisible (width3Sld = new MONSTRWidthSlider ("Band 3 Width Slider",
-                                                          ourProcessor,
-                                                          MonstrAudioProcessor::isActiveBand3));
+    width3Sld.reset(new MONSTRWidthSlider("Band 3 Width Slider",
+                                          ourProcessor,
+                                          MonstrAudioProcessor::isActiveBand3));
+    addAndMakeVisible(width3Sld.get());
     width3Sld->setTooltip (TRANS("Drag the horizontal sliders left or right to change the crossover frequencies of each band.\n"
                                  "\n"
                                  "Drag up or down near the middle of a band to increase or decrease that band\'s stereo width.\n"
@@ -495,32 +500,32 @@ void MONSTRCrossoverComponent::_enableDoubleClickToDefault() {
 }
 
 void MONSTRCrossoverComponent::MONSTRCrossoverListener::sliderValueChanged(Slider* sliderThatWasMoved) {
-    if (sliderThatWasMoved == parent->crossoverLowerSld)
+    if (sliderThatWasMoved == parent->crossoverLowerSld.get())
     {
         //[UserSliderCode_crossoverLowerSld] -- add your slider handling code here..
         parent->ourProcessor->setParameter(MonstrAudioProcessor::crossoverLower, static_cast<float>(parent->crossoverLowerSld->getValue()));
         //[/UserSliderCode_crossoverLowerSld]
     }
-    else if (sliderThatWasMoved == parent->crossoverUpperSld)
+    else if (sliderThatWasMoved == parent->crossoverUpperSld.get())
     {
         //[UserSliderCode_crossoverUpperSld] -- add your slider handling code here..
         parent->ourProcessor->setParameter(MonstrAudioProcessor::crossoverUpper, static_cast<float>(parent->crossoverUpperSld->getValue()));
         //[/UserSliderCode_crossoverUpperSld]
     }
 
-    if (sliderThatWasMoved == parent->width1Sld)
+    if (sliderThatWasMoved == parent->width1Sld.get())
     {
         //[UserSliderCode_width1Sld] -- add your slider handling code here..
         parent->ourProcessor->setParameter(MonstrAudioProcessor::widthBand1, static_cast<float>(parent->width1Sld->getValue()));
         //[/UserSliderCode_width1Sld]
     }
-    else if (sliderThatWasMoved == parent->width2Sld)
+    else if (sliderThatWasMoved == parent->width2Sld.get())
     {
         //[UserSliderCode_width2Sld] -- add your slider handling code here..
         parent->ourProcessor->setParameter(MonstrAudioProcessor::widthBand2, static_cast<float>(parent->width2Sld->getValue()));
         //[/UserSliderCode_width2Sld]
     }
-    else if (sliderThatWasMoved == parent->width3Sld)
+    else if (sliderThatWasMoved == parent->width3Sld.get())
     {
         //[UserSliderCode_width3Sld] -- add your slider handling code here..
         parent->ourProcessor->setParameter(MonstrAudioProcessor::widthBand3, static_cast<float>(parent->width3Sld->getValue()));
