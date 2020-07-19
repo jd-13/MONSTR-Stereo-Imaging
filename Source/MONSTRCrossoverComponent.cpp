@@ -526,4 +526,10 @@ void MONSTRCrossoverComponent::MONSTRCrossoverListener::sliderValueChanged(Slide
         parent->ourProcessor->setParameter(MonstrAudioProcessor::widthBand3, static_cast<float>(parent->width3Sld->getValue()));
         //[/UserSliderCode_width3Sld]
     }
+
+    // The drawn area of the crossover sliders overlaps the width sliders, they need to repaint when
+    // a width slider changes otherwise the bars drawn by the width sliders appear to tear at the
+    // boundary of the crossover slider
+    parent->crossoverLowerSld->repaint();
+    parent->crossoverUpperSld->repaint();
 }
