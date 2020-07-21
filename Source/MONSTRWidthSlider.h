@@ -30,15 +30,12 @@
 
 class MONSTRWidthSlider : public Slider {
 public:
-    MONSTRWidthSlider(String name,
-                      MonstrAudioProcessor* newProcessor,
-                      int parameter);
-    
+    MONSTRWidthSlider(String name, std::function<void(bool)> setParameterCallback);
+
     virtual void mouseDown(const MouseEvent& event) override;
-    
+
 private:
-    MonstrAudioProcessor* ourProcessor;
-    int parameter;
+    std::function<void(bool)> _setParameterCallback;
 
 };
 

@@ -47,13 +47,10 @@ MonstrAudioProcessorEditor::MonstrAudioProcessorEditor (MonstrAudioProcessor& ow
 
 
     //[Constructor] You can add your own custom stuff here..
-    startTimer(200);
-
     _assignLookAndFeelToAllChildren(customLookAndFeel);
 
-    // Define a rectangle for the sine wave to be drawn in
-
-
+    // Call this manually once to make sure the UI reflects the parameters' states correctly
+    _onParameterUpdate();
     //[/Constructor]
 }
 
@@ -99,14 +96,8 @@ void MonstrAudioProcessorEditor::resized()
 
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
-
-void MonstrAudioProcessorEditor::timerCallback() {
-
-    MonstrAudioProcessor* ourProcessor = getProcessor();
-
-    if (ourProcessor->needsUIUpdate()) {
-        mCrossover->repaint();
-    }
+void MonstrAudioProcessorEditor::_onParameterUpdate() {
+    mCrossover->repaint();
 }
 //[/MiscUserCode]
 

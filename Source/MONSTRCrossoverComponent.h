@@ -116,6 +116,8 @@ private:
         }
 
         void sliderValueChanged(Slider* sliderThatWasMoved) override;
+        void sliderDragStarted(Slider* slider) override;
+        void sliderDragEnded(Slider* slider) override;
 
     private:
         MONSTRCrossoverComponent* parent;

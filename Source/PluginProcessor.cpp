@@ -15,7 +15,16 @@
 //==============================================================================
 MonstrAudioProcessor::MonstrAudioProcessor()
 {
-    _UIUpdateFlag = true;
+    namespace MP = WECore::MONSTR::Parameters;
+
+    registerParameter(isActiveBand1, SWITCHBAND1_STR, MP::BANDSWITCH_DEFAULT, [&](bool val) { setIsActiveBand1(val); });
+    registerParameter(widthBand1, WIDTHBAND1_STR, MP::WIDTH.defaultValue, [&](float val) { setWidthBand1(val); });
+    registerParameter(crossoverLower, CROSSOVERLOWER_STR, MP::CROSSOVERLOWER.defaultValue, [&](float val) { setCrossoverLower(val); });
+    registerParameter(isActiveBand2, SWITCHBAND2_STR, MP::BANDSWITCH_DEFAULT, [&](bool val) { setIsActiveBand2(val); });
+    registerParameter(widthBand2, WIDTHBAND2_STR, MP::WIDTH.defaultValue, [&](float val) { setWidthBand2(val); });
+    registerParameter(crossoverUpper, CROSSOVERUPPER_STR, MP::CROSSOVERUPPER.defaultValue, [&](float val) { setCrossoverUpper(val); });
+    registerParameter(isActiveBand3, SWITCHBAND3_STR, MP::BANDSWITCH_DEFAULT, [&](bool val) { setIsActiveBand3(val); });
+    registerParameter(widthBand3, WIDTHBAND3_STR, MP::WIDTH.defaultValue, [&](float val) { setWidthBand3(val); });
 }
 
 MonstrAudioProcessor::~MonstrAudioProcessor()
@@ -26,192 +35,6 @@ MonstrAudioProcessor::~MonstrAudioProcessor()
 const String MonstrAudioProcessor::getName() const
 {
     return JucePlugin_Name;
-}
-
-int MonstrAudioProcessor::getNumParameters()
-{
-    return totalNumParams;
-}
-
-float MonstrAudioProcessor::getParameter (int index)
-{
-    switch (index) {
-        case isActiveBand1:
-            return mMONSTR.mCrossover.band1.getIsActive();
-
-        case widthBand1:
-            return WECore::MONSTR::Parameters::WIDTH.InternalToNormalised(mMONSTR.mCrossover.band1.getWidth());
-
-
-
-        case crossoverLower:
-            return WECore::MONSTR::Parameters::CROSSOVERLOWER.InternalToNormalised(mMONSTR.mCrossover.getCrossoverLower());
-
-
-
-        case isActiveBand2:
-            return mMONSTR.mCrossover.band2.getIsActive();
-
-        case widthBand2:
-            return WECore::MONSTR::Parameters::WIDTH.InternalToNormalised(mMONSTR.mCrossover.band2.getWidth());
-
-
-
-        case crossoverUpper:
-            return WECore::MONSTR::Parameters::CROSSOVERUPPER.InternalToNormalised(mMONSTR.mCrossover.getCrossoverUpper());
-
-
-
-        case isActiveBand3:
-            return mMONSTR.mCrossover.band3.getIsActive();
-
-        case widthBand3:
-            return WECore::MONSTR::Parameters::WIDTH.InternalToNormalised(mMONSTR.mCrossover.band3.getWidth());
-
-
-
-        default:
-            return 0.0f;
-    }
-}
-
-void MonstrAudioProcessor::setParameter (int index, float newValue)
-{
-    switch (index) {
-        case isActiveBand1:
-            mMONSTR.mCrossover.band1.setIsActive(newValue > 0.5);
-            break;
-
-        case widthBand1:
-            mMONSTR.mCrossover.band1.setWidth(WECore::MONSTR::Parameters::WIDTH.NormalisedToInternal(newValue));
-            break;
-
-
-
-        case crossoverLower:
-            mMONSTR.mCrossover.setCrossoverLower(WECore::MONSTR::Parameters::CROSSOVERLOWER.NormalisedToInternal(newValue));
-            break;
-
-
-
-        case isActiveBand2:
-            mMONSTR.mCrossover.band2.setIsActive(newValue > 0.5);
-            break;
-
-        case widthBand2:
-            mMONSTR.mCrossover.band2.setWidth(WECore::MONSTR::Parameters::WIDTH.NormalisedToInternal(newValue));
-            break;
-
-
-
-        case crossoverUpper:
-            mMONSTR.mCrossover.setCrossoverUpper(WECore::MONSTR::Parameters::CROSSOVERUPPER.NormalisedToInternal(newValue));
-            break;
-
-
-
-        case isActiveBand3:
-            mMONSTR.mCrossover.band3.setIsActive(newValue > 0.5);
-            break;
-
-        case widthBand3:
-            mMONSTR.mCrossover.band3.setWidth(WECore::MONSTR::Parameters::WIDTH.NormalisedToInternal(newValue));
-
-        default:
-            break;
-    }
-}
-
-const String MonstrAudioProcessor::getParameterName (int index)
-{
-    switch (index) {
-        case isActiveBand1:
-            return SWITCHBAND1_STR;
-
-        case widthBand1:
-            return WIDTHBAND1_STR;
-
-
-
-        case crossoverLower:
-            return CROSSOVERLOWER_STR;
-
-
-
-        case isActiveBand2:
-            return SWITCHBAND2_STR;
-
-        case widthBand2:
-            return WIDTHBAND2_STR;
-
-
-
-        case crossoverUpper:
-            return CROSSOVERUPPER_STR;
-
-
-
-        case isActiveBand3:
-            return SWITCHBAND3_STR;
-
-        case widthBand3:
-            return WIDTHBAND3_STR;
-
-        default:
-            return String();
-    }
-}
-
-const String MonstrAudioProcessor::getParameterText (int index)
-{
-    switch (index) {
-        case isActiveBand1:
-            return String(static_cast<int>(mMONSTR.mCrossover.band1.getIsActive()));
-
-        case widthBand1:
-            return String(WECore::MONSTR::Parameters::WIDTH.InternalToNormalised(mMONSTR.mCrossover.band1.getWidth()));
-
-
-
-        case crossoverLower:
-            return String(WECore::MONSTR::Parameters::CROSSOVERLOWER.InternalToNormalised(mMONSTR.mCrossover.getCrossoverLower()));
-
-
-
-        case isActiveBand2:
-            return String(static_cast<int>(mMONSTR.mCrossover.band2.getIsActive()));
-
-        case widthBand2:
-            return String(WECore::MONSTR::Parameters::WIDTH.InternalToNormalised(mMONSTR.mCrossover.band2.getWidth()));
-
-
-
-        case crossoverUpper:
-            return String(WECore::MONSTR::Parameters::CROSSOVERUPPER.InternalToNormalised(mMONSTR.mCrossover.getCrossoverUpper()));
-
-
-
-        case isActiveBand3:
-            return String(static_cast<int>(mMONSTR.mCrossover.band3.getIsActive()));
-
-        case widthBand3:
-            return String(WECore::MONSTR::Parameters::WIDTH.InternalToNormalised(mMONSTR.mCrossover.band3.getWidth()));
-
-        default:
-            return String();
-    }
-}
-
-bool MonstrAudioProcessor::isParameterAutomatable(int parameterIndex) const {
-    switch (parameterIndex) {
-        case isActiveBand1:
-        case isActiveBand2:
-        case isActiveBand3:
-            return false;
-
-        default:
-            return true;
-    }
 }
 
 const String MonstrAudioProcessor::getInputChannelName (int channelIndex) const
@@ -334,44 +157,44 @@ AudioProcessorEditor* MonstrAudioProcessor::createEditor()
 }
 
 //==============================================================================
-void MonstrAudioProcessor::getStateInformation (MemoryBlock& destData)
-{
-    // You should use this method to store your parameters in the memory block.
-    // You could do that either as raw data, or use the XML or ValueTree classes
-    // as intermediaries to make it easy to save and load complex data.
-    std::vector<float> userParams;
-    for (int iii {0}; iii < totalNumParams; iii++) {
-        userParams.push_back(getParameter(iii));
-    }
-
-    XmlElement root("Root");
-    XmlElement *el = root.createNewChildElement("AllUserParam");
-
-    el->addTextElement(String(floatVectorToString(userParams)));
-    copyXmlToBinary(root, destData);
+void MonstrAudioProcessor::setIsActiveBand1(bool val) {
+    mMONSTR.mCrossover.band1.setIsActive(val);
+    isActiveBand1->setValueNotifyingHost(val);
 }
 
-void MonstrAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
-{
-    // You should use this method to restore your parameters from this memory block,
-    // whose contents will have been created by the getStateInformation() call.
-    std::unique_ptr<XmlElement> pRoot(getXmlFromBinary(data, sizeInBytes));
-    std::vector<float> tmpUserParam;
+void MonstrAudioProcessor::setWidthBand1(float val) {
+    mMONSTR.mCrossover.band1.setWidth(WECore::MONSTR::Parameters::WIDTH.NormalisedToInternal(val));
+    widthBand1->setValueNotifyingHost(val);
+}
 
-    if (pRoot != NULL) {
-        forEachXmlChildElement((*pRoot), pChild) {
-            if (pChild->hasTagName("AllUserParam")) {
-                String sFloatCSV = pChild->getAllSubText();
-                if (stringToFloatVector(sFloatCSV, tmpUserParam, totalNumParams) == totalNumParams) {
-                    for (int iii {0}; iii < totalNumParams; iii++) {
-                        setParameter(iii, tmpUserParam[iii]);
-                    }
-                }
-            }
-        }
+void MonstrAudioProcessor::setCrossoverLower(float val) {
+    mMONSTR.mCrossover.setCrossoverLower(WECore::MONSTR::Parameters::CROSSOVERLOWER.NormalisedToInternal(val));
+    crossoverLower->setValueNotifyingHost(val);
+}
 
-        _UIUpdateFlag = true;
-    }
+void MonstrAudioProcessor::setIsActiveBand2(bool val) {
+    mMONSTR.mCrossover.band2.setIsActive(val);
+    isActiveBand2->setValueNotifyingHost(val);
+}
+
+void MonstrAudioProcessor::setWidthBand2(float val) {
+    mMONSTR.mCrossover.band2.setWidth(WECore::MONSTR::Parameters::WIDTH.NormalisedToInternal(val));
+    widthBand2->setValueNotifyingHost(val);
+}
+
+void MonstrAudioProcessor::setCrossoverUpper(float val) {
+    mMONSTR.mCrossover.setCrossoverUpper(WECore::MONSTR::Parameters::CROSSOVERUPPER.NormalisedToInternal(val));
+    crossoverUpper->setValueNotifyingHost(val);
+}
+
+void MonstrAudioProcessor::setIsActiveBand3(bool val) {
+    mMONSTR.mCrossover.band3.setIsActive(val);
+    isActiveBand3->setValueNotifyingHost(val);
+}
+
+void MonstrAudioProcessor::setWidthBand3(float val) {
+    mMONSTR.mCrossover.band3.setWidth(WECore::MONSTR::Parameters::WIDTH.NormalisedToInternal(val));
+    widthBand3->setValueNotifyingHost(val);
 }
 
 //==============================================================================

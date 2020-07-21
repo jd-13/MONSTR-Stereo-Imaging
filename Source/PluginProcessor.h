@@ -40,14 +40,6 @@ public:
     //==============================================================================
     const String getName() const override;
 
-    int getNumParameters() override;
-    float getParameter (int index) override;
-    void setParameter (int index, float newValue) override;
-    bool isParameterAutomatable(int parameterIndex) const override;
-
-    const String getParameterName (int index) override;
-    const String getParameterText (int index) override;
-
     const String getInputChannelName (int channelIndex) const override;
     const String getOutputChannelName (int channelIndex) const override;
     bool isInputChannelStereoPair (int index) const override;
@@ -66,25 +58,39 @@ public:
     void changeProgramName (int index, const String& newName) override;
 
     //==============================================================================
-    void getStateInformation (MemoryBlock& destData) override;
-    void setStateInformation (const void* data, int sizeInBytes) override;
+    /**
+     * Parameter setters.
+     *
+     * For float parameters a value in the normalised 0 to 1 range is expected.
+     *
+     * For int parameters are used to represent menu items, the integer value in the real range of
+     * the parameter (eg. 0 to 4) is expected.
+     *
+     * For bool parameters they can only be true or false anyway.
+     *
+     * These do not call the ChangeBroadcaster as the UI will already know about these changes since
+     * it is the only one calling these methods.
+     */
+    /** @{ */
+    void setIsActiveBand1(bool val);
+    void setWidthBand1(float val);
+    void setCrossoverLower(float val);
+    void setIsActiveBand2(bool val);
+    void setWidthBand2(float val);
+    void setCrossoverUpper(float val);
+    void setIsActiveBand3(bool val);
+    void setWidthBand3(float val);
+    /** @} */
 
-    enum Parameters {
-        isActiveBand1 = 0,
-        widthBand1,
-
-        crossoverLower,
-
-        isActiveBand2,
-        widthBand2,
-
-        crossoverUpper,
-
-        isActiveBand3,
-        widthBand3,
-
-        totalNumParams
-    };
+    // Parameters (public for beginChangeGesture/endChangeGesture/get)
+    AudioParameterBool* isActiveBand1;
+    AudioParameterFloat* widthBand1;
+    AudioParameterFloat* crossoverLower;
+    AudioParameterBool* isActiveBand2;
+    AudioParameterFloat* widthBand2;
+    AudioParameterFloat* crossoverUpper;
+    AudioParameterBool* isActiveBand3;
+    AudioParameterFloat* widthBand3;
 
 private:
     MONSTR mMONSTR;

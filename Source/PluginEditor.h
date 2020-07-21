@@ -38,8 +38,7 @@
     Describe your class and how it works here!
                                                                     //[/Comments]
 */
-class MonstrAudioProcessorEditor  : public WECore::JUCEPlugin::CoreProcessorEditor,
-                                    public Timer
+class MonstrAudioProcessorEditor  : public WECore::JUCEPlugin::CoreProcessorEditor
 {
 public:
     //==============================================================================
@@ -48,7 +47,6 @@ public:
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
-    void timerCallback() override;
     MonstrAudioProcessor* getProcessor() const {
         return static_cast<MonstrAudioProcessor*>(getAudioProcessor());
     }
@@ -57,13 +55,13 @@ public:
     void paint (juce::Graphics& g) override;
     void resized() override;
 
-
-
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
     MONSTRLookAndFeel customLookAndFeel;
     Rectangle<int> crossoverBounds;
     ScopedPointer<MONSTRCrossoverComponent> mCrossover;
+
+    virtual void _onParameterUpdate() override;
     //[/UserVariables]
 
     //==============================================================================

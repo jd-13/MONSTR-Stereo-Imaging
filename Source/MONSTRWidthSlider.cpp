@@ -23,18 +23,16 @@
  */
 
 #include "MONSTRWidthSlider.h"
-MONSTRWidthSlider::MONSTRWidthSlider(String name,
-                                     MonstrAudioProcessor* newProcessor,
-                                     int newParameter)
-:  Slider(name),                                                                            ourProcessor(newProcessor),
-    parameter(newParameter) {
+MONSTRWidthSlider::MONSTRWidthSlider(String name, std::function<void(bool)> setParameterCallback)
+        : Slider(name),
+          _setParameterCallback(setParameterCallback) {
 }
 
 void MONSTRWidthSlider::mouseDown(const juce::MouseEvent &event) {
     if (event.mods.isRightButtonDown()) {
         setEnabled(!isEnabled());
-        ourProcessor->setParameter(parameter, isEnabled());
+        _setParameterCallback(isEnabled());
     }
-    
+
     Slider::mouseDown(event);
 }

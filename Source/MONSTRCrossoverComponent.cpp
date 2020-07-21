@@ -76,8 +76,7 @@ MONSTRCrossoverComponent::MONSTRCrossoverComponent(String name,
     crossoverUpperSld->setSkewFactor (0.7);
 
     width1Sld.reset(new MONSTRWidthSlider("Band 1 Width Slider",
-                                          ourProcessor,
-                                          MonstrAudioProcessor::isActiveBand1));
+                                          [&](bool val) { ourProcessor->setIsActiveBand1(val); }));
     addAndMakeVisible(width1Sld.get());
     width1Sld->setTooltip (TRANS("Drag the horizontal sliders left or right to change the crossover frequencies of each band.\n"
                                  "\n"
@@ -90,8 +89,7 @@ MONSTRCrossoverComponent::MONSTRCrossoverComponent(String name,
     width1Sld->addListener (mListener);
 
     width2Sld.reset(new MONSTRWidthSlider("Band 2 Width Slider",
-                                          ourProcessor,
-                                          MonstrAudioProcessor::isActiveBand2));
+                                          [&](bool val) { ourProcessor->setIsActiveBand2(val); }));
     addAndMakeVisible(width2Sld.get());
     width2Sld->setTooltip (TRANS("Drag the horizontal sliders left or right to change the crossover frequencies of each band.\n"
                                  "\n"
@@ -104,8 +102,7 @@ MONSTRCrossoverComponent::MONSTRCrossoverComponent(String name,
     width2Sld->addListener (mListener);
 
     width3Sld.reset(new MONSTRWidthSlider("Band 3 Width Slider",
-                                          ourProcessor,
-                                          MonstrAudioProcessor::isActiveBand3));
+                                          [&](bool val) { ourProcessor->setIsActiveBand3(val); }));
     addAndMakeVisible(width3Sld.get());
     width3Sld->setTooltip (TRANS("Drag the horizontal sliders left or right to change the crossover frequencies of each band.\n"
                                  "\n"
@@ -476,16 +473,16 @@ void MONSTRCrossoverComponent::drawSliderThumbs(Graphics& g,
 }
 
 void MONSTRCrossoverComponent::updateSliders() {
-    crossoverLowerSld->setValue(ourProcessor->getParameter(MonstrAudioProcessor::crossoverLower), dontSendNotification);
-    crossoverUpperSld->setValue(ourProcessor->getParameter(MonstrAudioProcessor::crossoverUpper), dontSendNotification);
+    crossoverLowerSld->setValue(ourProcessor->crossoverLower->get());
+    crossoverUpperSld->setValue(ourProcessor->crossoverUpper->get());
 
-    width1Sld->setValue(ourProcessor->getParameter(MonstrAudioProcessor::widthBand1), dontSendNotification);
-    width2Sld->setValue(ourProcessor->getParameter(MonstrAudioProcessor::widthBand2), dontSendNotification);
-    width3Sld->setValue(ourProcessor->getParameter(MonstrAudioProcessor::widthBand3), dontSendNotification);
+    width1Sld->setValue(ourProcessor->widthBand1->get());
+    width2Sld->setValue(ourProcessor->widthBand2->get());
+    width3Sld->setValue(ourProcessor->widthBand3->get());
 
-    width1Sld->setEnabled(ourProcessor->getParameter(MonstrAudioProcessor::isActiveBand1));
-    width2Sld->setEnabled(ourProcessor->getParameter(MonstrAudioProcessor::isActiveBand2));
-    width3Sld->setEnabled(ourProcessor->getParameter(MonstrAudioProcessor::isActiveBand3));
+    width1Sld->setEnabled(ourProcessor->isActiveBand1->get());
+    width2Sld->setEnabled(ourProcessor->isActiveBand2->get());
+    width3Sld->setEnabled(ourProcessor->isActiveBand3->get());
 }
 
 void MONSTRCrossoverComponent::_enableDoubleClickToDefault() {
@@ -503,32 +500,32 @@ void MONSTRCrossoverComponent::MONSTRCrossoverListener::sliderValueChanged(Slide
     if (sliderThatWasMoved == parent->crossoverLowerSld.get())
     {
         //[UserSliderCode_crossoverLowerSld] -- add your slider handling code here..
-        parent->ourProcessor->setParameter(MonstrAudioProcessor::crossoverLower, static_cast<float>(parent->crossoverLowerSld->getValue()));
+        parent->ourProcessor->setCrossoverLower(parent->crossoverLowerSld->getValue());
         //[/UserSliderCode_crossoverLowerSld]
     }
     else if (sliderThatWasMoved == parent->crossoverUpperSld.get())
     {
         //[UserSliderCode_crossoverUpperSld] -- add your slider handling code here..
-        parent->ourProcessor->setParameter(MonstrAudioProcessor::crossoverUpper, static_cast<float>(parent->crossoverUpperSld->getValue()));
+        parent->ourProcessor->setCrossoverUpper(parent->crossoverUpperSld->getValue());
         //[/UserSliderCode_crossoverUpperSld]
     }
 
     if (sliderThatWasMoved == parent->width1Sld.get())
     {
         //[UserSliderCode_width1Sld] -- add your slider handling code here..
-        parent->ourProcessor->setParameter(MonstrAudioProcessor::widthBand1, static_cast<float>(parent->width1Sld->getValue()));
+        parent->ourProcessor->setWidthBand1(parent->width1Sld->getValue());
         //[/UserSliderCode_width1Sld]
     }
     else if (sliderThatWasMoved == parent->width2Sld.get())
     {
         //[UserSliderCode_width2Sld] -- add your slider handling code here..
-        parent->ourProcessor->setParameter(MonstrAudioProcessor::widthBand2, static_cast<float>(parent->width2Sld->getValue()));
+        parent->ourProcessor->setWidthBand2(parent->width2Sld->getValue());
         //[/UserSliderCode_width2Sld]
     }
     else if (sliderThatWasMoved == parent->width3Sld.get())
     {
         //[UserSliderCode_width3Sld] -- add your slider handling code here..
-        parent->ourProcessor->setParameter(MonstrAudioProcessor::widthBand3, static_cast<float>(parent->width3Sld->getValue()));
+        parent->ourProcessor->setWidthBand3(parent->width3Sld->getValue());
         //[/UserSliderCode_width3Sld]
     }
 
@@ -537,4 +534,34 @@ void MONSTRCrossoverComponent::MONSTRCrossoverListener::sliderValueChanged(Slide
     // boundary of the crossover slider
     parent->crossoverLowerSld->repaint();
     parent->crossoverUpperSld->repaint();
+}
+
+void MONSTRCrossoverComponent::MONSTRCrossoverListener::sliderDragStarted(Slider* slider) {
+
+    if (slider == parent->crossoverLowerSld.get()) {
+        parent->ourProcessor->crossoverLower->beginChangeGesture();
+    } else if (slider == parent->crossoverUpperSld.get()) {
+        parent->ourProcessor->crossoverUpper->beginChangeGesture();
+    } else if (slider == parent->width1Sld.get()) {
+        parent->ourProcessor->widthBand1->beginChangeGesture();
+    } else if (slider == parent->width2Sld.get()) {
+        parent->ourProcessor->widthBand2->beginChangeGesture();
+    } else if (slider == parent->width3Sld.get()) {
+        parent->ourProcessor->widthBand3->beginChangeGesture();
+    }
+}
+
+void MONSTRCrossoverComponent::MONSTRCrossoverListener::sliderDragEnded(Slider* slider) {
+
+    if (slider == parent->crossoverLowerSld.get()) {
+        parent->ourProcessor->crossoverLower->endChangeGesture();
+    } else if (slider == parent->crossoverUpperSld.get()) {
+        parent->ourProcessor->crossoverUpper->endChangeGesture();
+    } else if (slider == parent->width1Sld.get()) {
+        parent->ourProcessor->widthBand1->endChangeGesture();
+    } else if (slider == parent->width2Sld.get()) {
+        parent->ourProcessor->widthBand2->endChangeGesture();
+    } else if (slider == parent->width3Sld.get()) {
+        parent->ourProcessor->widthBand3->endChangeGesture();
+    }
 }
