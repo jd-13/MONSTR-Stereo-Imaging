@@ -473,12 +473,12 @@ void MONSTRCrossoverComponent::drawSliderThumbs(Graphics& g,
 }
 
 void MONSTRCrossoverComponent::updateSliders() {
-    crossoverLowerSld->setValue(ourProcessor->crossoverLower->get());
-    crossoverUpperSld->setValue(ourProcessor->crossoverUpper->get());
+    crossoverLowerSld->setValue(ourProcessor->crossoverLower->get(), dontSendNotification);
+    crossoverUpperSld->setValue(ourProcessor->crossoverUpper->get(), dontSendNotification);
 
-    width1Sld->setValue(ourProcessor->widthBand1->get());
-    width2Sld->setValue(ourProcessor->widthBand2->get());
-    width3Sld->setValue(ourProcessor->widthBand3->get());
+    width1Sld->setValue(ourProcessor->widthBand1->get(), dontSendNotification);
+    width2Sld->setValue(ourProcessor->widthBand2->get(), dontSendNotification);
+    width3Sld->setValue(ourProcessor->widthBand3->get(), dontSendNotification);
 
     width1Sld->setEnabled(ourProcessor->isActiveBand1->get());
     width2Sld->setEnabled(ourProcessor->isActiveBand2->get());
