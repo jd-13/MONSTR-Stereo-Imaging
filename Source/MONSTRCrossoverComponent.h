@@ -81,7 +81,7 @@ private:
 
     // decrease the scaling coefficient to increase the on-screen space
     // used by the lower frequencies
-    constexpr static const int scaleCoefficient {20};
+    constexpr static const int scaleCoefficient {8};
 
     constexpr static const int sliderThumbRadius {6};
 
