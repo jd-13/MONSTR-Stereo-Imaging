@@ -55,6 +55,8 @@ public:
     void paint (juce::Graphics& g) override;
     void resized() override;
 
+
+
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
     MONSTRLookAndFeel customLookAndFeel;

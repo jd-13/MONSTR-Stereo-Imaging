@@ -112,7 +112,7 @@ void MonstrAudioProcessorEditor::_onParameterUpdate() {
 BEGIN_JUCER_METADATA
 
 <JUCER_COMPONENT documentType="Component" className="MonstrAudioProcessorEditor"
-                 componentName="" parentClasses="public WECore::JUCEPlugin::CoreProcessorEditor, public Timer"
+                 componentName="" parentClasses="public WECore::JUCEPlugin::CoreProcessorEditor"
                  constructorParams="MonstrAudioProcessor&amp; ownerFilter" variableInitialisers="CoreProcessorEditor(ownerFilter)"
                  snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330"
                  fixedSize="1" initialWidth="640" initialHeight="290">
