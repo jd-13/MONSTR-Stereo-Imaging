@@ -1,7 +1,7 @@
 # MONSTR-Stereo-Imaging
 MONSTR is a multiband stereo imaging plugin, available in VST, VST3 and Audio Unit formats. MONSTR allows the user to control the stereo width of a sound in 3 different frequency bands, and so can be used to perform common tasks such as narrowing the bass frequencies while adding width to the highs.  
 
-For more details and a free download of the compiled plugin: https://www.whiteelephantaudio.com/#plugins  
+For more details and a free download of the compiled plugin: https://www.whiteelephantaudio.com/plugins/monstr  
 
 ![](https://whiteelephantaudio.com/images/thumbs/originals/monstrFull.png)
 
