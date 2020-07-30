@@ -98,7 +98,7 @@
                 vst3Folder="~/SDKs/VST3 SDK">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" libraryPath="/usr/X11R6/lib/" isDebug="0" optimisation="3"
-                       targetName="MONSTR" linuxArchitecture="-m64" headerPath="~/WEA/DSPFiltersComplete/shared/DSPFilters/include/&#10;~/WEA/WECore/WECore"
+                       targetName="MONSTR" headerPath="~/WEA/WECore/DSPFilters/shared/DSPFilters/include&#10;~/WEA/WECore/WECore"
                        linkTimeOptimisation="0"/>
         <CONFIGURATION name="Release" libraryPath="/usr/X11R6/lib/" isDebug="0" optimisation="3"
                        targetName="MONSTR"/>
