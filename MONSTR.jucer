@@ -98,7 +98,7 @@
                 vst3Folder="~/SDKs/VST3 SDK">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" libraryPath="/usr/X11R6/lib/" isDebug="0" optimisation="3"
-                       targetName="MONSTR" headerPath="~/WEA/WECore/DSPFilters/shared/DSPFilters/include&#10;~/WEA/WECore/WECore"
+                       targetName="MONSTR" headerPath="~/WEA/WECore/WECore&#10;~/WEA/WECore/DSPFilters/shared/DSPFilters/include"
                        linkTimeOptimisation="0"/>
         <CONFIGURATION name="Release" libraryPath="/usr/X11R6/lib/" isDebug="0" optimisation="3"
                        targetName="MONSTR"/>
@@ -125,7 +125,7 @@
     </LINUX_MAKE>
     <VS2017 targetFolder="Builds/VisualStudio2017" extraCompilerFlags="/std:c++17">
       <CONFIGURATIONS>
-        <CONFIGURATION isDebug="0" name="Debug" headerPath="C:\WEA\WECore\Source\WECore"/>
+        <CONFIGURATION isDebug="0" name="Debug" headerPath="%USERPROFILE%\WEA\WECore\WECore&#10;%USERPROFILE%\WEA\WECore\WECore\DSPFilters\shared\DSPFilters\include"/>
         <CONFIGURATION isDebug="0" name="Release"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
