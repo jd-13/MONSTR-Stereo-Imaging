@@ -18,13 +18,13 @@ MonstrAudioProcessor::MonstrAudioProcessor()
     namespace MP = WECore::MONSTR::Parameters;
 
     registerParameter(isActiveBand1, SWITCHBAND1_STR, MP::BANDSWITCH_DEFAULT, [&](bool val) { setIsActiveBand1(val); });
-    registerParameter(widthBand1, WIDTHBAND1_STR, MP::WIDTH.defaultValue, [&](float val) { setWidthBand1(val); });
-    registerParameter(crossoverLower, CROSSOVERLOWER_STR, MP::CROSSOVERLOWER.defaultValue, [&](float val) { setCrossoverLower(val); });
+    registerParameter(widthBand1, WIDTHBAND1_STR, &MP::WIDTH, MP::WIDTH.defaultValue, [&](float val) { setWidthBand1(val); });
+    registerParameter(crossoverLower, CROSSOVERLOWER_STR, &MP::CROSSOVERLOWER, MP::CROSSOVERLOWER.defaultValue, [&](float val) { setCrossoverLower(val); });
     registerParameter(isActiveBand2, SWITCHBAND2_STR, MP::BANDSWITCH_DEFAULT, [&](bool val) { setIsActiveBand2(val); });
-    registerParameter(widthBand2, WIDTHBAND2_STR, MP::WIDTH.defaultValue, [&](float val) { setWidthBand2(val); });
-    registerParameter(crossoverUpper, CROSSOVERUPPER_STR, MP::CROSSOVERUPPER.defaultValue, [&](float val) { setCrossoverUpper(val); });
+    registerParameter(widthBand2, WIDTHBAND2_STR, &MP::WIDTH, MP::WIDTH.defaultValue, [&](float val) { setWidthBand2(val); });
+    registerParameter(crossoverUpper, CROSSOVERUPPER_STR, &MP::CROSSOVERUPPER, MP::CROSSOVERUPPER.defaultValue, [&](float val) { setCrossoverUpper(val); });
     registerParameter(isActiveBand3, SWITCHBAND3_STR, MP::BANDSWITCH_DEFAULT, [&](bool val) { setIsActiveBand3(val); });
-    registerParameter(widthBand3, WIDTHBAND3_STR, MP::WIDTH.defaultValue, [&](float val) { setWidthBand3(val); });
+    registerParameter(widthBand3, WIDTHBAND3_STR, &MP::WIDTH, MP::WIDTH.defaultValue, [&](float val) { setWidthBand3(val); });
 }
 
 MonstrAudioProcessor::~MonstrAudioProcessor()
