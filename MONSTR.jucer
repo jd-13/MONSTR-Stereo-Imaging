@@ -12,7 +12,7 @@
               companyEmail="info@whiteelephantaudio.com" buildAUv3="0" pluginIsMidiEffectPlugin="0"
               displaySplashScreen="0" reportAppUsage="0" splashScreenColour="Dark"
               buildStandalone="0" enableIAA="0" pluginFormats="buildAU,buildVST3"
-              jucerFormatVersion="1">
+              jucerFormatVersion="1" cppLanguageStandard="17">
   <MAINGROUP id="ZkK3BH" name="MONSTR">
     <GROUP id="{1E402055-9A34-3AEA-FE15-FACE7D5D6E2D}" name="Graphics">
       <FILE id="skGThj" name="MONSTR Background.png" compile="0" resource="1"
