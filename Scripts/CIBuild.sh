@@ -23,8 +23,10 @@ $JUCE_PATH/Projucer --resave $SCRIPT_DIR/../MONSTR.jucer
 cat $SCRIPT_DIR/../Builds/LinuxMakefile/Makefile
 
 # Set include paths
-sed -i 's#-I$(HOME)/WEA/WECore/DSPFilters/shared/DSPFilters/include#-I../../WECore/DSPFilters/shared/DSPFilters/include#g' $SCRIPT_DIR/../Builds/LinuxMakefile/Makefile
 sed -i 's#-I$(HOME)/WEA/WECore/WECore#-I../../WECore/WECore#g' $SCRIPT_DIR/../Builds/LinuxMakefile/Makefile
+
+# TODO: this path gets set wrong, not sure why
+sed -i 's#-I$(HOME)/WWECore/DSPFilters/shared/DSPFilters/include#-I../../WECore/DSPFilters/shared/DSPFilters/include#g' $SCRIPT_DIR/../Builds/LinuxMakefile/Makefile
 
 cat $SCRIPT_DIR/../Builds/LinuxMakefile/Makefile
 
