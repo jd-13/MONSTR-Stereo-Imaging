@@ -12,16 +12,12 @@ git clone --recurse-submodules https://github.com/jd-13/WE-Core $SCRIPT_DIR/../W
 # Set JUCE module paths
 sed -i 's#../JUCE/modules#/home/JUCE/modules#g' $SCRIPT_DIR/../MONSTR.jucer
 
-# Set DSPFilter paths
+# Set include paths
 sed -i 's#../WECore/DSPFilters#WECore/DSPFilters#g' $SCRIPT_DIR/../MONSTR.jucer
+sed -i 's#~/WEA/WECore#../../WECore#g' $SCRIPT_DIR/../MONSTR.jucer
 
 # Generate the makefile
 $JUCE_PATH/Projucer --resave $SCRIPT_DIR/../MONSTR.jucer
-
-# Update the include paths
-sed -i 's#-I$(HOME)/WEA/WECore#-I../../WECore#g' $SCRIPT_DIR/../Builds/LinuxMakefile/Makefile
-
-cat $SCRIPT_DIR/../Builds/LinuxMakefile/Makefile
 
 # Run the build
 cd $SCRIPT_DIR/../Builds/LinuxMakefile
