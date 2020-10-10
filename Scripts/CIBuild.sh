@@ -21,6 +21,8 @@ $JUCE_PATH/Projucer --resave $SCRIPT_DIR/../MONSTR.jucer
 # Update the include paths
 sed -i 's#-I$(HOME)/WEA/WECore#-I../../WECore#g' $SCRIPT_DIR/../Builds/LinuxMakefile/Makefile
 
+cat $SCRIPT_DIR/../Builds/LinuxMakefile/Makefile
+
 # Run the build
 cd $SCRIPT_DIR/../Builds/LinuxMakefile
 make
