@@ -19,6 +19,8 @@ sed -i 's#~/WEA/WECore#../../WECore#g' $SCRIPT_DIR/../MONSTR.jucer
 # Generate the makefile
 $JUCE_PATH/Projucer --resave $SCRIPT_DIR/../MONSTR.jucer
 
+cat $SCRIPT_DIR/../Builds/LinuxMakefile/Makefile
+
 # Run the build
 cd $SCRIPT_DIR/../Builds/LinuxMakefile
 make
