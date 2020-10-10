@@ -13,7 +13,7 @@ git clone --recurse-submodules https://github.com/jd-13/WE-Core $SCRIPT_DIR/../W
 sed -i 's#../JUCE/modules#/home/JUCE/modules#g' $SCRIPT_DIR/../MONSTR.jucer
 
 # Set DSPFilter paths
-sed -i 's#../../../WECore/DSPFilters#WECore/DSPFilters#g' $SCRIPT_DIR/../MONSTR.jucer
+sed -i 's#../WECore/DSPFilters#WECore/DSPFilters#g' $SCRIPT_DIR/../MONSTR.jucer
 
 # Generate the makefile
 $JUCE_PATH/Projucer --resave $SCRIPT_DIR/../MONSTR.jucer
