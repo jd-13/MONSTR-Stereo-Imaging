@@ -15,12 +15,16 @@ sed -i 's#../JUCE/modules#/home/JUCE/modules#g' $SCRIPT_DIR/../MONSTR.jucer
 # Set DSPFilters path
 sed -i 's#../WECore/DSPFilters#WECore/DSPFilters#g' $SCRIPT_DIR/../MONSTR.jucer
 
+cat $SCRIPT_DIR/../MONSTR.jucer
+
 # Generate the makefile
 $JUCE_PATH/Projucer --resave $SCRIPT_DIR/../MONSTR.jucer
 
+cat $SCRIPT_DIR/../Builds/LinuxMakefile/Makefile
+
 # Set include paths
-sed -i 's#-I$(HOME)/WEA/WECore/WECore#../../WECore/WECore#g' $SCRIPT_DIR/../Builds/LinuxMakefile/Makefile
-sed -i 's#-I$(HOME)/WEA/WECore/DSPFilters/shared/DSPFilters/include#../../WECore/DSPFilters/shared/DSPFilters/include#g' $SCRIPT_DIR/../Builds/LinuxMakefile/Makefile
+sed -i 's#-I$(HOME)/WEA/WECore/DSPFilters/shared/DSPFilters/include#-I../../WECore/DSPFilters/shared/DSPFilters/include#g' $SCRIPT_DIR/../Builds/LinuxMakefile/Makefile
+sed -i 's#-I$(HOME)/WEA/WECore/WECore#-I../../WECore/WECore#g' $SCRIPT_DIR/../Builds/LinuxMakefile/Makefile
 
 cat $SCRIPT_DIR/../Builds/LinuxMakefile/Makefile
 
