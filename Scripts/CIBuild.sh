@@ -19,8 +19,7 @@ sed -i 's#../WECore/DSPFilters#WECore/DSPFilters#g' $SCRIPT_DIR/../MONSTR.jucer
 $JUCE_PATH/Projucer --resave $SCRIPT_DIR/../MONSTR.jucer
 
 # Update the include paths
-sed -i 's#-I$(HOME)/WEA/WECore/WECore#-I../../WECore/WECore#g' $SCRIPT_DIR/../Builds/LinuxMakefile/Makefile
-sed -i 's#-I$(HOME)/WEA/WECore/DSPFilters#-I../../WECore/DSPFilters#g' $SCRIPT_DIR/../Builds/LinuxMakefile/Makefile
+sed -i 's#-I$(HOME)/WEA/WECore#-I../../WECore#g' $SCRIPT_DIR/../Builds/LinuxMakefile/Makefile
 
 # Run the build
 cd $SCRIPT_DIR/../Builds/LinuxMakefile
