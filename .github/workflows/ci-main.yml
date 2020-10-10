@@ -1,0 +1,30 @@
+name: CI Main
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  BuildClang:
+    runs-on: ubuntu-latest
+    container: jackd13/audioplugins:clang10
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+      - name: RunBuild
+        run: Scripts/CIBuild.sh
+
+  BuildGCC:
+    runs-on: ubuntu-latest
+    container: jackd13/audioplugins:gcc7
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+      - name: RunBuild
+        run: Scripts/CIBuild.sh
