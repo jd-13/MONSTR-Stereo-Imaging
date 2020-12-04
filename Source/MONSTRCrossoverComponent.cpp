@@ -24,6 +24,8 @@
 
 #include "MONSTRCrossoverComponent.h"
 
+#include "WEFilters/StereoWidthProcessorParameters.h"
+
 const Colour MONSTRCrossoverComponent::lightGrey(200, 200, 200);
 const Colour MONSTRCrossoverComponent::darkGrey(107, 107, 107);
 const Colour MONSTRCrossoverComponent::red(250, 0, 0);
@@ -487,13 +489,14 @@ void MONSTRCrossoverComponent::updateSliders() {
 
 void MONSTRCrossoverComponent::_enableDoubleClickToDefault() {
     namespace MP = WECore::MONSTR::Parameters;
+    namespace SP = WECore::StereoWidth::Parameters;
 
     crossoverLowerSld->setDoubleClickReturnValue(true, MP::CROSSOVERLOWER.InternalToNormalised(MP::CROSSOVERLOWER.defaultValue));
     crossoverUpperSld->setDoubleClickReturnValue(true, MP::CROSSOVERUPPER.InternalToNormalised(MP::CROSSOVERUPPER.defaultValue));
 
-    width1Sld->setDoubleClickReturnValue(true, MP::WIDTH.InternalToNormalised(MP::WIDTH.defaultValue));
-    width2Sld->setDoubleClickReturnValue(true, MP::WIDTH.InternalToNormalised(MP::WIDTH.defaultValue));
-    width3Sld->setDoubleClickReturnValue(true, MP::WIDTH.InternalToNormalised(MP::WIDTH.defaultValue));
+    width1Sld->setDoubleClickReturnValue(true, SP::WIDTH.InternalToNormalised(SP::WIDTH.defaultValue));
+    width2Sld->setDoubleClickReturnValue(true, SP::WIDTH.InternalToNormalised(SP::WIDTH.defaultValue));
+    width3Sld->setDoubleClickReturnValue(true, SP::WIDTH.InternalToNormalised(SP::WIDTH.defaultValue));
 }
 
 void MONSTRCrossoverComponent::MONSTRCrossoverListener::sliderValueChanged(Slider* sliderThatWasMoved) {

@@ -27,14 +27,16 @@
 
 #include "MONSTRFilters/MONSTRCrossover.h"
 #include "../JuceLibraryCode/JuceHeader.h"
+#include "WEFilters/StereoWidthProcessor.h"
 
 class MONSTR {
 public:
     MONSTR();
-    ~MONSTR();
-    
+    ~MONSTR() = default;
+
     WECore::MONSTR::MONSTRCrossover<float> mCrossover;
-    
+    std::array<std::shared_ptr<WECore::StereoWidth::StereoWidthProcessor<float>>, 3> processors;
+
     /* Process2in2out
      *
      * Performs the effect processing on inLeftSample and inRightSample. Use for
@@ -45,11 +47,11 @@ public:
      *       numSamples      Number of samples loaded into the buffer
      */
     void Process2in2out(float* leftSample, float* rightSample, size_t numSamples);
-    
+
     void setSampleRate(double newSampleRate);
-    
-    
-private:    
+
+
+private:
 };
 
 

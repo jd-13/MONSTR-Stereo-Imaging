@@ -23,12 +23,16 @@
  */
 
 #include "MONSTR.h"
-#include <algorithm>
 
+MONSTR::MONSTR() {
+    processors[0] = std::make_shared<WECore::StereoWidth::StereoWidthProcessor<float>>();
+    processors[1] = std::make_shared<WECore::StereoWidth::StereoWidthProcessor<float>>();
+    processors[2] = std::make_shared<WECore::StereoWidth::StereoWidthProcessor<float>>();
 
-MONSTR::MONSTR() {}
-
-MONSTR::~MONSTR() {}
+    mCrossover.band1.setEffectsProcessor(processors[0]);
+    mCrossover.band2.setEffectsProcessor(processors[1]);
+    mCrossover.band3.setEffectsProcessor(processors[2]);
+}
 
 void MONSTR::Process2in2out(float* leftSample, float* rightSample, size_t numSamples) {
     mCrossover.Process2in2out(leftSample, rightSample, numSamples);
