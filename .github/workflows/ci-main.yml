@@ -22,7 +22,7 @@ jobs:
 
   BuildGCC:
     runs-on: ubuntu-latest
-    container: jackd13/audioplugins:gcc7
+    container: jackd13/audioplugins:gcc10
 
     steps:
       - uses: actions/checkout@v2
