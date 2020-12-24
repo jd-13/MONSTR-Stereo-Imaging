@@ -123,10 +123,10 @@
         <MODULEPATH id="juce_osc" path="../JUCE/modules"/>
       </MODULEPATHS>
     </LINUX_MAKE>
-    <VS2017 targetFolder="Builds/VisualStudio2017" extraCompilerFlags="/std:c++17">
+    <VS2019 targetFolder="Builds/VisualStudio2019">
       <CONFIGURATIONS>
         <CONFIGURATION isDebug="0" name="Debug" headerPath="%USERPROFILE%\WEA\WECore\WECore&#10;%USERPROFILE%\WEA\WECore\DSPFilters\shared\DSPFilters\include"
-                       defines="_HAS_TR1_NAMESPACE"/>
+                       defines="_HAS_TR1_NAMESPACE" linkTimeOptimisation="1" optimisation="3"/>
         <CONFIGURATION isDebug="0" name="Release"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
@@ -148,7 +148,7 @@
         <MODULEPATH id="juce_audio_devices" path="..\JUCE\modules"/>
         <MODULEPATH id="juce_audio_basics" path="..\JUCE\modules"/>
       </MODULEPATHS>
-    </VS2017>
+    </VS2019>
   </EXPORTFORMATS>
   <MODULES>
     <MODULES id="juce_audio_basics" showAllCode="1" useLocalCopy="0"/>
