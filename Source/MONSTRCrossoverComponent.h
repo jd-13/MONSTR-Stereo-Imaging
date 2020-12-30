@@ -42,10 +42,13 @@ public:
 
     void paint(Graphics& g) override;
 
+    void mouseDown(const MouseEvent& event) override;
+
     void mouseDrag(const MouseEvent& event) override;
 
-private:
+    void mouseUp(const MouseEvent& event) override;
 
+private:
     constexpr static int SLIDER_THUMB_RADIUS {6};
 
     std::array<double, 200>sineWaveTable;
@@ -66,6 +69,8 @@ private:
     std::array<bool, WECore::MONSTR::Parameters::_MAX_NUM_BANDS> _bandActives;
 
     MonstrAudioProcessor* _processor;
+
+    std::optional<std::function<void(const MouseEvent&)>> _mouseDragCallback;
 
     void _drawNeutralLine(Graphics& g);
 

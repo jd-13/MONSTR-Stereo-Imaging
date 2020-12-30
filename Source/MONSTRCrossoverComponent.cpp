@@ -136,12 +136,10 @@ void MONSTRCrossoverComponent::paint(Graphics &g) {
                        crossoverUpperHz);
 }
 
-void MONSTRCrossoverComponent::mouseDrag(const MouseEvent& event) {
+void MONSTRCrossoverComponent::mouseDown(const MouseEvent& event) {
 
-    // Going from left to right, find which part of the component the mouse was over when the drag
-    // started
+    constexpr int CROSSOVER_DRAG_TARGET_WIDTH {SLIDER_THUMB_RADIUS * 2};
     const int mouseDownX {event.getMouseDownX()};
-    const Point mouseNow {event.getPosition()};
 
     const double crossoverLowerXPos {
         sliderValueToXPos(_crossoverValues[0], getWidth())
@@ -150,29 +148,51 @@ void MONSTRCrossoverComponent::mouseDrag(const MouseEvent& event) {
         sliderValueToXPos(_crossoverValues[1], getWidth())
     };
 
-    if (mouseDownX < crossoverLowerXPos - SLIDER_THUMB_RADIUS) {
+    // Going from left to right, find which part of the component the mouse was over when the drag
+    // started, and set the appropriate callback
+    if (mouseDownX < crossoverLowerXPos - CROSSOVER_DRAG_TARGET_WIDTH) {
         // Drag started below the first crossover
-        _processor->setWidthBand1(YPosToWidthValue(mouseNow.getY(), getHeight()));
+        _mouseDragCallback = [&](const MouseEvent& event) {
+            _processor->setWidthBand1(YPosToWidthValue(event.getPosition().getY(), getHeight()));
+        };
 
-    } else if (mouseDownX < crossoverLowerXPos + SLIDER_THUMB_RADIUS) {
+    } else if (mouseDownX < crossoverLowerXPos + CROSSOVER_DRAG_TARGET_WIDTH) {
         // Drag started on the first crossover
-        _processor->setCrossoverLower(XPosToSliderValue(mouseNow.getX(), getWidth()));
+        _mouseDragCallback = [&](const MouseEvent& event) {
+            _processor->setCrossoverLower(XPosToSliderValue(event.getPosition().getX(), getWidth()));
+        };
 
-    } else if (mouseDownX < crossoverUpperXPos - SLIDER_THUMB_RADIUS) {
+    } else if (mouseDownX < crossoverUpperXPos - CROSSOVER_DRAG_TARGET_WIDTH) {
         // Drag started below the second crossover
-        _processor->setWidthBand2(YPosToWidthValue(mouseNow.getY(), getHeight()));
-
-    } else if (mouseDownX < crossoverUpperXPos + SLIDER_THUMB_RADIUS) {
+        _mouseDragCallback = [&](const MouseEvent& event) {
+            _processor->setWidthBand2(YPosToWidthValue(event.getPosition().getY(), getHeight()));
+        };
+    } else if (mouseDownX < crossoverUpperXPos + CROSSOVER_DRAG_TARGET_WIDTH) {
         // Drag started on the second crossover
-        _processor->setCrossoverUpper(XPosToSliderValue(mouseNow.getX(), getWidth()));
+        _mouseDragCallback = [&](const MouseEvent& event) {
+            _processor->setCrossoverUpper(XPosToSliderValue(event.getPosition().getX(), getWidth()));
+        };
 
     } else {
         // Drag started above the second crossover
-        _processor->setWidthBand3(YPosToWidthValue(mouseNow.getY(), getHeight()));
+        _mouseDragCallback = [&](const MouseEvent& event) {
+            _processor->setWidthBand3(YPosToWidthValue(event.getPosition().getY(), getHeight()));
+        };
+    }
+}
+
+void MONSTRCrossoverComponent::mouseDrag(const MouseEvent& event) {
+
+    if (_mouseDragCallback.has_value()) {
+        (*_mouseDragCallback)(event);
     }
 
     updateParameters();
     repaint();
+}
+
+void MONSTRCrossoverComponent::mouseUp(const MouseEvent& event) {
+    _mouseDragCallback.reset();
 }
 
 void MONSTRCrossoverComponent::_drawNeutralLine(Graphics &g) {
