@@ -33,14 +33,14 @@ MonstrAudioProcessorEditor::MonstrAudioProcessorEditor (MonstrAudioProcessor& ow
     //[Constructor_pre] You can add your own custom stuff here..
     //[/Constructor_pre]
 
+    crossoverView.reset (new MONSTRCrossoverComponent (getProcessor()));
+    addAndMakeVisible (crossoverView.get());
+    crossoverView->setName ("Crossover View");
+
+    crossoverView->setBounds (40, 40, 560, 210);
+
 
     //[UserPreSize]
-    addAndMakeVisible(mCrossover = new MONSTRCrossoverComponent("mCrossover",
-                                                       getProcessor()));
-    crossoverBounds = Rectangle<int>(40,
-                                     40,
-                                     560,
-                                     210);
     //[/UserPreSize]
 
     setSize (640, 290);
@@ -59,10 +59,10 @@ MonstrAudioProcessorEditor::~MonstrAudioProcessorEditor()
     //[Destructor_pre]. You can add your own custom destruction code here..
     //[/Destructor_pre]
 
+    crossoverView = nullptr;
 
 
     //[Destructor]. You can add your own custom destruction code here..
-    mCrossover = nullptr;
     _removeLookAndFeelFromAllChildren();
     //[/Destructor]
 }
@@ -89,7 +89,6 @@ void MonstrAudioProcessorEditor::resized()
     //[/UserPreResize]
 
     //[UserResized] Add your own custom resize handling here..
-    mCrossover->setBounds(crossoverBounds);
     //[/UserResized]
 }
 
@@ -97,7 +96,8 @@ void MonstrAudioProcessorEditor::resized()
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
 void MonstrAudioProcessorEditor::_onParameterUpdate() {
-    mCrossover->repaint();
+    crossoverView->updateParameters();
+    crossoverView->repaint();
 }
 //[/MiscUserCode]
 
@@ -117,6 +117,9 @@ BEGIN_JUCER_METADATA
                  snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330"
                  fixedSize="1" initialWidth="640" initialHeight="290">
   <BACKGROUND backgroundColour="ffffffff"/>
+  <GENERICCOMPONENT name="Crossover View" id="e7b7ed6ee8457913" memberName="crossoverView"
+                    virtualName="MONSTRCrossoverComponent" explicitFocusOrder="0"
+                    pos="40 40 560 210" class="juce::Component" params="getProcessor()"/>
 </JUCER_COMPONENT>
 
 END_JUCER_METADATA

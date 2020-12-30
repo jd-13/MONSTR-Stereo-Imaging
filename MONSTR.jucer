@@ -44,10 +44,6 @@
               file="Source/MONSTRCrossoverComponent.cpp"/>
         <FILE id="ovY5LC" name="MONSTRCrossoverComponent.h" compile="0" resource="0"
               file="Source/MONSTRCrossoverComponent.h"/>
-        <FILE id="jb7bPe" name="MONSTRWidthSlider.cpp" compile="1" resource="0"
-              file="Source/MONSTRWidthSlider.cpp"/>
-        <FILE id="gaNmh6" name="MONSTRWidthSlider.h" compile="0" resource="0"
-              file="Source/MONSTRWidthSlider.h"/>
         <FILE id="UYLJO7" name="MONSTRLookAndFeel.cpp" compile="1" resource="0"
               file="Source/MONSTRLookAndFeel.cpp"/>
         <FILE id="rJ5ICP" name="MONSTRLookAndFeel.h" compile="0" resource="0"

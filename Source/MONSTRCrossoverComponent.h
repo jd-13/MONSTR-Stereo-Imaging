@@ -22,12 +22,10 @@
  *
  */
 
-#ifndef MONSTRCROSSOVERBACKGROUND_H_INCLUDED
-#define MONSTRCROSSOVERBACKGROUND_H_INCLUDED
+#pragma once
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "MONSTRLookAndFeel.h"
-#include "MONSTRWidthSlider.h"
 #include "PluginProcessor.h"
 #include "ParameterData.h"
 #include "General/CoreMath.h"
@@ -37,53 +35,18 @@
 class MONSTRCrossoverComponent : public Component {
 public:
 
-    MONSTRCrossoverComponent(String name,
-                    MonstrAudioProcessor* newAudioProcessor);
-
+    MONSTRCrossoverComponent(MonstrAudioProcessor* newAudioProcessor);
     virtual ~MONSTRCrossoverComponent();
+
+    void updateParameters();
 
     void paint(Graphics& g) override;
 
-    void resized() override;
-
+    void mouseDrag(const MouseEvent& event) override;
 
 private:
-    void resizeWidthSliders(int crossoverLowerXPos,
-                            int crossoverUpperXPos);
 
-    void drawSine(Graphics& g,
-                  float crossoverLowerHz,
-                  float crossoverUpperHz);
-
-    void drawWidthRectangles(Graphics& g,
-                             int crossoverLowerXPos,
-                             int crossoverUpperXPos);
-
-    void drawNeutralLine(Graphics& g);
-
-    void drawFrequencyText(Graphics& g,
-                           int crossoverLowerXPos,
-                           float crossoverLowerHz,
-                           int crossoverUpperXPos,
-                           float crossoverUpperHz);
-
-    void drawSliderThumbs(Graphics& g,
-                          float crossoverLowerXPos,
-                          float crossoverUpperXPos);
-
-    void positionHorizontalSliders();
-
-    void updateSliders();
-
-    // defines the fraction of the distance from the top and bottom
-    // of the crossover GUI element which represents neutral stereo width
-    constexpr static const float neutralPos {0.25};
-
-    // decrease the scaling coefficient to increase the on-screen space
-    // used by the lower frequencies
-    constexpr static const int scaleCoefficient {8};
-
-    constexpr static const int sliderThumbRadius {6};
+    constexpr static int SLIDER_THUMB_RADIUS {6};
 
     std::array<double, 200>sineWaveTable;
 
@@ -97,34 +60,30 @@ private:
                         greenTrans,
                         lightGreyTrans;
 
-    MonstrAudioProcessor* ourProcessor;
 
-    std::unique_ptr<Slider> crossoverLowerSld,
-                            crossoverUpperSld;
+    std::array<double, WECore::MONSTR::Parameters::_MAX_NUM_BANDS - 1> _crossoverValues;
+    std::array<double, WECore::MONSTR::Parameters::_MAX_NUM_BANDS> _bandWidths;
+    std::array<bool, WECore::MONSTR::Parameters::_MAX_NUM_BANDS> _bandActives;
 
-    std::unique_ptr<MONSTRWidthSlider> width1Sld,
-                                       width2Sld,
-                                       width3Sld;
+    MonstrAudioProcessor* _processor;
 
-    void _enableDoubleClickToDefault();
+    void _drawNeutralLine(Graphics& g);
 
-    class MONSTRCrossoverListener : public Slider::Listener {
-    public:
-        MONSTRCrossoverListener(MONSTRCrossoverComponent* crossover) :   Slider::Listener(),
-                                                                parent(crossover) {
+    void _drawSine(Graphics& g,
+                   float crossoverLowerHz,
+                   float crossoverUpperHz);
 
-        }
+    void _drawSliderThumbs(Graphics& g,
+                           float crossoverLowerXPos,
+                           float crossoverUpperXPos);
 
-        void sliderValueChanged(Slider* sliderThatWasMoved) override;
-        void sliderDragStarted(Slider* slider) override;
-        void sliderDragEnded(Slider* slider) override;
+    void _drawWidthRectangles(Graphics& g,
+                              int crossoverLowerXPos,
+                              int crossoverUpperXPos);
 
-    private:
-        MONSTRCrossoverComponent* parent;
-    };
-
-    ScopedPointer<MONSTRCrossoverListener> mListener;
-
+    void _drawFrequencyText(Graphics& g,
+                            int crossoverLowerXPos,
+                            float crossoverLowerHz,
+                            int crossoverUpperXPos,
+                            float crossoverUpperHz);
 };
-
-#endif  // MONSTRCROSSOVERBACKGROUND_H_INCLUDED

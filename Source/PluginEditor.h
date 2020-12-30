@@ -23,7 +23,6 @@
 #include "JuceHeader.h"
 #include "PluginProcessor.h"
 #include "MONSTRLookAndFeel.h"
-#include "MONSTRWidthSlider.h"
 #include "MONSTRCrossoverComponent.h"
 #include "CoreJUCEPlugin/CoreProcessorEditor.h"
 //[/Headers]
@@ -60,13 +59,12 @@ public:
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
     MONSTRLookAndFeel customLookAndFeel;
-    Rectangle<int> crossoverBounds;
-    ScopedPointer<MONSTRCrossoverComponent> mCrossover;
 
     virtual void _onParameterUpdate() override;
     //[/UserVariables]
 
     //==============================================================================
+    std::unique_ptr<MONSTRCrossoverComponent> crossoverView;
 
 
     //==============================================================================

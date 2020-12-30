@@ -29,9 +29,9 @@ MONSTR::MONSTR() {
     processors[1] = std::make_shared<WECore::StereoWidth::StereoWidthProcessor<float>>();
     processors[2] = std::make_shared<WECore::StereoWidth::StereoWidthProcessor<float>>();
 
-    mCrossover.band1.setEffectsProcessor(processors[0]);
-    mCrossover.band2.setEffectsProcessor(processors[1]);
-    mCrossover.band3.setEffectsProcessor(processors[2]);
+    mCrossover.setEffectsProcessor(0, processors[0]);
+    mCrossover.setEffectsProcessor(1, processors[1]);
+    mCrossover.setEffectsProcessor(2, processors[2]);
 }
 
 void MONSTR::Process2in2out(float* leftSample, float* rightSample, size_t numSamples) {

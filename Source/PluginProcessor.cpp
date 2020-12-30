@@ -21,10 +21,10 @@ MonstrAudioProcessor::MonstrAudioProcessor()
 
     registerParameter(isActiveBand1, SWITCHBAND1_STR, MP::BANDSWITCH_DEFAULT, [&](bool val) { setIsActiveBand1(val); });
     registerParameter(widthBand1, WIDTHBAND1_STR, &SP::WIDTH, SP::WIDTH.defaultValue, [&](float val) { setWidthBand1(val); });
-    registerParameter(crossoverLower, CROSSOVERLOWER_STR, &MP::CROSSOVERLOWER, MP::CROSSOVERLOWER.defaultValue, [&](float val) { setCrossoverLower(val); });
+    registerParameter(crossoverLower, CROSSOVERLOWER_STR, &MP::CROSSOVER_FREQUENCY, MP::CROSSOVER_LOWER_DEFAULT, [&](float val) { setCrossoverLower(val); });
     registerParameter(isActiveBand2, SWITCHBAND2_STR, MP::BANDSWITCH_DEFAULT, [&](bool val) { setIsActiveBand2(val); });
     registerParameter(widthBand2, WIDTHBAND2_STR, &SP::WIDTH, SP::WIDTH.defaultValue, [&](float val) { setWidthBand2(val); });
-    registerParameter(crossoverUpper, CROSSOVERUPPER_STR, &MP::CROSSOVERUPPER, MP::CROSSOVERUPPER.defaultValue, [&](float val) { setCrossoverUpper(val); });
+    registerParameter(crossoverUpper, CROSSOVERUPPER_STR, &MP::CROSSOVER_FREQUENCY, MP::CROSSOVER_UPPER_DEFAULT, [&](float val) { setCrossoverUpper(val); });
     registerParameter(isActiveBand3, SWITCHBAND3_STR, MP::BANDSWITCH_DEFAULT, [&](bool val) { setIsActiveBand3(val); });
     registerParameter(widthBand3, WIDTHBAND3_STR, &SP::WIDTH, SP::WIDTH.defaultValue, [&](float val) { setWidthBand3(val); });
 }
@@ -160,7 +160,7 @@ AudioProcessorEditor* MonstrAudioProcessor::createEditor()
 
 //==============================================================================
 void MonstrAudioProcessor::setIsActiveBand1(bool val) {
-    mMONSTR.mCrossover.band1.setIsActive(val);
+    mMONSTR.mCrossover.setIsActive(0, val);
     isActiveBand1->setValueNotifyingHost(val);
 }
 
@@ -170,12 +170,12 @@ void MonstrAudioProcessor::setWidthBand1(float val) {
 }
 
 void MonstrAudioProcessor::setCrossoverLower(float val) {
-    mMONSTR.mCrossover.setCrossoverLower(WECore::MONSTR::Parameters::CROSSOVERLOWER.NormalisedToInternal(val));
+    mMONSTR.mCrossover.setCrossoverFrequency(0, WECore::MONSTR::Parameters::CROSSOVER_FREQUENCY.NormalisedToInternal(val));
     crossoverLower->setValueNotifyingHost(val);
 }
 
 void MonstrAudioProcessor::setIsActiveBand2(bool val) {
-    mMONSTR.mCrossover.band2.setIsActive(val);
+    mMONSTR.mCrossover.setIsActive(1, val);
     isActiveBand2->setValueNotifyingHost(val);
 }
 
@@ -185,12 +185,12 @@ void MonstrAudioProcessor::setWidthBand2(float val) {
 }
 
 void MonstrAudioProcessor::setCrossoverUpper(float val) {
-    mMONSTR.mCrossover.setCrossoverUpper(WECore::MONSTR::Parameters::CROSSOVERUPPER.NormalisedToInternal(val));
+    mMONSTR.mCrossover.setCrossoverFrequency(1, WECore::MONSTR::Parameters::CROSSOVER_FREQUENCY.NormalisedToInternal(val));
     crossoverUpper->setValueNotifyingHost(val);
 }
 
 void MonstrAudioProcessor::setIsActiveBand3(bool val) {
-    mMONSTR.mCrossover.band3.setIsActive(val);
+    mMONSTR.mCrossover.setIsActive(2, val);
     isActiveBand3->setValueNotifyingHost(val);
 }
 

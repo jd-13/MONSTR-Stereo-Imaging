@@ -24,7 +24,36 @@
 
 #include "MONSTRCrossoverComponent.h"
 
+#include <algorithm>
 #include "WEFilters/StereoWidthProcessorParameters.h"
+
+namespace {
+    double sliderValueToInternalLog(double sliderValue) {
+        return std::pow(10, 1.0414 * sliderValue - 1) - 0.1;
+    }
+
+    double internalLogToSliderValue(double internalValue) {
+        return (std::log10(internalValue + 0.1) + 1) / 1.0414;
+    }
+
+    double sliderValueToXPos(double sliderValue, int componentWidth) {
+        const double MARGIN_PX {componentWidth * 0.05};
+        const double realRange {componentWidth - 2 * MARGIN_PX};
+
+        return (internalLogToSliderValue(sliderValue) * realRange) + MARGIN_PX;
+    }
+
+    double XPosToSliderValue(int XPos, int componentWidth) {
+        const double MARGIN_PX {componentWidth * 0.05};
+        const double realRange {componentWidth - 2 * MARGIN_PX};
+
+        return sliderValueToInternalLog(std::max(XPos - MARGIN_PX, 0.0) / realRange);
+    }
+
+    double YPosToWidthValue(int YPos, int componentHeight) {
+        return 1 - std::min(std::max(0.0, YPos - componentHeight / 4.0) / (componentHeight / 2.0), 1.0);
+    }
+}
 
 const Colour MONSTRCrossoverComponent::lightGrey(200, 200, 200);
 const Colour MONSTRCrossoverComponent::darkGrey(107, 107, 107);
@@ -36,10 +65,8 @@ const Colour MONSTRCrossoverComponent::yellowTrans(static_cast<uint8_t>(255), 25
 const Colour MONSTRCrossoverComponent::greenTrans(static_cast<uint8_t>(30), 255, 0 , 0.5f);
 const Colour MONSTRCrossoverComponent::lightGreyTrans(static_cast<uint8_t>(200), 200, 200, 0.5f);
 
-MONSTRCrossoverComponent::MONSTRCrossoverComponent(String name,
-                                 MonstrAudioProcessor* newAudioProcessor)
-                                    :   Component(name),
-                                        ourProcessor(newAudioProcessor) {
+MONSTRCrossoverComponent::MONSTRCrossoverComponent(MonstrAudioProcessor* newAudioProcessor)
+        : _processor(newAudioProcessor) {
 
     // Generate sine wave table
     for (size_t iii {0}; iii < sineWaveTable.size(); iii++) {
@@ -47,184 +74,124 @@ MONSTRCrossoverComponent::MONSTRCrossoverComponent(String name,
         sineWaveTable[iii] = sin(pow(M_E, 1.5 * xVal + 1.83)) / 2 + 0.5;
     }
 
+    // Initialise parameters to default values
+    for (double& position : _crossoverValues) {
+        position = 0;
+    }
 
-    // Add Sliders
-    mListener = new MONSTRCrossoverListener(this);
+    for (double& width : _bandWidths) {
+        width = 0;
+    }
 
-    crossoverLowerSld.reset(new Slider("Crossover Lower Slider"));
-    addAndMakeVisible(crossoverLowerSld.get());
-    crossoverLowerSld->setTooltip (TRANS("Drag the horizontal sliders left or right to change the crossover frequencies of each band.\n"
-                                         "\n"
-                                         "Drag up or down near the middle of a band to increase or decrease that band\'s stereo width.\n"
-                                         "\n"
-                                         "Right click near the middle of a band to bypass its stereo processing."));
-    crossoverLowerSld->setRange (0, 1, 0);
-    crossoverLowerSld->setSliderStyle (Slider::LinearHorizontal);
-    crossoverLowerSld->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
-    crossoverLowerSld->addListener (mListener);
-    crossoverLowerSld->setSkewFactor (0.7);
-
-    crossoverUpperSld.reset(new Slider("Crossover Upper Slider"));
-    addAndMakeVisible(crossoverUpperSld.get());
-    crossoverUpperSld->setTooltip (TRANS("Drag the horizontal sliders left or right to change the crossover freqencies of each band.\n"
-                                         "\n"
-                                         "Drag up or down near the middle of a band to increase or decrease that band\'s stereo width.\n"
-                                         "\n"
-                                         "Right click near the middle of a band to bypass its stereo processing."));
-    crossoverUpperSld->setRange (0, 1, 0);
-    crossoverUpperSld->setSliderStyle (Slider::LinearHorizontal);
-    crossoverUpperSld->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
-    crossoverUpperSld->addListener (mListener);
-    crossoverUpperSld->setSkewFactor (0.7);
-
-    width1Sld.reset(new MONSTRWidthSlider("Band 1 Width Slider",
-                                          [&](bool val) { ourProcessor->setIsActiveBand1(val); }));
-    addAndMakeVisible(width1Sld.get());
-    width1Sld->setTooltip (TRANS("Drag the horizontal sliders left or right to change the crossover frequencies of each band.\n"
-                                 "\n"
-                                 "Drag up or down near the middle of a band to increase or decrease that band\'s stereo width.\n"
-                                 "\n"
-                                 "Right click near the middle of a band to bypass its stereo processing."));
-    width1Sld->setRange (0, 1, 0.01);
-    width1Sld->setSliderStyle (Slider::LinearVertical);
-    width1Sld->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
-    width1Sld->addListener (mListener);
-
-    width2Sld.reset(new MONSTRWidthSlider("Band 2 Width Slider",
-                                          [&](bool val) { ourProcessor->setIsActiveBand2(val); }));
-    addAndMakeVisible(width2Sld.get());
-    width2Sld->setTooltip (TRANS("Drag the horizontal sliders left or right to change the crossover frequencies of each band.\n"
-                                 "\n"
-                                 "Drag up or down near the middle of a band to increase or decrease that band\'s stereo width.\n"
-                                 "\n"
-                                 "Right click near the middle of a band to bypass its stereo processing."));
-    width2Sld->setRange (0, 1, 0.01);
-    width2Sld->setSliderStyle (Slider::LinearVertical);
-    width2Sld->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
-    width2Sld->addListener (mListener);
-
-    width3Sld.reset(new MONSTRWidthSlider("Band 3 Width Slider",
-                                          [&](bool val) { ourProcessor->setIsActiveBand3(val); }));
-    addAndMakeVisible(width3Sld.get());
-    width3Sld->setTooltip (TRANS("Drag the horizontal sliders left or right to change the crossover frequencies of each band.\n"
-                                 "\n"
-                                 "Drag up or down near the middle of a band to increase or decrease that band\'s stereo width.\n"
-                                 "\n"
-                                 "Right click near the middle of a band to bypass its stereo processing."));
-    width3Sld->setRange (0, 1, 0.01);
-    width3Sld->setSliderStyle (Slider::LinearVertical);
-    width3Sld->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
-    width3Sld->addListener (mListener);
-
-
-    // Configure sliders
-    crossoverLowerSld->setSliderSnapsToMousePosition(false);
-    crossoverUpperSld->setSliderSnapsToMousePosition(false);
-
-    crossoverLowerSld->setMouseDragSensitivity(100);
-    crossoverUpperSld->setMouseDragSensitivity(100);
-    crossoverLowerSld->setVelocityBasedMode(false);
-    crossoverUpperSld->setVelocityBasedMode(false);
-
-    width1Sld->setSliderSnapsToMousePosition(false);
-    width2Sld->setSliderSnapsToMousePosition(false);
-    width3Sld->setSliderSnapsToMousePosition(false);
-
-    _enableDoubleClickToDefault();
+    for (bool& active : _bandActives) {
+        active = false;
+    }
 }
 
 MONSTRCrossoverComponent::~MONSTRCrossoverComponent() {
-    crossoverLowerSld = nullptr;
-    crossoverUpperSld = nullptr;
-    width1Sld = nullptr;
-    width2Sld = nullptr;
-    width3Sld = nullptr;
+}
+
+void MONSTRCrossoverComponent::updateParameters() {
+    _crossoverValues[0] = _processor->crossoverLower->get();
+    _crossoverValues[1] = _processor->crossoverUpper->get();
+
+    _bandWidths[0] = _processor->widthBand1->get();
+    _bandWidths[1] = _processor->widthBand2->get();
+    _bandWidths[2] = _processor->widthBand3->get();
+
+    _bandActives[0] = _processor->isActiveBand1->get();
+    _bandActives[1] = _processor->isActiveBand2->get();
+    _bandActives[2] = _processor->isActiveBand3->get();
 }
 
 void MONSTRCrossoverComponent::paint(Graphics &g) {
 
-    updateSliders();
+    _drawNeutralLine(g);
 
-    // calculate the crossover values in Hz from the sliders
+    const double crossoverLowerXPos {
+        sliderValueToXPos(_crossoverValues[0], getWidth())
+    };
+    const double crossoverUpperXPos {
+        sliderValueToXPos(_crossoverValues[1], getWidth())
+    };
+
+    _drawSine(g, crossoverLowerXPos, crossoverUpperXPos);
+
+    _drawWidthRectangles(g, crossoverLowerXPos, crossoverUpperXPos);
+
+    _drawSliderThumbs(g, crossoverLowerXPos, crossoverUpperXPos);
+
     const double crossoverLowerHz {
-        WECore::MONSTR::Parameters::CROSSOVERLOWER.NormalisedToInternal(
-                                                                    crossoverLowerSld->getValue())};
+        WECore::MONSTR::Parameters::CROSSOVER_FREQUENCY.NormalisedToInternal(_crossoverValues[0])
+    };
 
     const double crossoverUpperHz {
-        WECore::MONSTR::Parameters::CROSSOVERUPPER.NormalisedToInternal(
-                                                                    crossoverUpperSld->getValue())};
-
-    // calculate the raw logarithmic values
-    float crossoverLowerXPos {
-        log2f((crossoverLowerHz + scaleCoefficient) / scaleCoefficient)
-        / log2f((WECore::MONSTR::Parameters::CROSSOVERLOWER.maxValue + scaleCoefficient) / scaleCoefficient)
-    };
-    float crossoverUpperXPos {
-        log2f((crossoverUpperHz + scaleCoefficient) / scaleCoefficient)
-        / log2f((WECore::MONSTR::Parameters::CROSSOVERUPPER.maxValue + scaleCoefficient) / scaleCoefficient)
+        WECore::MONSTR::Parameters::CROSSOVER_FREQUENCY.NormalisedToInternal(_crossoverValues[1])
     };
 
-    // normalise so that they correspond to actual coordinates
-    crossoverLowerXPos *= getWidth()
-                          * (log2((WECore::MONSTR::Parameters::CROSSOVERLOWER.maxValue + scaleCoefficient) / scaleCoefficient) / log2(20000));
-    crossoverUpperXPos *= getWidth()
-                       * (log2((WECore::MONSTR::Parameters::CROSSOVERUPPER.maxValue + scaleCoefficient) / scaleCoefficient) / log2(20000));
-
-    drawSine(g, crossoverLowerXPos, crossoverUpperXPos);
-
-    drawNeutralLine(g);
-
-    drawWidthRectangles(g,
-                        crossoverLowerXPos,
-                        crossoverUpperXPos);
-
-    drawFrequencyText(g,
-                      crossoverLowerXPos,
-                      crossoverLowerHz,
-                      crossoverUpperXPos,
-                      crossoverUpperHz);
-
-    drawSliderThumbs(g,
-                     crossoverLowerXPos,
-                     crossoverUpperXPos);
-
-
-    resizeWidthSliders(crossoverLowerXPos,
-                       crossoverUpperXPos);
+    _drawFrequencyText(g,
+                       crossoverLowerXPos,
+                       crossoverLowerHz,
+                       crossoverUpperXPos,
+                       crossoverUpperHz);
 }
 
-void MONSTRCrossoverComponent::resized() {
-    positionHorizontalSliders();
+void MONSTRCrossoverComponent::mouseDrag(const MouseEvent& event) {
 
-    width1Sld->setBounds (64, 8, 72, 192);
-    width2Sld->setBounds (232, 16, 72, 184);
-    width3Sld->setBounds (432, 8, 72, 208);
+    // Going from left to right, find which part of the component the mouse was over when the drag
+    // started
+    const int mouseDownX {event.getMouseDownX()};
+    const Point mouseNow {event.getPosition()};
+
+    const double crossoverLowerXPos {
+        sliderValueToXPos(_crossoverValues[0], getWidth())
+    };
+    const double crossoverUpperXPos {
+        sliderValueToXPos(_crossoverValues[1], getWidth())
+    };
+
+    if (mouseDownX < crossoverLowerXPos - SLIDER_THUMB_RADIUS) {
+        // Drag started below the first crossover
+        _processor->setWidthBand1(YPosToWidthValue(mouseNow.getY(), getHeight()));
+
+    } else if (mouseDownX < crossoverLowerXPos + SLIDER_THUMB_RADIUS) {
+        // Drag started on the first crossover
+        _processor->setCrossoverLower(XPosToSliderValue(mouseNow.getX(), getWidth()));
+
+    } else if (mouseDownX < crossoverUpperXPos - SLIDER_THUMB_RADIUS) {
+        // Drag started below the second crossover
+        _processor->setWidthBand2(YPosToWidthValue(mouseNow.getY(), getHeight()));
+
+    } else if (mouseDownX < crossoverUpperXPos + SLIDER_THUMB_RADIUS) {
+        // Drag started on the second crossover
+        _processor->setCrossoverUpper(XPosToSliderValue(mouseNow.getX(), getWidth()));
+
+    } else {
+        // Drag started above the second crossover
+        _processor->setWidthBand3(YPosToWidthValue(mouseNow.getY(), getHeight()));
+    }
+
+    updateParameters();
+    repaint();
 }
 
-void MONSTRCrossoverComponent::resizeWidthSliders(int crossoverLowerXPos,
-                                         int crossoverUpperXPos) {
-    // a margin to be applied where the edges of the vertical sliders meet the thumbs
-    // of the horizontal sliders to prevent overlap
-    width1Sld->setBounds(0,
-                         0,
-                         crossoverLowerXPos - sliderThumbRadius,
-                         getHeight());
+void MONSTRCrossoverComponent::_drawNeutralLine(Graphics &g) {
 
-    width2Sld->setBounds(crossoverLowerXPos + sliderThumbRadius,
-                         0,
-                         crossoverUpperXPos - crossoverLowerXPos - sliderThumbRadius * 2,
-                         getHeight());
+    Path p;
+    p.addLineSegment(Line<float>(0,
+                                 getHeight() / 2,
+                                 getWidth(),
+                                 getHeight() / 2),
+                     1);
 
-    width3Sld->setBounds(crossoverUpperXPos + sliderThumbRadius,
-                         0,
-                         getWidth() - crossoverUpperXPos,
-                         getHeight());
+    g.setColour(lightGrey);
+    g.strokePath(p, PathStrokeType(0.5f));
 }
 
-// draws the sine wave behind each band
-void MONSTRCrossoverComponent::drawSine(Graphics &g,
-                               float crossoverLowerXPos,
-                               float crossoverUpperXPos) {
+// Draws the sine wave behind each band
+void MONSTRCrossoverComponent::_drawSine(Graphics &g,
+                                         float crossoverLowerXPos,
+                                         float crossoverUpperXPos) {
     Path p;
     const int pointsToLowerSliderPos {static_cast<int>(sineWaveTable.size() * static_cast<float>(crossoverLowerXPos / getWidth()))};
     const int pointsToUpperSliderPos {static_cast<int>(sineWaveTable.size() * static_cast<float>(crossoverUpperXPos / getWidth()))};
@@ -274,144 +241,9 @@ void MONSTRCrossoverComponent::drawSine(Graphics &g,
     g.strokePath(p, PathStrokeType(2.0f));
 }
 
-// draws the rectangles showing the width of each band
-void MONSTRCrossoverComponent::drawWidthRectangles(Graphics &g,
-                                          int crossoverLowerXPos,
-                                          int crossoverUpperXPos) {
-    const float range {0.25};
-
-    // lambda to draw the width rectangles for each band
-    auto drawWidth = [&g, &range, this](const Colour& colour,
-                                          float widthValue,
-                                          float x,
-                                          float bandWidth,
-                                          bool isBandActive) -> void {
-
-        if (isBandActive) {
-            g.setColour(colour);
-        } else {
-            g.setColour(lightGreyTrans);
-        }
-
-        if (widthValue > 0.5) {
-
-            /* left edge
-             * top edge
-             * width
-             * height
-             */
-
-            g.fillRect(x,
-                       getHeight() * neutralPos - getHeight() * range * (widthValue - 0.5),
-                       bandWidth,
-                       (getHeight() * neutralPos) - (getHeight() * neutralPos - getHeight() * range * (widthValue - 0.5)));
-
-            g.fillRect(x,
-                       getHeight() * (1 - neutralPos),
-                       bandWidth,
-                       getHeight() * range * (widthValue - 0.5));
-        } else {
-            g.fillRect(x,
-                       getHeight() * neutralPos,
-                       bandWidth,
-                       getHeight() * range * (0.5 - widthValue));
-
-            g.fillRect(x,
-                       getHeight() * (1 - neutralPos) - getHeight() * range * (0.5 - widthValue),
-                       bandWidth,
-                       (getHeight() * (1 - neutralPos)) - (getHeight() * (1 - neutralPos) - getHeight() * range * (0.5 - widthValue)));
-        }
-    };
-
-    drawWidth(redTrans,
-              width1Sld->getValue(),
-              0,
-              crossoverLowerXPos,
-              width1Sld->isEnabled());
-
-    drawWidth(yellowTrans,
-              width2Sld->getValue(),
-              crossoverLowerXPos,
-              crossoverUpperXPos - crossoverLowerXPos,
-              width2Sld->isEnabled());
-
-    drawWidth(greenTrans,
-              width3Sld->getValue(),
-              crossoverUpperXPos,
-              getWidth() - crossoverUpperXPos,
-              width3Sld->isEnabled());
-}
-
-// draws the lines representing neutral width
-void MONSTRCrossoverComponent::drawNeutralLine(Graphics &g) {
-
-    Path p;
-    p.addLineSegment(Line<float>(0,
-                                 getHeight() * neutralPos,
-                                 getWidth(),
-                                 getHeight() * neutralPos),
-                     1);
-    p.addLineSegment(Line<float>(0,
-                                 getHeight() * (1 - neutralPos),
-                                 getWidth(),
-                                 getHeight() * (1 - neutralPos)),
-                     1);
-
-
-    g.setColour(lightGrey);
-    g.strokePath(p, PathStrokeType(0.5f));
-}
-
-
-// calculates the positions of the horizontal crossover sliders
-void MONSTRCrossoverComponent::positionHorizontalSliders() {
-    // calculate the positions of the vertical edges of the sliders on the logarithmic scale
-    const double crossoverLowerLogMin {getWidth() * (log2((WECore::MONSTR::Parameters::CROSSOVERLOWER.minValue + scaleCoefficient) / scaleCoefficient) / log2(20000))};
-    const double crossoverLowerLogMax {getWidth() * (log2((WECore::MONSTR::Parameters::CROSSOVERLOWER.maxValue + scaleCoefficient) / scaleCoefficient) / log2(20000))};
-    const double crossoverUpperLogMin {getWidth() * (log2((WECore::MONSTR::Parameters::CROSSOVERUPPER.minValue + scaleCoefficient) / scaleCoefficient) / log2(20000))};
-    const double crossoverUpperLogMax {getWidth() * (log2((WECore::MONSTR::Parameters::CROSSOVERUPPER.maxValue + scaleCoefficient) / scaleCoefficient) / log2(20000))};
-
-    crossoverLowerSld->setBounds(crossoverLowerLogMin - sliderThumbRadius,
-                                 0,
-                                 crossoverLowerLogMax - crossoverLowerLogMin + 2 * sliderThumbRadius,
-                                 getHeight());
-
-    crossoverUpperSld->setBounds(crossoverUpperLogMin - sliderThumbRadius,
-                                 0,
-                                 getWidth() - crossoverUpperLogMax + sliderThumbRadius,
-                                 getHeight());
-}
-
-void MONSTRCrossoverComponent::drawFrequencyText(Graphics &g,
-                                        int crossoverLowerXPos,
-                                        float crossoverLowerHz,
-                                        int crossoverUpperXPos,
-                                        float crossoverUpperHz) {
-    const double fractionOfHeight {0.9};
-    const int spacing {5};
-
-    g.setColour(yellow);
-    g.drawText(String(static_cast<int>(crossoverLowerHz)) + " Hz",
-               crossoverLowerXPos + spacing,
-               getHeight() * fractionOfHeight,
-               60,
-               20,
-               Justification::centredLeft,
-               false);
-
-    g.setColour(green);
-    g.drawText(String(static_cast<int>(crossoverUpperHz)) + " Hz",
-               crossoverUpperXPos + spacing,
-               getHeight() * fractionOfHeight,
-               60,
-               20,
-               Justification::centredLeft,
-               false);
-}
-
-void MONSTRCrossoverComponent::drawSliderThumbs(Graphics& g,
-                                       float crossoverLowerXPos,
-                                       float crossoverUpperXPos) {
+void MONSTRCrossoverComponent::_drawSliderThumbs(Graphics& g,
+                                                 float crossoverLowerXPos,
+                                                 float crossoverUpperXPos) {
 
     auto drawSingleThumb = [&g, this](int crossoverXPos,
                                       Colour topColour,
@@ -439,21 +271,21 @@ void MONSTRCrossoverComponent::drawSliderThumbs(Graphics& g,
 
         p.clear();
         g.setColour(darkGrey);
-        p.addEllipse(crossoverXPos - sliderThumbRadius,
-                     getHeight() * 0.5 - sliderThumbRadius,
-                     sliderThumbRadius * 2,
-                     sliderThumbRadius * 2);
+        p.addEllipse(crossoverXPos - SLIDER_THUMB_RADIUS,
+                     getHeight() * 0.5 - SLIDER_THUMB_RADIUS,
+                     SLIDER_THUMB_RADIUS * 2,
+                     SLIDER_THUMB_RADIUS * 2);
         g.fillPath(p);
 
         p.clear();
         g.setColour(topColour);
         p.addCentredArc(crossoverXPos,
                         getHeight() * 0.5,
-                        sliderThumbRadius,
-                        sliderThumbRadius,
-                        CoreMath::DOUBLE_PI,
+                        SLIDER_THUMB_RADIUS,
+                        SLIDER_THUMB_RADIUS,
+                        WECore::CoreMath::DOUBLE_PI,
                         0,
-                        CoreMath::DOUBLE_PI,
+                        WECore::CoreMath::DOUBLE_PI,
                         true);
         g.strokePath(p, PathStrokeType(lineWidth));
 
@@ -461,11 +293,11 @@ void MONSTRCrossoverComponent::drawSliderThumbs(Graphics& g,
         g.setColour(bottomColour);
         p.addCentredArc(crossoverXPos,
                         getHeight() * 0.5,
-                        sliderThumbRadius,
-                        sliderThumbRadius,
+                        SLIDER_THUMB_RADIUS,
+                        SLIDER_THUMB_RADIUS,
                         0,
                         0,
-                        CoreMath::DOUBLE_PI,
+                        WECore::CoreMath::DOUBLE_PI,
                         true);
         g.strokePath(p, PathStrokeType(lineWidth));
     };
@@ -474,97 +306,83 @@ void MONSTRCrossoverComponent::drawSliderThumbs(Graphics& g,
     drawSingleThumb(crossoverUpperXPos, yellow, green);
 }
 
-void MONSTRCrossoverComponent::updateSliders() {
-    crossoverLowerSld->setValue(ourProcessor->crossoverLower->get(), dontSendNotification);
-    crossoverUpperSld->setValue(ourProcessor->crossoverUpper->get(), dontSendNotification);
+void MONSTRCrossoverComponent::_drawWidthRectangles(Graphics &g,
+                                                    int crossoverLowerXPos,
+                                                    int crossoverUpperXPos) {
+    const float range {0.25};
 
-    width1Sld->setValue(ourProcessor->widthBand1->get(), dontSendNotification);
-    width2Sld->setValue(ourProcessor->widthBand2->get(), dontSendNotification);
-    width3Sld->setValue(ourProcessor->widthBand3->get(), dontSendNotification);
+    // lambda to draw the width rectangles for each band
+    auto drawWidth = [&g, &range, this](const Colour& colour,
+                                        float widthValue,
+                                        float x,
+                                        float bandWidth,
+                                        bool isBandActive) -> void {
 
-    width1Sld->setEnabled(ourProcessor->isActiveBand1->get());
-    width2Sld->setEnabled(ourProcessor->isActiveBand2->get());
-    width3Sld->setEnabled(ourProcessor->isActiveBand3->get());
+        if (isBandActive) {
+            g.setColour(colour);
+        } else {
+            g.setColour(lightGreyTrans);
+        }
+
+        float ypos {0};
+        float height {0};
+
+        // Move the width value to the range -0.5:0.5
+        widthValue -= 0.5;
+
+        if (widthValue > 0) {
+            height = (getHeight() / 2.0) * widthValue;
+            ypos = getHeight() / 2.0 - height;
+        } else {
+            ypos = getHeight() / 2.0;
+            height = (getHeight() / 2.0) * std::abs(widthValue);
+        }
+
+        g.fillRect(x, ypos, bandWidth, height);
+    };
+
+    drawWidth(redTrans,
+              _bandWidths[0],
+              0,
+              crossoverLowerXPos,
+              _bandActives[0]);
+
+    drawWidth(yellowTrans,
+              _bandWidths[1],
+              crossoverLowerXPos,
+              crossoverUpperXPos - crossoverLowerXPos,
+              _bandActives[1]);
+
+    drawWidth(greenTrans,
+              _bandWidths[2],
+              crossoverUpperXPos,
+              getWidth() - crossoverUpperXPos,
+              _bandActives[2]);
 }
 
-void MONSTRCrossoverComponent::_enableDoubleClickToDefault() {
-    namespace MP = WECore::MONSTR::Parameters;
-    namespace SP = WECore::StereoWidth::Parameters;
+void MONSTRCrossoverComponent::_drawFrequencyText(Graphics &g,
+                                                  int crossoverLowerXPos,
+                                                  float crossoverLowerHz,
+                                                  int crossoverUpperXPos,
+                                                  float crossoverUpperHz) {
+    const double fractionOfHeight {0.9};
+    const int spacing {5};
 
-    crossoverLowerSld->setDoubleClickReturnValue(true, MP::CROSSOVERLOWER.InternalToNormalised(MP::CROSSOVERLOWER.defaultValue));
-    crossoverUpperSld->setDoubleClickReturnValue(true, MP::CROSSOVERUPPER.InternalToNormalised(MP::CROSSOVERUPPER.defaultValue));
+    g.setColour(yellow);
+    g.drawText(String(static_cast<int>(crossoverLowerHz)) + " Hz",
+               crossoverLowerXPos + spacing,
+               getHeight() * fractionOfHeight,
+               60,
+               20,
+               Justification::centredLeft,
+               false);
 
-    width1Sld->setDoubleClickReturnValue(true, SP::WIDTH.InternalToNormalised(SP::WIDTH.defaultValue));
-    width2Sld->setDoubleClickReturnValue(true, SP::WIDTH.InternalToNormalised(SP::WIDTH.defaultValue));
-    width3Sld->setDoubleClickReturnValue(true, SP::WIDTH.InternalToNormalised(SP::WIDTH.defaultValue));
-}
-
-void MONSTRCrossoverComponent::MONSTRCrossoverListener::sliderValueChanged(Slider* sliderThatWasMoved) {
-    if (sliderThatWasMoved == parent->crossoverLowerSld.get())
-    {
-        //[UserSliderCode_crossoverLowerSld] -- add your slider handling code here..
-        parent->ourProcessor->setCrossoverLower(parent->crossoverLowerSld->getValue());
-        //[/UserSliderCode_crossoverLowerSld]
-    }
-    else if (sliderThatWasMoved == parent->crossoverUpperSld.get())
-    {
-        //[UserSliderCode_crossoverUpperSld] -- add your slider handling code here..
-        parent->ourProcessor->setCrossoverUpper(parent->crossoverUpperSld->getValue());
-        //[/UserSliderCode_crossoverUpperSld]
-    }
-
-    if (sliderThatWasMoved == parent->width1Sld.get())
-    {
-        //[UserSliderCode_width1Sld] -- add your slider handling code here..
-        parent->ourProcessor->setWidthBand1(parent->width1Sld->getValue());
-        //[/UserSliderCode_width1Sld]
-    }
-    else if (sliderThatWasMoved == parent->width2Sld.get())
-    {
-        //[UserSliderCode_width2Sld] -- add your slider handling code here..
-        parent->ourProcessor->setWidthBand2(parent->width2Sld->getValue());
-        //[/UserSliderCode_width2Sld]
-    }
-    else if (sliderThatWasMoved == parent->width3Sld.get())
-    {
-        //[UserSliderCode_width3Sld] -- add your slider handling code here..
-        parent->ourProcessor->setWidthBand3(parent->width3Sld->getValue());
-        //[/UserSliderCode_width3Sld]
-    }
-
-    // The drawn area of the crossover sliders overlaps the width sliders, they need to repaint when
-    // a width slider changes otherwise the bars drawn by the width sliders appear to tear at the
-    // boundary of the crossover slider
-    parent->crossoverLowerSld->repaint();
-    parent->crossoverUpperSld->repaint();
-}
-
-void MONSTRCrossoverComponent::MONSTRCrossoverListener::sliderDragStarted(Slider* slider) {
-
-    if (slider == parent->crossoverLowerSld.get()) {
-        parent->ourProcessor->crossoverLower->beginChangeGesture();
-    } else if (slider == parent->crossoverUpperSld.get()) {
-        parent->ourProcessor->crossoverUpper->beginChangeGesture();
-    } else if (slider == parent->width1Sld.get()) {
-        parent->ourProcessor->widthBand1->beginChangeGesture();
-    } else if (slider == parent->width2Sld.get()) {
-        parent->ourProcessor->widthBand2->beginChangeGesture();
-    } else if (slider == parent->width3Sld.get()) {
-        parent->ourProcessor->widthBand3->beginChangeGesture();
-    }
-}
-
-void MONSTRCrossoverComponent::MONSTRCrossoverListener::sliderDragEnded(Slider* slider) {
-
-    if (slider == parent->crossoverLowerSld.get()) {
-        parent->ourProcessor->crossoverLower->endChangeGesture();
-    } else if (slider == parent->crossoverUpperSld.get()) {
-        parent->ourProcessor->crossoverUpper->endChangeGesture();
-    } else if (slider == parent->width1Sld.get()) {
-        parent->ourProcessor->widthBand1->endChangeGesture();
-    } else if (slider == parent->width2Sld.get()) {
-        parent->ourProcessor->widthBand2->endChangeGesture();
-    } else if (slider == parent->width3Sld.get()) {
-        parent->ourProcessor->widthBand3->endChangeGesture();
-    }
+    g.setColour(green);
+    g.drawText(String(static_cast<int>(crossoverUpperHz)) + " Hz",
+               crossoverUpperXPos + spacing,
+               getHeight() * fractionOfHeight,
+               60,
+               20,
+               Justification::centredLeft,
+               false);
 }
