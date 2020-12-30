@@ -24,13 +24,15 @@
 
 #pragma once
 
+#include <array>
+#include <memory>
+#include <optional>
+
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "MONSTRLookAndFeel.h"
 #include "PluginProcessor.h"
 #include "ParameterData.h"
 #include "General/CoreMath.h"
-#include <memory>
-#include <array>
 
 class MONSTRCrossoverComponent : public Component {
 public:
