@@ -57,12 +57,6 @@ private:
 
     static const Colour lightGrey,
                         darkGrey,
-                        red,
-                        yellow,
-                        green,
-                        redTrans,
-                        yellowTrans,
-                        greenTrans,
                         lightGreyTrans;
 
 

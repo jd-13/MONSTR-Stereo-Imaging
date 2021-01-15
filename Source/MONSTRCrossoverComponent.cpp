@@ -28,6 +28,17 @@
 #include "WEFilters/StereoWidthProcessorParameters.h"
 
 namespace {
+    struct BandColour {
+        Colour main;
+        Colour translucent;
+    };
+
+    const std::array<BandColour, 3> bandColours {{
+        {Colour(250, 0, 0), Colour(static_cast<uint8_t>(250), 0, 0, 0.5f)}, // casts to remove constructor ambiguity
+        {Colour(255, 255, 0), Colour(static_cast<uint8_t>(255), 255, 0, 0.5f)},
+        {Colour(30, 255, 0), Colour(static_cast<uint8_t>(30), 255, 0, 0.5f)}
+    }};
+
     double sliderValueToInternalLog(double sliderValue) {
         return std::pow(10, 1.0414 * sliderValue - 1) - 0.1;
     }
@@ -57,12 +68,6 @@ namespace {
 
 const Colour MONSTRCrossoverComponent::lightGrey(200, 200, 200);
 const Colour MONSTRCrossoverComponent::darkGrey(107, 107, 107);
-const Colour MONSTRCrossoverComponent::red(250, 0, 0);
-const Colour MONSTRCrossoverComponent::yellow(255, 255, 0);
-const Colour MONSTRCrossoverComponent::green(30, 255, 0);
-const Colour MONSTRCrossoverComponent::redTrans(static_cast<uint8_t>(250), 0, 0, 0.5f);     // casts to remove constructor ambiguity
-const Colour MONSTRCrossoverComponent::yellowTrans(static_cast<uint8_t>(255), 255, 0, 0.5f);
-const Colour MONSTRCrossoverComponent::greenTrans(static_cast<uint8_t>(30), 255, 0 , 0.5f);
 const Colour MONSTRCrossoverComponent::lightGreyTrans(static_cast<uint8_t>(200), 200, 200, 0.5f);
 
 MONSTRCrossoverComponent::MONSTRCrossoverComponent(MonstrAudioProcessor* newAudioProcessor)
@@ -232,7 +237,7 @@ void MONSTRCrossoverComponent::_drawSine(Graphics &g,
         sineLoop(iii);
     }
 
-    g.setColour(red);
+    g.setColour(bandColours[0].main);
     g.strokePath(p, PathStrokeType(2.0f));
 
     // start second band
@@ -244,7 +249,7 @@ void MONSTRCrossoverComponent::_drawSine(Graphics &g,
         sineLoop(iii);
     }
 
-    g.setColour(yellow);
+    g.setColour(bandColours[1].main);
     g.strokePath(p, PathStrokeType(2.0f));
 
     // start final band
@@ -255,7 +260,7 @@ void MONSTRCrossoverComponent::_drawSine(Graphics &g,
         sineLoop(iii);
     }
 
-    g.setColour(green);
+    g.setColour(bandColours[2].main);
     g.strokePath(p, PathStrokeType(2.0f));
 }
 
@@ -320,8 +325,8 @@ void MONSTRCrossoverComponent::_drawSliderThumbs(Graphics& g,
         g.strokePath(p, PathStrokeType(lineWidth));
     };
 
-    drawSingleThumb(crossoverLowerXPos, red, yellow);
-    drawSingleThumb(crossoverUpperXPos, yellow, green);
+    drawSingleThumb(crossoverLowerXPos, bandColours[0].main, bandColours[1].main);
+    drawSingleThumb(crossoverUpperXPos, bandColours[1].main, bandColours[2].main);
 }
 
 void MONSTRCrossoverComponent::_drawWidthRectangles(Graphics &g,
@@ -359,19 +364,19 @@ void MONSTRCrossoverComponent::_drawWidthRectangles(Graphics &g,
         g.fillRect(x, ypos, bandWidth, height);
     };
 
-    drawWidth(redTrans,
+    drawWidth(bandColours[0].translucent,
               _bandWidths[0],
               0,
               crossoverLowerXPos,
               _bandActives[0]);
 
-    drawWidth(yellowTrans,
+    drawWidth(bandColours[1].translucent,
               _bandWidths[1],
               crossoverLowerXPos,
               crossoverUpperXPos - crossoverLowerXPos,
               _bandActives[1]);
 
-    drawWidth(greenTrans,
+    drawWidth(bandColours[2].translucent,
               _bandWidths[2],
               crossoverUpperXPos,
               getWidth() - crossoverUpperXPos,
@@ -386,7 +391,7 @@ void MONSTRCrossoverComponent::_drawFrequencyText(Graphics &g,
     const double fractionOfHeight {0.9};
     const int spacing {5};
 
-    g.setColour(yellow);
+    g.setColour(bandColours[1].main);
     g.drawText(String(static_cast<int>(crossoverLowerHz)) + " Hz",
                crossoverLowerXPos + spacing,
                getHeight() * fractionOfHeight,
@@ -395,7 +400,7 @@ void MONSTRCrossoverComponent::_drawFrequencyText(Graphics &g,
                Justification::centredLeft,
                false);
 
-    g.setColour(green);
+    g.setColour(bandColours[2].main);
     g.drawText(String(static_cast<int>(crossoverUpperHz)) + " Hz",
                crossoverUpperXPos + spacing,
                getHeight() * fractionOfHeight,
