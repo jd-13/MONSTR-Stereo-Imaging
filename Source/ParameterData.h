@@ -25,17 +25,29 @@
 #ifndef PARAMETERDATA_H_INCLUDED
 #define PARAMETERDATA_H_INCLUDED
 
+#include <array>
+
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "General/ParameterDefinition.h"
 
-const String    SWITCHBAND1_STR {"Band1Bypass"},
-                SWITCHBAND2_STR {"Band2Bypass"},
-                SWITCHBAND3_STR {"Band3Bypass"},
-                WIDTHBAND1_STR {"Band1Width"},
-                WIDTHBAND2_STR {"Band2Width"},
-                WIDTHBAND3_STR {"Band3Width"},
-                CROSSOVERLOWER_STR {"LowerCrossover"},
-                CROSSOVERUPPER_STR {"UpperCrossover"};
+struct BandStrings {
+    String isActive;
+    String width;
+};
 
+const std::array<BandStrings, WECore::MONSTR::Parameters::_MAX_NUM_BANDS> BAND_STRINGS {{
+    {"Band1Bypass", "Band1Width"},
+    {"Band2Bypass", "Band2Width"},
+    {"Band3Bypass", "Band3Width"},
+    {"Band4Bypass", "Band4Width"},
+    {"Band5Bypass", "Band5Width"}
+}};
+
+const std::array<String, WECore::MONSTR::Parameters::_MAX_NUM_BANDS - 1> CROSSOVER_STRINGS {
+    "Crossover1Frequency",
+    "Crossover2Frequency",
+    "Crossover3Frequency",
+    "Crossover4Frequency",
+};
 
 #endif  // PARAMETERDATA_H_INCLUDED

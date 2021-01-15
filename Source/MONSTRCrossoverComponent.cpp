@@ -92,16 +92,14 @@ MONSTRCrossoverComponent::~MONSTRCrossoverComponent() {
 }
 
 void MONSTRCrossoverComponent::updateParameters() {
-    _crossoverValues[0] = _processor->crossoverLower->get();
-    _crossoverValues[1] = _processor->crossoverUpper->get();
+    for (size_t index {0}; index < _bandActives.size(); index++) {
+        _bandActives[index] = _processor->bandParameters[index].isActive->get();
+        _bandWidths[index] = _processor->bandParameters[index].width->get();
+    }
 
-    _bandWidths[0] = _processor->widthBand1->get();
-    _bandWidths[1] = _processor->widthBand2->get();
-    _bandWidths[2] = _processor->widthBand3->get();
-
-    _bandActives[0] = _processor->isActiveBand1->get();
-    _bandActives[1] = _processor->isActiveBand2->get();
-    _bandActives[2] = _processor->isActiveBand3->get();
+    for (size_t index {0}; index < _crossoverValues.size(); index++) {
+        _crossoverValues[index] = _processor->crossoverParameters[index]->get();
+    }
 }
 
 void MONSTRCrossoverComponent::paint(Graphics &g) {
@@ -153,30 +151,30 @@ void MONSTRCrossoverComponent::mouseDown(const MouseEvent& event) {
     if (mouseDownX < crossoverLowerXPos - CROSSOVER_DRAG_TARGET_WIDTH) {
         // Drag started below the first crossover
         _mouseDragCallback = [&](const MouseEvent& event) {
-            _processor->setWidthBand1(YPosToWidthValue(event.getPosition().getY(), getHeight()));
+            _processor->setBandWidth(0, YPosToWidthValue(event.getPosition().getY(), getHeight()));
         };
 
     } else if (mouseDownX < crossoverLowerXPos + CROSSOVER_DRAG_TARGET_WIDTH) {
         // Drag started on the first crossover
         _mouseDragCallback = [&](const MouseEvent& event) {
-            _processor->setCrossoverLower(XPosToSliderValue(event.getPosition().getX(), getWidth()));
+            _processor->setCrossoverFrequency(0, XPosToSliderValue(event.getPosition().getX(), getWidth()));
         };
 
     } else if (mouseDownX < crossoverUpperXPos - CROSSOVER_DRAG_TARGET_WIDTH) {
         // Drag started below the second crossover
         _mouseDragCallback = [&](const MouseEvent& event) {
-            _processor->setWidthBand2(YPosToWidthValue(event.getPosition().getY(), getHeight()));
+            _processor->setBandWidth(1, YPosToWidthValue(event.getPosition().getY(), getHeight()));
         };
     } else if (mouseDownX < crossoverUpperXPos + CROSSOVER_DRAG_TARGET_WIDTH) {
         // Drag started on the second crossover
         _mouseDragCallback = [&](const MouseEvent& event) {
-            _processor->setCrossoverUpper(XPosToSliderValue(event.getPosition().getX(), getWidth()));
+            _processor->setCrossoverFrequency(1, XPosToSliderValue(event.getPosition().getX(), getWidth()));
         };
 
     } else {
         // Drag started above the second crossover
         _mouseDragCallback = [&](const MouseEvent& event) {
-            _processor->setWidthBand3(YPosToWidthValue(event.getPosition().getY(), getHeight()));
+            _processor->setBandWidth(2, YPosToWidthValue(event.getPosition().getY(), getHeight()));
         };
     }
 }

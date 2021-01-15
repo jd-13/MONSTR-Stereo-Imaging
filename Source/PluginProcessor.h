@@ -72,25 +72,19 @@ public:
      * it is the only one calling these methods.
      */
     /** @{ */
-    void setIsActiveBand1(bool val);
-    void setWidthBand1(float val);
-    void setCrossoverLower(float val);
-    void setIsActiveBand2(bool val);
-    void setWidthBand2(float val);
-    void setCrossoverUpper(float val);
-    void setIsActiveBand3(bool val);
-    void setWidthBand3(float val);
+    void setBandActive(size_t index, bool val);
+    void setBandWidth(size_t index, float val);
+    void setCrossoverFrequency(size_t index, float val);
     /** @} */
 
+    struct BandParametersWrapper {
+        AudioParameterBool* isActive;
+        AudioParameterFloat* width;
+    };
+
     // Parameters (public for beginChangeGesture/endChangeGesture/get)
-    AudioParameterBool* isActiveBand1;
-    AudioParameterFloat* widthBand1;
-    AudioParameterFloat* crossoverLower;
-    AudioParameterBool* isActiveBand2;
-    AudioParameterFloat* widthBand2;
-    AudioParameterFloat* crossoverUpper;
-    AudioParameterBool* isActiveBand3;
-    AudioParameterFloat* widthBand3;
+    std::array<BandParametersWrapper, WECore::MONSTR::Parameters::_MAX_NUM_BANDS> bandParameters;
+    std::array<AudioParameterFloat*, WECore::MONSTR::Parameters::_MAX_NUM_BANDS - 1> crossoverParameters;
 
 private:
     MONSTR mMONSTR;
