@@ -20,8 +20,8 @@ MonstrAudioProcessor::MonstrAudioProcessor()
     namespace SP = WECore::StereoWidth::Parameters;
 
     for (size_t index {0}; index < bandParameters.size(); index++) {
-        registerParameter(bandParameters[index].isActive, BAND_STRINGS[index].isActive, MP::BANDSWITCH_DEFAULT, [&](bool val) { setBandActive(index, val); });
-        registerParameter(bandParameters[index].width, BAND_STRINGS[index].width, &SP::WIDTH, SP::WIDTH.defaultValue, [&](float val) { setBandWidth(index, val); });
+        registerParameter(bandParameters[index].isActive, BAND_STRINGS[index].isActive, MP::BANDSWITCH_DEFAULT, [index, this](bool val) { setBandActive(index, val); });
+        registerParameter(bandParameters[index].width, BAND_STRINGS[index].width, &SP::WIDTH, SP::WIDTH.defaultValue, [index, this](float val) { setBandWidth(index, val); });
 
         if (index < crossoverParameters.size()) {
             double defaultValue {MP::CROSSOVER_LOWER_DEFAULT};
@@ -31,7 +31,7 @@ MonstrAudioProcessor::MonstrAudioProcessor()
                 defaultValue = MP::CROSSOVER_FREQUENCY.defaultValue;
             }
 
-            registerParameter(crossoverParameters[index], CROSSOVER_STRINGS[index], &MP::CROSSOVER_FREQUENCY, defaultValue, [&](float val) { setCrossoverFrequency(index, val); });
+            registerParameter(crossoverParameters[index], CROSSOVER_STRINGS[index], &MP::CROSSOVER_FREQUENCY, defaultValue, [index, this](float val) { setCrossoverFrequency(index, val); });
         }
     }
 }
