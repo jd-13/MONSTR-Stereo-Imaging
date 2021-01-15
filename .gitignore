@@ -1,7 +1,7 @@
-Source/Graphics/MONSTR\ Background.xcf
-Builds/*
+Builds
 JuceLibraryCode/Binary*
 JuceLibraryCode/include*
 JuceLibraryCode/Juce*.h
 JuceLibraryCode/ReadMe.txt
 .DS_Store
+private
