@@ -86,6 +86,8 @@ public:
     std::array<BandParametersWrapper, WECore::MONSTR::Parameters::_MAX_NUM_BANDS> bandParameters;
     std::array<AudioParameterFloat*, WECore::MONSTR::Parameters::_MAX_NUM_BANDS - 1> crossoverParameters;
 
+    size_t getNumBands() { return mMONSTR.mCrossover.getNumBands(); }
+
 private:
     MONSTR mMONSTR;
 

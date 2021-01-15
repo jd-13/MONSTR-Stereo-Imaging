@@ -59,6 +59,7 @@ private:
                         darkGrey,
                         lightGreyTrans;
 
+    size_t _numAvailableBands;
 
     std::array<double, WECore::MONSTR::Parameters::_MAX_NUM_BANDS - 1> _crossoverValues;
     std::array<double, WECore::MONSTR::Parameters::_MAX_NUM_BANDS> _bandWidths;
@@ -70,21 +71,11 @@ private:
 
     void _drawNeutralLine(Graphics& g);
 
-    void _drawSine(Graphics& g,
-                   float crossoverLowerHz,
-                   float crossoverUpperHz);
+    void _drawSine(Graphics& g);
 
-    void _drawSliderThumbs(Graphics& g,
-                           float crossoverLowerXPos,
-                           float crossoverUpperXPos);
+    void _drawSliderThumbs(Graphics& g);
 
-    void _drawWidthRectangles(Graphics& g,
-                              int crossoverLowerXPos,
-                              int crossoverUpperXPos);
+    void _drawWidthRectangles(Graphics& g);
 
-    void _drawFrequencyText(Graphics& g,
-                            int crossoverLowerXPos,
-                            float crossoverLowerHz,
-                            int crossoverUpperXPos,
-                            float crossoverUpperHz);
+    void _drawFrequencyText(Graphics& g);
 };
