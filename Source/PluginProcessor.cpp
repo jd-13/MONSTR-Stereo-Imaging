@@ -19,21 +19,24 @@ MonstrAudioProcessor::MonstrAudioProcessor()
     namespace MP = WECore::MONSTR::Parameters;
     namespace SP = WECore::StereoWidth::Parameters;
 
-    for (size_t index {0}; index < bandParameters.size(); index++) {
-        registerParameter(bandParameters[index].isActive, BAND_STRINGS[index].isActive, MP::BANDSWITCH_DEFAULT, [index, this](bool val) { setBandActive(index, val); });
-        registerParameter(bandParameters[index].width, BAND_STRINGS[index].width, &SP::WIDTH, SP::WIDTH.defaultValue, [index, this](float val) { setBandWidth(index, val); });
+    registerParameter(bandParameters[0].isActive, BAND_STRINGS[0].isActive, MP::BANDSWITCH_DEFAULT, [&](bool val) { setBandActive(0, val); });
+    registerParameter(bandParameters[0].width, BAND_STRINGS[0].width, &SP::WIDTH, SP::WIDTH.defaultValue, [&](float val) { setBandWidth(0, val); });
+    registerParameter(crossoverParameters[0], CROSSOVER_STRINGS[0], &MP::CROSSOVER_FREQUENCY, MP::CROSSOVER_LOWER_DEFAULT, [&](float val) { setCrossoverFrequency(0, val); });
 
-        if (index < crossoverParameters.size()) {
-            double defaultValue {MP::CROSSOVER_LOWER_DEFAULT};
-            if (index == 1) {
-                defaultValue = MP::CROSSOVER_UPPER_DEFAULT;
-            } else if (index > 1) {
-                defaultValue = MP::CROSSOVER_FREQUENCY.defaultValue;
-            }
+    registerParameter(bandParameters[1].isActive, BAND_STRINGS[1].isActive, MP::BANDSWITCH_DEFAULT, [&](bool val) { setBandActive(1, val); });
+    registerParameter(bandParameters[1].width, BAND_STRINGS[1].width, &SP::WIDTH, SP::WIDTH.defaultValue, [&](float val) { setBandWidth(1, val); });
+    registerParameter(crossoverParameters[1], CROSSOVER_STRINGS[1], &MP::CROSSOVER_FREQUENCY, MP::CROSSOVER_UPPER_DEFAULT, [&](float val) { setCrossoverFrequency(1, val); });
 
-            registerParameter(crossoverParameters[index], CROSSOVER_STRINGS[index], &MP::CROSSOVER_FREQUENCY, defaultValue, [index, this](float val) { setCrossoverFrequency(index, val); });
-        }
-    }
+    registerParameter(bandParameters[2].isActive, BAND_STRINGS[2].isActive, MP::BANDSWITCH_DEFAULT, [&](bool val) { setBandActive(2, val); });
+    registerParameter(bandParameters[2].width, BAND_STRINGS[2].width, &SP::WIDTH, SP::WIDTH.defaultValue, [&](float val) { setBandWidth(2, val); });
+    registerParameter(crossoverParameters[2], CROSSOVER_STRINGS[2], &MP::CROSSOVER_FREQUENCY, MP::CROSSOVER_FREQUENCY.defaultValue, [&](float val) { setCrossoverFrequency(2, val); });
+
+    registerParameter(bandParameters[3].isActive, BAND_STRINGS[3].isActive, MP::BANDSWITCH_DEFAULT, [&](bool val) { setBandActive(3, val); });
+    registerParameter(bandParameters[3].width, BAND_STRINGS[3].width, &SP::WIDTH, SP::WIDTH.defaultValue, [&](float val) { setBandWidth(3, val); });
+    registerParameter(crossoverParameters[3], CROSSOVER_STRINGS[3], &MP::CROSSOVER_FREQUENCY, MP::CROSSOVER_FREQUENCY.defaultValue, [&](float val) { setCrossoverFrequency(3, val); });
+
+    registerParameter(bandParameters[4].isActive, BAND_STRINGS[4].isActive, MP::BANDSWITCH_DEFAULT, [&](bool val) { setBandActive(4, val); });
+    registerParameter(bandParameters[4].width, BAND_STRINGS[4].width, &SP::WIDTH, SP::WIDTH.defaultValue, [&](float val) { setBandWidth(4, val); });
 }
 
 MonstrAudioProcessor::~MonstrAudioProcessor()
