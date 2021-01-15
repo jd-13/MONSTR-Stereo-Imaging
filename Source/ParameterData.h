@@ -40,7 +40,8 @@ const std::array<BandStrings, WECore::MONSTR::Parameters::_MAX_NUM_BANDS> BAND_S
     {"Band2Bypass", "Band2Width"},
     {"Band3Bypass", "Band3Width"},
     {"Band4Bypass", "Band4Width"},
-    {"Band5Bypass", "Band5Width"}
+    {"Band5Bypass", "Band5Width"},
+    {"Band6Bypass", "Band6Width"}
 }};
 
 const std::array<String, WECore::MONSTR::Parameters::_MAX_NUM_BANDS - 1> CROSSOVER_STRINGS {
@@ -48,6 +49,7 @@ const std::array<String, WECore::MONSTR::Parameters::_MAX_NUM_BANDS - 1> CROSSOV
     "Crossover2Frequency",
     "Crossover3Frequency",
     "Crossover4Frequency",
+    "Crossover5Frequency"
 };
 
 #endif  // PARAMETERDATA_H_INCLUDED

@@ -25,13 +25,11 @@
 #include "MONSTR.h"
 
 MONSTR::MONSTR() {
-    processors[0] = std::make_shared<WECore::StereoWidth::StereoWidthProcessor<float>>();
-    processors[1] = std::make_shared<WECore::StereoWidth::StereoWidthProcessor<float>>();
-    processors[2] = std::make_shared<WECore::StereoWidth::StereoWidthProcessor<float>>();
-
-    mCrossover.setEffectsProcessor(0, processors[0]);
-    mCrossover.setEffectsProcessor(1, processors[1]);
-    mCrossover.setEffectsProcessor(2, processors[2]);
+    // Assign all the StereoWidthProcessors
+    for (size_t index {0}; index < processors.size(); index++) {
+        processors[index] = std::make_shared<WECore::StereoWidth::StereoWidthProcessor<float>>();
+        mCrossover.setEffectsProcessor(index, processors[index]);
+    }
 }
 
 void MONSTR::Process2in2out(float* leftSample, float* rightSample, size_t numSamples) {

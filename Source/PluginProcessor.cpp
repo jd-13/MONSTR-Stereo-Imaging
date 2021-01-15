@@ -37,6 +37,10 @@ MonstrAudioProcessor::MonstrAudioProcessor()
 
     registerParameter(bandParameters[4].isActive, BAND_STRINGS[4].isActive, MP::BANDSWITCH_DEFAULT, [&](bool val) { setBandActive(4, val); });
     registerParameter(bandParameters[4].width, BAND_STRINGS[4].width, &SP::WIDTH, SP::WIDTH.defaultValue, [&](float val) { setBandWidth(4, val); });
+    registerParameter(crossoverParameters[4], CROSSOVER_STRINGS[4], &MP::CROSSOVER_FREQUENCY, MP::CROSSOVER_FREQUENCY.defaultValue, [&](float val) { setCrossoverFrequency(4, val); });
+
+    registerParameter(bandParameters[5].isActive, BAND_STRINGS[5].isActive, MP::BANDSWITCH_DEFAULT, [&](bool val) { setBandActive(5, val); });
+    registerParameter(bandParameters[5].width, BAND_STRINGS[5].width, &SP::WIDTH, SP::WIDTH.defaultValue, [&](float val) { setBandWidth(5, val); });
 }
 
 MonstrAudioProcessor::~MonstrAudioProcessor()

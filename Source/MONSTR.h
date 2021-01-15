@@ -35,7 +35,7 @@ public:
     ~MONSTR() = default;
 
     WECore::MONSTR::MONSTRCrossover<float> mCrossover;
-    std::array<std::shared_ptr<WECore::StereoWidth::StereoWidthProcessor<float>>, 3> processors;
+    std::array<std::shared_ptr<WECore::StereoWidth::StereoWidthProcessor<float>>, WECore::MONSTR::Parameters::_MAX_NUM_BANDS> processors;
 
     /* Process2in2out
      *
