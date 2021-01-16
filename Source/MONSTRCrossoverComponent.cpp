@@ -98,7 +98,7 @@ MONSTRCrossoverComponent::~MONSTRCrossoverComponent() {
 }
 
 void MONSTRCrossoverComponent::updateParameters() {
-    _numAvailableBands = _processor->getNumBands();
+    _numAvailableBands = _processor->numBands->get();
 
     for (size_t index {0}; index < _bandActives.size(); index++) {
         _bandActives[index] = _processor->bandParameters[index].isActive->get();

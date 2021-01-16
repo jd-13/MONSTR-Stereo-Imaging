@@ -41,6 +41,9 @@ MonstrAudioProcessor::MonstrAudioProcessor()
 
     registerParameter(bandParameters[5].isActive, BAND_STRINGS[5].isActive, MP::BANDSWITCH_DEFAULT, [&](bool val) { setBandActive(5, val); });
     registerParameter(bandParameters[5].width, BAND_STRINGS[5].width, &SP::WIDTH, SP::WIDTH.defaultValue, [&](float val) { setBandWidth(5, val); });
+
+    registerParameter(numBands, NUMBANDS_STR, &MP::NUM_BANDS, MP::NUM_BANDS.defaultValue, [&](int val) { mMONSTR.mCrossover.setNumBands(val); });
+
 }
 
 MonstrAudioProcessor::~MonstrAudioProcessor()
@@ -173,6 +176,15 @@ AudioProcessorEditor* MonstrAudioProcessor::createEditor()
 }
 
 //==============================================================================
+void MonstrAudioProcessor::addBand() {
+    mMONSTR.mCrossover.addBand();
+    numBands->setValueNotifyingHost(numBands->getNormalisableRange().convertTo0to1(mMONSTR.mCrossover.getNumBands()));
+}
+void MonstrAudioProcessor::removeBand() {
+    mMONSTR.mCrossover.removeBand();
+    numBands->setValueNotifyingHost(numBands->getNormalisableRange().convertTo0to1(mMONSTR.mCrossover.getNumBands()));
+}
+
 void MonstrAudioProcessor::setBandActive(size_t index, bool val) {
     if (index < bandParameters.size()) {
         mMONSTR.mCrossover.setIsActive(index, val);

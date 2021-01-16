@@ -37,7 +37,8 @@
     Describe your class and how it works here!
                                                                     //[/Comments]
 */
-class MonstrAudioProcessorEditor  : public WECore::JUCEPlugin::CoreProcessorEditor
+class MonstrAudioProcessorEditor  : public WECore::JUCEPlugin::CoreProcessorEditor,
+                                    public juce::Button::Listener
 {
 public:
     //==============================================================================
@@ -53,6 +54,7 @@ public:
 
     void paint (juce::Graphics& g) override;
     void resized() override;
+    void buttonClicked (juce::Button* buttonThatWasClicked) override;
 
 
 
@@ -65,6 +67,8 @@ private:
 
     //==============================================================================
     std::unique_ptr<MONSTRCrossoverComponent> crossoverView;
+    std::unique_ptr<juce::TextButton> AddBandBtn;
+    std::unique_ptr<juce::TextButton> RemoveBandBtn;
 
 
     //==============================================================================

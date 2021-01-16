@@ -39,6 +39,20 @@ MonstrAudioProcessorEditor::MonstrAudioProcessorEditor (MonstrAudioProcessor& ow
 
     crossoverView->setBounds (40, 40, 560, 210);
 
+    AddBandBtn.reset (new juce::TextButton ("Add Band Button"));
+    addAndMakeVisible (AddBandBtn.get());
+    AddBandBtn->setButtonText (TRANS("+"));
+    AddBandBtn->addListener (this);
+
+    AddBandBtn->setBounds (336, 256, 40, 24);
+
+    RemoveBandBtn.reset (new juce::TextButton ("Remove Band Button"));
+    addAndMakeVisible (RemoveBandBtn.get());
+    RemoveBandBtn->setButtonText (TRANS("-"));
+    RemoveBandBtn->addListener (this);
+
+    RemoveBandBtn->setBounds (256, 256, 40, 24);
+
 
     //[UserPreSize]
     //[/UserPreSize]
@@ -60,6 +74,8 @@ MonstrAudioProcessorEditor::~MonstrAudioProcessorEditor()
     //[/Destructor_pre]
 
     crossoverView = nullptr;
+    AddBandBtn = nullptr;
+    RemoveBandBtn = nullptr;
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -92,12 +108,52 @@ void MonstrAudioProcessorEditor::resized()
     //[/UserResized]
 }
 
+void MonstrAudioProcessorEditor::buttonClicked (juce::Button* buttonThatWasClicked)
+{
+    //[UserbuttonClicked_Pre]
+    MonstrAudioProcessor* ourProcessor {getProcessor()};
+    //[/UserbuttonClicked_Pre]
+
+    if (buttonThatWasClicked == AddBandBtn.get())
+    {
+        //[UserButtonCode_AddBandBtn] -- add your button handler code here..
+        ourProcessor->addBand();
+        //[/UserButtonCode_AddBandBtn]
+    }
+    else if (buttonThatWasClicked == RemoveBandBtn.get())
+    {
+        //[UserButtonCode_RemoveBandBtn] -- add your button handler code here..
+        ourProcessor->removeBand();
+        //[/UserButtonCode_RemoveBandBtn]
+    }
+
+    //[UserbuttonClicked_Post]
+    crossoverView->updateParameters();
+    crossoverView->repaint();
+    //[/UserbuttonClicked_Post]
+}
+
 
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
 void MonstrAudioProcessorEditor::_onParameterUpdate() {
     crossoverView->updateParameters();
     crossoverView->repaint();
+
+    MonstrAudioProcessor* ourProcessor {getProcessor()};
+
+    // Disable the buttons when at the minimum/maximum number of bands
+
+    if (ourProcessor->numBands->get() == WECore::MONSTR::Parameters::NUM_BANDS.minValue) {
+        AddBandBtn->setEnabled(true);
+        RemoveBandBtn->setEnabled(false);
+    } else if (ourProcessor->numBands->get() == WECore::MONSTR::Parameters::NUM_BANDS.maxValue) {
+        AddBandBtn->setEnabled(false);
+        RemoveBandBtn->setEnabled(true);
+    } else {
+        AddBandBtn->setEnabled(true);
+        RemoveBandBtn->setEnabled(true);
+    }
 }
 //[/MiscUserCode]
 
@@ -120,6 +176,12 @@ BEGIN_JUCER_METADATA
   <GENERICCOMPONENT name="Crossover View" id="e7b7ed6ee8457913" memberName="crossoverView"
                     virtualName="MONSTRCrossoverComponent" explicitFocusOrder="0"
                     pos="40 40 560 210" class="juce::Component" params="getProcessor()"/>
+  <TEXTBUTTON name="Add Band Button" id="9e80e2964e937f97" memberName="AddBandBtn"
+              virtualName="" explicitFocusOrder="0" pos="336 256 40 24" buttonText="+"
+              connectedEdges="0" needsCallback="1" radioGroupId="0"/>
+  <TEXTBUTTON name="Remove Band Button" id="2ef4417e3e0b973d" memberName="RemoveBandBtn"
+              virtualName="" explicitFocusOrder="0" pos="256 256 40 24" buttonText="-"
+              connectedEdges="0" needsCallback="1" radioGroupId="0"/>
 </JUCER_COMPONENT>
 
 END_JUCER_METADATA

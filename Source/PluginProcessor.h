@@ -72,6 +72,8 @@ public:
      * it is the only one calling these methods.
      */
     /** @{ */
+    void addBand();
+    void removeBand();
     void setBandActive(size_t index, bool val);
     void setBandWidth(size_t index, float val);
     void setCrossoverFrequency(size_t index, float val);
@@ -83,10 +85,9 @@ public:
     };
 
     // Parameters (public for beginChangeGesture/endChangeGesture/get)
+    AudioParameterInt* numBands;
     std::array<BandParametersWrapper, WECore::MONSTR::Parameters::_MAX_NUM_BANDS> bandParameters;
     std::array<AudioParameterFloat*, WECore::MONSTR::Parameters::_MAX_NUM_BANDS - 1> crossoverParameters;
-
-    size_t getNumBands() { return mMONSTR.mCrossover.getNumBands(); }
 
 private:
     MONSTR mMONSTR;

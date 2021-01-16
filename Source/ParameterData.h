@@ -30,6 +30,8 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "General/ParameterDefinition.h"
 
+const String NUMBANDS_STR = "NumBands";
+
 struct BandStrings {
     String isActive;
     String width;
