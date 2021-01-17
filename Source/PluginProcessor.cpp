@@ -208,6 +208,10 @@ void MonstrAudioProcessor::setCrossoverFrequency(size_t index, float val) {
     if (index < crossoverParameters.size()) {
         mMONSTR.mCrossover.setCrossoverFrequency(index, WECore::MONSTR::Parameters::CROSSOVER_FREQUENCY.NormalisedToInternal(val));
         crossoverParameters[index]->setValueNotifyingHost(val);
+
+        // Changing the frequency of one crossover may affect others if they also need to be moved -
+        // make sure the UI and host parameters are updated
+        _refreshCrossoverParameters();
     }
 }
 
@@ -219,7 +223,7 @@ void MonstrAudioProcessor::_refreshCrossoverParameters() {
                 mMONSTR.mCrossover.getCrossoverFrequency(index))
         };
 
-        setCrossoverFrequency(index, normalisedFrequency);
+        crossoverParameters[index]->setValueNotifyingHost(normalisedFrequency);
     }
 }
 
