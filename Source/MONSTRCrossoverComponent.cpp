@@ -240,14 +240,18 @@ void MONSTRCrossoverComponent::_drawSine(Graphics &g) {
                 static_cast<int>(sineWaveTable.size() - 1)
         };
 
+        constexpr double SINE_Y_FACTOR {0.9};
+        const double sineYScale {getHeight() * SINE_Y_FACTOR};
+        const double sineYOffset {((1 - SINE_Y_FACTOR) / 2) * getHeight()};
+
         p.clear();
-        p.startNewSubPath(absXPos * getWidth(), sineWaveTable[pointsDrawn] * getHeight());
+        p.startNewSubPath(absXPos * getWidth(), sineWaveTable[pointsDrawn] * sineYScale + sineYOffset);
 
         pointsDrawn++;
 
         for (; pointsDrawn <= pointsToCrossoverXPos; pointsDrawn++) {
             absXPos = (1.0 / sineWaveTable.size()) * pointsDrawn;
-            p.lineTo(absXPos * getWidth(), sineWaveTable[pointsDrawn] * getHeight());
+            p.lineTo(absXPos * getWidth(), sineWaveTable[pointsDrawn] * sineYScale + sineYOffset);
         }
 
         pointsDrawn--;
