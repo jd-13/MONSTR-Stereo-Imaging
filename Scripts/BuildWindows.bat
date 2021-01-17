@@ -11,8 +11,8 @@ ECHO "=== Using WE-Core %WECORE_COMMIT% ==="
 popd
 
 ECHO "=== Downloading JUCE ==="
-powershell -Command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; Invoke-WebRequest https://github.com/juce-framework/JUCE/releases/download/6.0.5/juce-6.0.5-windows.zip -OutFile %SCRIPT_DIR%..\juce-6.0.5-windows.zip}"
-powershell -Command "& {Expand-Archive -LiteralPath %SCRIPT_DIR%..\juce-6.0.5-windows.zip -DestinationPath %SCRIPT_DIR%..}"
+powershell -Command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; Invoke-WebRequest https://github.com/juce-framework/JUCE/releases/download/6.0.7/juce-6.0.7-windows.zip -OutFile %SCRIPT_DIR%..\juce-6.0.7-windows.zip}"
+powershell -Command "& {Expand-Archive -LiteralPath %SCRIPT_DIR%..\juce-6.0.7-windows.zip -DestinationPath %SCRIPT_DIR%..}"
 
 ECHO "=== Setting module paths ==="
 powershell -Command "& {$PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'; (get-content %SCRIPT_DIR%..\MONSTR.jucer).replace(\"..\JUCE\modules\",\"JUCE\modules\") | out-file -filepath %SCRIPT_DIR%..\MONSTR.jucer}"

@@ -13,9 +13,9 @@ echo "=== Using WE-Core $(git log --pretty=format:'%h' -n 1) ==="
 cd -
 
 echo "=== Downloading JUCE ==="
-wget https://github.com/juce-framework/JUCE/releases/download/6.0.5/juce-6.0.5-osx.zip \
+wget https://github.com/juce-framework/JUCE/releases/download/6.0.5/juce-6.0.7-osx.zip \
      -P $SCRIPT_DIR/..
-unzip $SCRIPT_DIR/../juce-6.0.5-osx.zip
+unzip $SCRIPT_DIR/../juce-6.0.7-osx.zip
 
 echo "=== Setting module paths ==="
 sed -i '' -e 's#../../../../../SDKs/JUCE/modules#JUCE/modules#g' $SCRIPT_DIR/../MONSTR.jucer
