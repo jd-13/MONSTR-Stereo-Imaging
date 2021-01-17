@@ -121,7 +121,6 @@ void MONSTRCrossoverComponent::paint(Graphics &g) {
 
 void MONSTRCrossoverComponent::mouseDown(const MouseEvent& event) {
 
-    constexpr int CROSSOVER_DRAG_TARGET_WIDTH {SLIDER_THUMB_RADIUS * 2};
     const int mouseDownX {event.getMouseDownX()};
 
     // For each available band, check if the cursor landed on a crossover frequency handle or on
@@ -129,7 +128,7 @@ void MONSTRCrossoverComponent::mouseDown(const MouseEvent& event) {
     for (size_t bandIndex {0}; bandIndex < _numAvailableBands; bandIndex++) {
         const double crossoverXPos {sliderValueToXPos(_crossoverValues[bandIndex], getWidth())};
 
-        if (mouseDownX < crossoverXPos - CROSSOVER_DRAG_TARGET_WIDTH) {
+        if (mouseDownX < crossoverXPos - SLIDER_THUMB_TARGET_WIDTH) {
 
             // Drag started below a crossover handle, so is a width change
             _mouseDragCallback = [bandIndex, this](const MouseEvent& event) {
@@ -138,7 +137,7 @@ void MONSTRCrossoverComponent::mouseDown(const MouseEvent& event) {
 
             break;
 
-        } else if (mouseDownX < crossoverXPos + CROSSOVER_DRAG_TARGET_WIDTH) {
+        } else if (mouseDownX < crossoverXPos + SLIDER_THUMB_TARGET_WIDTH) {
 
             // Drag started on a crossover handle, so is a frequency change
             _mouseDragCallback = [bandIndex, this](const MouseEvent& event) {
@@ -170,6 +169,40 @@ void MONSTRCrossoverComponent::mouseDrag(const MouseEvent& event) {
 
 void MONSTRCrossoverComponent::mouseUp(const MouseEvent& event) {
     _mouseDragCallback.reset();
+}
+
+void MONSTRCrossoverComponent::mouseDoubleClick(const MouseEvent& event) {
+
+    // This implements "double click to default" for the width parameters
+
+    const int mouseDownX {event.getMouseDownX()};
+
+    const double defaultWidth {
+        WECore::StereoWidth::Parameters::WIDTH.InternalToNormalised(WECore::StereoWidth::Parameters::WIDTH.defaultValue)
+    };
+
+    // For each available band, check if the cursor landed on a crossover frequency handle or on
+    // the gaps in between
+    for (size_t bandIndex {0}; bandIndex < _numAvailableBands; bandIndex++) {
+        const double crossoverXPos {sliderValueToXPos(_crossoverValues[bandIndex], getWidth())};
+
+        if (mouseDownX < crossoverXPos - SLIDER_THUMB_TARGET_WIDTH) {
+            // Click landed below a crossover handle, so reset the width to its default
+            _processor->setBandWidth(bandIndex, defaultWidth);
+            break;
+
+        } else if (mouseDownX < crossoverXPos + SLIDER_THUMB_TARGET_WIDTH) {
+            // Drag started on a crossover handle - do nothing and exit the loop
+            break;
+        }
+    }
+
+    // We need to do one final check for if the cursor landed in the top band, above the highest
+    // crossover
+    const double topCrossoverXPos {sliderValueToXPos(_crossoverValues[_numAvailableBands - 1], getWidth())};
+    if (mouseDownX > topCrossoverXPos + SLIDER_THUMB_TARGET_WIDTH) {
+        _processor->setBandWidth(_numAvailableBands - 1, defaultWidth);
+    }
 }
 
 void MONSTRCrossoverComponent::_drawNeutralLine(Graphics &g) {

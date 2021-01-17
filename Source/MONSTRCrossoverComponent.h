@@ -50,8 +50,12 @@ public:
 
     void mouseUp(const MouseEvent& event) override;
 
+    void mouseDoubleClick(const MouseEvent& event) override;
+
 private:
+    // The radius is used for drawing, and the target width for mouse events
     constexpr static int SLIDER_THUMB_RADIUS {6};
+    constexpr static int SLIDER_THUMB_TARGET_WIDTH {SLIDER_THUMB_RADIUS * 2};
 
     std::array<double, 200>sineWaveTable;
 
