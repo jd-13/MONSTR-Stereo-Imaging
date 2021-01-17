@@ -92,6 +92,8 @@ public:
 private:
     MONSTR mMONSTR;
 
+    void _refreshCrossoverParameters();
+
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MonstrAudioProcessor)
 };

@@ -179,6 +179,11 @@ AudioProcessorEditor* MonstrAudioProcessor::createEditor()
 void MonstrAudioProcessor::addBand() {
     mMONSTR.mCrossover.addBand();
     numBands->setValueNotifyingHost(numBands->getNormalisableRange().convertTo0to1(mMONSTR.mCrossover.getNumBands()));
+
+    // The crossover may rearrange some crossover frequencies to make the new band fit, as well as
+    // parameters of the new band having been reset to their defaults - we need to make sure the UI
+    // and host parameters are kept in sync
+    _refreshCrossoverParameters();
 }
 void MonstrAudioProcessor::removeBand() {
     mMONSTR.mCrossover.removeBand();
@@ -203,6 +208,18 @@ void MonstrAudioProcessor::setCrossoverFrequency(size_t index, float val) {
     if (index < crossoverParameters.size()) {
         mMONSTR.mCrossover.setCrossoverFrequency(index, WECore::MONSTR::Parameters::CROSSOVER_FREQUENCY.NormalisedToInternal(val));
         crossoverParameters[index]->setValueNotifyingHost(val);
+    }
+}
+
+void MonstrAudioProcessor::_refreshCrossoverParameters() {
+    for (size_t index {0}; index < mMONSTR.mCrossover.getNumBands() - 1; index++) {
+
+        const double normalisedFrequency {
+            WECore::MONSTR::Parameters::CROSSOVER_FREQUENCY.InternalToNormalised(
+                mMONSTR.mCrossover.getCrossoverFrequency(index))
+        };
+
+        setCrossoverFrequency(index, normalisedFrequency);
     }
 }
 
