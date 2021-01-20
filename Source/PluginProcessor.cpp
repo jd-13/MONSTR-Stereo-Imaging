@@ -19,28 +19,31 @@ MonstrAudioProcessor::MonstrAudioProcessor()
     namespace MP = WECore::MONSTR::Parameters;
     namespace SP = WECore::StereoWidth::Parameters;
 
+    constexpr float WIDTH_PRECISION {0.01f};
+    constexpr float FREQ_PRECISION {0.001f};
+
     registerParameter(bandParameters[0].isActive, BAND_STRINGS[0].isActive, MP::BANDSWITCH_DEFAULT, [&](bool val) { setBandActive(0, val); });
-    registerParameter(bandParameters[0].width, BAND_STRINGS[0].width, &SP::WIDTH, SP::WIDTH.defaultValue, [&](float val) { setBandWidth(0, val); });
-    registerParameter(crossoverParameters[0], CROSSOVER_STRINGS[0], &MP::CROSSOVER_FREQUENCY, MP::CROSSOVER_LOWER_DEFAULT, [&](float val) { setCrossoverFrequency(0, val); });
+    registerParameter(bandParameters[0].width, BAND_STRINGS[0].width, &SP::WIDTH, SP::WIDTH.defaultValue, WIDTH_PRECISION, [&](float val) { setBandWidth(0, val); });
+    registerParameter(crossoverParameters[0], CROSSOVER_STRINGS[0], &MP::CROSSOVER_FREQUENCY, MP::CROSSOVER_LOWER_DEFAULT, FREQ_PRECISION, [&](float val) { setCrossoverFrequency(0, val); });
 
     registerParameter(bandParameters[1].isActive, BAND_STRINGS[1].isActive, MP::BANDSWITCH_DEFAULT, [&](bool val) { setBandActive(1, val); });
-    registerParameter(bandParameters[1].width, BAND_STRINGS[1].width, &SP::WIDTH, SP::WIDTH.defaultValue, [&](float val) { setBandWidth(1, val); });
-    registerParameter(crossoverParameters[1], CROSSOVER_STRINGS[1], &MP::CROSSOVER_FREQUENCY, MP::CROSSOVER_UPPER_DEFAULT, [&](float val) { setCrossoverFrequency(1, val); });
+    registerParameter(bandParameters[1].width, BAND_STRINGS[1].width, &SP::WIDTH, SP::WIDTH.defaultValue, WIDTH_PRECISION, [&](float val) { setBandWidth(1, val); });
+    registerParameter(crossoverParameters[1], CROSSOVER_STRINGS[1], &MP::CROSSOVER_FREQUENCY, MP::CROSSOVER_UPPER_DEFAULT, FREQ_PRECISION, [&](float val) { setCrossoverFrequency(1, val); });
 
     registerParameter(bandParameters[2].isActive, BAND_STRINGS[2].isActive, MP::BANDSWITCH_DEFAULT, [&](bool val) { setBandActive(2, val); });
-    registerParameter(bandParameters[2].width, BAND_STRINGS[2].width, &SP::WIDTH, SP::WIDTH.defaultValue, [&](float val) { setBandWidth(2, val); });
-    registerParameter(crossoverParameters[2], CROSSOVER_STRINGS[2], &MP::CROSSOVER_FREQUENCY, MP::CROSSOVER_FREQUENCY.defaultValue, [&](float val) { setCrossoverFrequency(2, val); });
+    registerParameter(bandParameters[2].width, BAND_STRINGS[2].width, &SP::WIDTH, SP::WIDTH.defaultValue, WIDTH_PRECISION, [&](float val) { setBandWidth(2, val); });
+    registerParameter(crossoverParameters[2], CROSSOVER_STRINGS[2], &MP::CROSSOVER_FREQUENCY, MP::CROSSOVER_FREQUENCY.defaultValue, FREQ_PRECISION, [&](float val) { setCrossoverFrequency(2, val); });
 
     registerParameter(bandParameters[3].isActive, BAND_STRINGS[3].isActive, MP::BANDSWITCH_DEFAULT, [&](bool val) { setBandActive(3, val); });
-    registerParameter(bandParameters[3].width, BAND_STRINGS[3].width, &SP::WIDTH, SP::WIDTH.defaultValue, [&](float val) { setBandWidth(3, val); });
-    registerParameter(crossoverParameters[3], CROSSOVER_STRINGS[3], &MP::CROSSOVER_FREQUENCY, MP::CROSSOVER_FREQUENCY.defaultValue, [&](float val) { setCrossoverFrequency(3, val); });
+    registerParameter(bandParameters[3].width, BAND_STRINGS[3].width, &SP::WIDTH, SP::WIDTH.defaultValue, WIDTH_PRECISION, [&](float val) { setBandWidth(3, val); });
+    registerParameter(crossoverParameters[3], CROSSOVER_STRINGS[3], &MP::CROSSOVER_FREQUENCY, MP::CROSSOVER_FREQUENCY.defaultValue, FREQ_PRECISION, [&](float val) { setCrossoverFrequency(3, val); });
 
     registerParameter(bandParameters[4].isActive, BAND_STRINGS[4].isActive, MP::BANDSWITCH_DEFAULT, [&](bool val) { setBandActive(4, val); });
-    registerParameter(bandParameters[4].width, BAND_STRINGS[4].width, &SP::WIDTH, SP::WIDTH.defaultValue, [&](float val) { setBandWidth(4, val); });
-    registerParameter(crossoverParameters[4], CROSSOVER_STRINGS[4], &MP::CROSSOVER_FREQUENCY, MP::CROSSOVER_FREQUENCY.defaultValue, [&](float val) { setCrossoverFrequency(4, val); });
+    registerParameter(bandParameters[4].width, BAND_STRINGS[4].width, &SP::WIDTH, SP::WIDTH.defaultValue, WIDTH_PRECISION, [&](float val) { setBandWidth(4, val); });
+    registerParameter(crossoverParameters[4], CROSSOVER_STRINGS[4], &MP::CROSSOVER_FREQUENCY, MP::CROSSOVER_FREQUENCY.defaultValue, FREQ_PRECISION, [&](float val) { setCrossoverFrequency(4, val); });
 
     registerParameter(bandParameters[5].isActive, BAND_STRINGS[5].isActive, MP::BANDSWITCH_DEFAULT, [&](bool val) { setBandActive(5, val); });
-    registerParameter(bandParameters[5].width, BAND_STRINGS[5].width, &SP::WIDTH, SP::WIDTH.defaultValue, [&](float val) { setBandWidth(5, val); });
+    registerParameter(bandParameters[5].width, BAND_STRINGS[5].width, &SP::WIDTH, SP::WIDTH.defaultValue, WIDTH_PRECISION, [&](float val) { setBandWidth(5, val); });
 
     auto restoreBands = [&](int val) {
         mMONSTR.mCrossover.setNumBands(val);
