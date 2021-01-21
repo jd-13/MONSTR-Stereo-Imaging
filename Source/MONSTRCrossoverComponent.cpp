@@ -122,9 +122,10 @@ void MONSTRCrossoverComponent::mouseDown(const MouseEvent& event) {
         }
     }
 
-    if (!_mouseDragCallback.has_value()) {
-        // If none of the previous if statements caught it then the drag started in the furthest
-        // right part of the component, so must be a width change on the highest band
+    // Handle the case for the highest band of the component in the furthest right
+    const double topCrossoverXPos {sliderValueToXPos(_processor->crossoverParameters[numBands - 1]->get(), getWidth())};
+
+    if (mouseDownX > topCrossoverXPos + SLIDER_THUMB_TARGET_WIDTH) {
         _mouseDragCallback = [&](const MouseEvent& event) {
             _processor->setBandWidth(numBands - 1, YPosToWidthValue(event.getPosition().getY(), getHeight()));
         };
