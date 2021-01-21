@@ -128,7 +128,6 @@ void MonstrAudioProcessorEditor::buttonClicked (juce::Button* buttonThatWasClick
     }
 
     //[UserbuttonClicked_Post]
-    crossoverView->updateParameters();
     crossoverView->repaint();
     //[/UserbuttonClicked_Post]
 }
@@ -137,7 +136,6 @@ void MonstrAudioProcessorEditor::buttonClicked (juce::Button* buttonThatWasClick
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
 void MonstrAudioProcessorEditor::_onParameterUpdate() {
-    crossoverView->updateParameters();
     crossoverView->repaint();
 
     MonstrAudioProcessor* ourProcessor {getProcessor()};

@@ -71,43 +71,16 @@ const Colour MONSTRCrossoverComponent::darkGrey(107, 107, 107);
 const Colour MONSTRCrossoverComponent::lightGreyTrans(static_cast<uint8_t>(200), 200, 200, 0.5f);
 
 MONSTRCrossoverComponent::MONSTRCrossoverComponent(MonstrAudioProcessor* newAudioProcessor)
-        : _processor(newAudioProcessor),
-          _numAvailableBands(WECore::MONSTR::Parameters::NUM_BANDS.defaultValue) {
+        : _processor(newAudioProcessor) {
 
     // Generate sine wave table
     for (size_t iii {0}; iii < sineWaveTable.size(); iii++) {
         double xVal {(1.0 / sineWaveTable.size()) * iii};
         sineWaveTable[iii] = sin(pow(M_E, 1.5 * xVal + 1.83)) / 2 + 0.5;
     }
-
-    // Initialise parameters to default values
-    for (double& position : _crossoverValues) {
-        position = 0;
-    }
-
-    for (double& width : _bandWidths) {
-        width = 0;
-    }
-
-    for (bool& active : _bandActives) {
-        active = false;
-    }
 }
 
 MONSTRCrossoverComponent::~MONSTRCrossoverComponent() {
-}
-
-void MONSTRCrossoverComponent::updateParameters() {
-    _numAvailableBands = _processor->numBands->get();
-
-    for (size_t index {0}; index < _bandActives.size(); index++) {
-        _bandActives[index] = _processor->bandParameters[index].isActive->get();
-        _bandWidths[index] = _processor->bandParameters[index].width->get();
-    }
-
-    for (size_t index {0}; index < _crossoverValues.size(); index++) {
-        _crossoverValues[index] = _processor->crossoverParameters[index]->get();
-    }
 }
 
 void MONSTRCrossoverComponent::paint(Graphics &g) {
@@ -125,8 +98,9 @@ void MONSTRCrossoverComponent::mouseDown(const MouseEvent& event) {
 
     // For each available band, check if the cursor landed on a crossover frequency handle or on
     // the gaps in between
-    for (size_t bandIndex {0}; bandIndex < _numAvailableBands; bandIndex++) {
-        const double crossoverXPos {sliderValueToXPos(_crossoverValues[bandIndex], getWidth())};
+    const int numBands {_processor->numBands->get()};
+    for (size_t bandIndex {0}; bandIndex < numBands; bandIndex++) {
+        const double crossoverXPos {sliderValueToXPos(_processor->crossoverParameters[bandIndex]->get(), getWidth())};
 
         if (mouseDownX < crossoverXPos - SLIDER_THUMB_TARGET_WIDTH) {
 
@@ -152,7 +126,7 @@ void MONSTRCrossoverComponent::mouseDown(const MouseEvent& event) {
         // If none of the previous if statements caught it then the drag started in the furthest
         // right part of the component, so must be a width change on the highest band
         _mouseDragCallback = [&](const MouseEvent& event) {
-            _processor->setBandWidth(_numAvailableBands - 1, YPosToWidthValue(event.getPosition().getY(), getHeight()));
+            _processor->setBandWidth(numBands - 1, YPosToWidthValue(event.getPosition().getY(), getHeight()));
         };
     }
 }
@@ -163,7 +137,6 @@ void MONSTRCrossoverComponent::mouseDrag(const MouseEvent& event) {
         (*_mouseDragCallback)(event);
     }
 
-    updateParameters();
     repaint();
 }
 
@@ -183,8 +156,9 @@ void MONSTRCrossoverComponent::mouseDoubleClick(const MouseEvent& event) {
 
     // For each available band, check if the cursor landed on a crossover frequency handle or on
     // the gaps in between
-    for (size_t bandIndex {0}; bandIndex < _numAvailableBands; bandIndex++) {
-        const double crossoverXPos {sliderValueToXPos(_crossoverValues[bandIndex], getWidth())};
+    const int numBands {_processor->numBands->get()};
+    for (size_t bandIndex {0}; bandIndex < numBands; bandIndex++) {
+        const double crossoverXPos {sliderValueToXPos(_processor->crossoverParameters[bandIndex]->get(), getWidth())};
 
         if (mouseDownX < crossoverXPos - SLIDER_THUMB_TARGET_WIDTH) {
             // Click landed below a crossover handle, so reset the width to its default
@@ -199,9 +173,9 @@ void MONSTRCrossoverComponent::mouseDoubleClick(const MouseEvent& event) {
 
     // We need to do one final check for if the cursor landed in the top band, above the highest
     // crossover
-    const double topCrossoverXPos {sliderValueToXPos(_crossoverValues[_numAvailableBands - 1], getWidth())};
+    const double topCrossoverXPos {sliderValueToXPos(_processor->crossoverParameters[numBands - 1]->get(), getWidth())};
     if (mouseDownX > topCrossoverXPos + SLIDER_THUMB_TARGET_WIDTH) {
-        _processor->setBandWidth(_numAvailableBands - 1, defaultWidth);
+        _processor->setBandWidth(numBands - 1, defaultWidth);
     }
 }
 
@@ -226,16 +200,17 @@ void MONSTRCrossoverComponent::_drawSine(Graphics &g) {
     int pointsDrawn {0};
 
     // For each band, draw the points of the sine up until the next crossover then switch colour
-    for (size_t bandIndex {0}; bandIndex < _numAvailableBands; bandIndex++) {
+    const int numBands {_processor->numBands->get()};
+    for (size_t bandIndex {0}; bandIndex < numBands; bandIndex++) {
 
         const double crossoverXPos {
-            sliderValueToXPos(_crossoverValues[bandIndex], getWidth())
+            sliderValueToXPos(_processor->crossoverParameters[bandIndex]->get(), getWidth())
         };
 
         // On the last band we don't really have another crossover point, we just need to keep going
         // all the way to the right of the component
         const int pointsToCrossoverXPos {
-            (bandIndex < _numAvailableBands - 1) ?
+            (bandIndex < numBands - 1) ?
                 static_cast<int>(sineWaveTable.size() * (crossoverXPos / getWidth())) :
                 static_cast<int>(sineWaveTable.size() - 1)
         };
@@ -263,9 +238,9 @@ void MONSTRCrossoverComponent::_drawSine(Graphics &g) {
 
 void MONSTRCrossoverComponent::_drawSliderThumbs(Graphics& g) {
 
-    for (size_t bandIndex {0}; bandIndex < _numAvailableBands - 1; bandIndex++) {
+    for (size_t bandIndex {0}; bandIndex < _processor->numBands->get() - 1; bandIndex++) {
         const double crossoverXPos {
-            sliderValueToXPos(_crossoverValues[bandIndex], getWidth())
+            sliderValueToXPos(_processor->crossoverParameters[bandIndex]->get(), getWidth())
         };
 
         const Colour& topColour = bandColours[bandIndex % bandColours.size()].main;
@@ -329,19 +304,20 @@ void MONSTRCrossoverComponent::_drawSliderThumbs(Graphics& g) {
 void MONSTRCrossoverComponent::_drawWidthRectangles(Graphics &g) {
 
     double currentXPos {0};
+    const int numBands {_processor->numBands->get()};
 
-    for (size_t bandIndex {0}; bandIndex < _numAvailableBands; bandIndex++) {
+    for (size_t bandIndex {0}; bandIndex < numBands; bandIndex++) {
 
         // For the last band use the value of getWidth() rather than the next crossover as there
         // isn't one
         const double nextCrossoverXPos {
-            (bandIndex < _numAvailableBands - 1) ?
-                sliderValueToXPos(_crossoverValues[bandIndex], getWidth()) :
+            (bandIndex < numBands - 1) ?
+                sliderValueToXPos(_processor->crossoverParameters[bandIndex]->get(), getWidth()) :
                 getWidth()
         };
 
         // Band is grey if inactive
-        if (_bandActives[bandIndex]) {
+        if (_processor->bandParameters[bandIndex].isActive->get()) {
             g.setColour(bandColours[bandIndex % bandColours.size()].translucent);
         } else {
             g.setColour(lightGreyTrans);
@@ -351,7 +327,7 @@ void MONSTRCrossoverComponent::_drawWidthRectangles(Graphics &g) {
         float height {0};
 
         // Move the width value to the range -0.5:0.5
-        const double widthValue {_bandWidths[bandIndex] - 0.5};
+        const double widthValue {_processor->bandParameters[bandIndex].width->get() - 0.5};
 
         if (widthValue > 0) {
             height = (getHeight() / 2.0) * widthValue;
@@ -371,15 +347,17 @@ void MONSTRCrossoverComponent::_drawFrequencyText(Graphics &g) {
     constexpr double fractionOfHeight {0.9};
     constexpr int spacing {5};
 
-    for (size_t bandIndex {0}; bandIndex < _numAvailableBands - 1; bandIndex++) {
+    for (size_t bandIndex {0}; bandIndex < _processor->numBands->get() - 1; bandIndex++) {
         g.setColour(bandColours[(bandIndex + 1) % bandColours.size()].main);
 
+        const float crossoverValue {_processor->crossoverParameters[bandIndex]->get()};
+
         const double crossoverXPos {
-            sliderValueToXPos(_crossoverValues[bandIndex], getWidth())
+            sliderValueToXPos(crossoverValue, getWidth())
         };
 
         const double crossoverHz {
-            WECore::MONSTR::Parameters::CROSSOVER_FREQUENCY.NormalisedToInternal(_crossoverValues[bandIndex])
+            WECore::MONSTR::Parameters::CROSSOVER_FREQUENCY.NormalisedToInternal(crossoverValue)
         };
 
         g.drawText(String(static_cast<int>(crossoverHz)) + " Hz",

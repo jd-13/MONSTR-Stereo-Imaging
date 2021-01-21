@@ -40,8 +40,6 @@ public:
     MONSTRCrossoverComponent(MonstrAudioProcessor* newAudioProcessor);
     virtual ~MONSTRCrossoverComponent();
 
-    void updateParameters();
-
     void paint(Graphics& g) override;
 
     void mouseDown(const MouseEvent& event) override;
@@ -62,12 +60,6 @@ private:
     static const Colour lightGrey,
                         darkGrey,
                         lightGreyTrans;
-
-    size_t _numAvailableBands;
-
-    std::array<double, WECore::MONSTR::Parameters::_MAX_NUM_BANDS - 1> _crossoverValues;
-    std::array<double, WECore::MONSTR::Parameters::_MAX_NUM_BANDS> _bandWidths;
-    std::array<bool, WECore::MONSTR::Parameters::_MAX_NUM_BANDS> _bandActives;
 
     MonstrAudioProcessor* _processor;
 
