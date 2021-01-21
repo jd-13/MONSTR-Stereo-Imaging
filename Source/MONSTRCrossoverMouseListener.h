@@ -1,9 +1,9 @@
 /*
- *	File:		MONSTRCrossoverComponent.h
+ *	File:		MONSTRCrossoverMouseListener.h
  *
  *	Version:	1.0.0
  *
- *	Created:	06/03/2016
+ *	Created:	21/01/2021
  *
  *	This file is part of MONSTR.
  *
@@ -24,41 +24,27 @@
 
 #pragma once
 
-#include <array>
 #include <memory>
-#include <optional>
 
 #include "../JuceLibraryCode/JuceHeader.h"
-#include "MONSTRCrossoverMouseListener.h"
-#include "MONSTRLookAndFeel.h"
 #include "PluginProcessor.h"
 
-class MONSTRCrossoverComponent : public Component {
+class MONSTRCrossoverMouseListener : public MouseListener {
 public:
 
-    MONSTRCrossoverComponent(MonstrAudioProcessor* newAudioProcessor);
-    virtual ~MONSTRCrossoverComponent();
+    MONSTRCrossoverMouseListener(MonstrAudioProcessor* newAudioProcessor);
+    virtual ~MONSTRCrossoverMouseListener();
 
-    void paint(Graphics& g) override;
+    void mouseDown(const MouseEvent& event) override;
+
+    void mouseDrag(const MouseEvent& event) override;
+
+    void mouseUp(const MouseEvent& event) override;
+
+    void mouseDoubleClick(const MouseEvent& event) override;
 
 private:
-    std::array<double, 200>sineWaveTable;
-
-    static const Colour lightGrey,
-                        darkGrey,
-                        lightGreyTrans;
-
     MonstrAudioProcessor* _processor;
 
-    std::unique_ptr<MONSTRCrossoverMouseListener> _mouseListener;
-
-    void _drawNeutralLine(Graphics& g);
-
-    void _drawSine(Graphics& g);
-
-    void _drawSliderThumbs(Graphics& g);
-
-    void _drawWidthRectangles(Graphics& g);
-
-    void _drawFrequencyText(Graphics& g);
+    std::optional<std::function<void(const MouseEvent&)>> _mouseDragCallback;
 };

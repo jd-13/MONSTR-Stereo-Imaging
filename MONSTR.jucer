@@ -44,6 +44,10 @@
               file="Source/MONSTRCrossoverComponent.cpp"/>
         <FILE id="ovY5LC" name="MONSTRCrossoverComponent.h" compile="0" resource="0"
               file="Source/MONSTRCrossoverComponent.h"/>
+        <FILE id="FgxE0j" name="MONSTRCrossoverMouseListener.cpp" compile="1"
+              resource="0" file="Source/MONSTRCrossoverMouseListener.cpp"/>
+        <FILE id="T7nSb4" name="MONSTRCrossoverMouseListener.h" compile="0"
+              resource="0" file="Source/MONSTRCrossoverMouseListener.h"/>
         <FILE id="UYLJO7" name="MONSTRLookAndFeel.cpp" compile="1" resource="0"
               file="Source/MONSTRLookAndFeel.cpp"/>
         <FILE id="rJ5ICP" name="MONSTRLookAndFeel.h" compile="0" resource="0"

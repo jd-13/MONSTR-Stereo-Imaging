@@ -26,6 +26,7 @@
 
 #include <algorithm>
 #include "WEFilters/StereoWidthProcessorParameters.h"
+#include "UIUtils.h"
 
 namespace {
     struct BandColour {
@@ -38,32 +39,6 @@ namespace {
         {Colour(255, 255, 0), Colour(static_cast<uint8_t>(255), 255, 0, 0.5f)},
         {Colour(30, 255, 0), Colour(static_cast<uint8_t>(30), 255, 0, 0.5f)}
     }};
-
-    double sliderValueToInternalLog(double sliderValue) {
-        return std::pow(10, 1.0414 * sliderValue - 1) - 0.1;
-    }
-
-    double internalLogToSliderValue(double internalValue) {
-        return (std::log10(internalValue + 0.1) + 1) / 1.0414;
-    }
-
-    double sliderValueToXPos(double sliderValue, int componentWidth) {
-        const double MARGIN_PX {componentWidth * 0.05};
-        const double realRange {componentWidth - 2 * MARGIN_PX};
-
-        return (internalLogToSliderValue(sliderValue) * realRange) + MARGIN_PX;
-    }
-
-    double XPosToSliderValue(int XPos, int componentWidth) {
-        const double MARGIN_PX {componentWidth * 0.05};
-        const double realRange {componentWidth - 2 * MARGIN_PX};
-
-        return sliderValueToInternalLog(std::max(XPos - MARGIN_PX, 0.0) / realRange);
-    }
-
-    double YPosToWidthValue(int YPos, int componentHeight) {
-        return 1 - std::min(std::max(0.0, YPos - componentHeight / 4.0) / (componentHeight / 2.0), 1.0);
-    }
 }
 
 const Colour MONSTRCrossoverComponent::lightGrey(200, 200, 200);
@@ -78,6 +53,9 @@ MONSTRCrossoverComponent::MONSTRCrossoverComponent(MonstrAudioProcessor* newAudi
         double xVal {(1.0 / sineWaveTable.size()) * iii};
         sineWaveTable[iii] = sin(pow(M_E, 1.5 * xVal + 1.83)) / 2 + 0.5;
     }
+
+    _mouseListener = std::make_unique<MONSTRCrossoverMouseListener>(_processor);
+    addMouseListener(_mouseListener.get(), false);
 }
 
 MONSTRCrossoverComponent::~MONSTRCrossoverComponent() {
@@ -90,94 +68,6 @@ void MONSTRCrossoverComponent::paint(Graphics &g) {
     _drawWidthRectangles(g);
     _drawSliderThumbs(g);
     _drawFrequencyText(g);
-}
-
-void MONSTRCrossoverComponent::mouseDown(const MouseEvent& event) {
-
-    const int mouseDownX {event.getMouseDownX()};
-
-    // For each available band, check if the cursor landed on a crossover frequency handle or on
-    // the gaps in between
-    const int numBands {_processor->numBands->get()};
-    for (size_t bandIndex {0}; bandIndex < numBands; bandIndex++) {
-        const double crossoverXPos {sliderValueToXPos(_processor->crossoverParameters[bandIndex]->get(), getWidth())};
-
-        if (mouseDownX < crossoverXPos - SLIDER_THUMB_TARGET_WIDTH) {
-
-            // Drag started below a crossover handle, so is a width change
-            _mouseDragCallback = [bandIndex, this](const MouseEvent& event) {
-                _processor->setBandWidth(bandIndex, YPosToWidthValue(event.getPosition().getY(), getHeight()));
-            };
-
-            break;
-
-        } else if (mouseDownX < crossoverXPos + SLIDER_THUMB_TARGET_WIDTH) {
-
-            // Drag started on a crossover handle, so is a frequency change
-            _mouseDragCallback = [bandIndex, this](const MouseEvent& event) {
-                _processor->setCrossoverFrequency(bandIndex, XPosToSliderValue(event.getPosition().getX(), getWidth()));
-            };
-
-            break;
-        }
-    }
-
-    // Handle the case for the highest band of the component in the furthest right
-    const double topCrossoverXPos {sliderValueToXPos(_processor->crossoverParameters[numBands - 1]->get(), getWidth())};
-
-    if (mouseDownX > topCrossoverXPos + SLIDER_THUMB_TARGET_WIDTH) {
-        _mouseDragCallback = [&](const MouseEvent& event) {
-            _processor->setBandWidth(numBands - 1, YPosToWidthValue(event.getPosition().getY(), getHeight()));
-        };
-    }
-}
-
-void MONSTRCrossoverComponent::mouseDrag(const MouseEvent& event) {
-
-    if (_mouseDragCallback.has_value()) {
-        (*_mouseDragCallback)(event);
-    }
-
-    repaint();
-}
-
-void MONSTRCrossoverComponent::mouseUp(const MouseEvent& event) {
-    _mouseDragCallback.reset();
-}
-
-void MONSTRCrossoverComponent::mouseDoubleClick(const MouseEvent& event) {
-
-    // This implements "double click to default" for the width parameters
-
-    const int mouseDownX {event.getMouseDownX()};
-
-    const double defaultWidth {
-        WECore::StereoWidth::Parameters::WIDTH.InternalToNormalised(WECore::StereoWidth::Parameters::WIDTH.defaultValue)
-    };
-
-    // For each available band, check if the cursor landed on a crossover frequency handle or on
-    // the gaps in between
-    const int numBands {_processor->numBands->get()};
-    for (size_t bandIndex {0}; bandIndex < numBands; bandIndex++) {
-        const double crossoverXPos {sliderValueToXPos(_processor->crossoverParameters[bandIndex]->get(), getWidth())};
-
-        if (mouseDownX < crossoverXPos - SLIDER_THUMB_TARGET_WIDTH) {
-            // Click landed below a crossover handle, so reset the width to its default
-            _processor->setBandWidth(bandIndex, defaultWidth);
-            break;
-
-        } else if (mouseDownX < crossoverXPos + SLIDER_THUMB_TARGET_WIDTH) {
-            // Drag started on a crossover handle - do nothing and exit the loop
-            break;
-        }
-    }
-
-    // We need to do one final check for if the cursor landed in the top band, above the highest
-    // crossover
-    const double topCrossoverXPos {sliderValueToXPos(_processor->crossoverParameters[numBands - 1]->get(), getWidth())};
-    if (mouseDownX > topCrossoverXPos + SLIDER_THUMB_TARGET_WIDTH) {
-        _processor->setBandWidth(numBands - 1, defaultWidth);
-    }
 }
 
 void MONSTRCrossoverComponent::_drawNeutralLine(Graphics &g) {
@@ -205,7 +95,7 @@ void MONSTRCrossoverComponent::_drawSine(Graphics &g) {
     for (size_t bandIndex {0}; bandIndex < numBands; bandIndex++) {
 
         const double crossoverXPos {
-            sliderValueToXPos(_processor->crossoverParameters[bandIndex]->get(), getWidth())
+            UIUtils::sliderValueToXPos(_processor->crossoverParameters[bandIndex]->get(), getWidth())
         };
 
         // On the last band we don't really have another crossover point, we just need to keep going
@@ -241,7 +131,7 @@ void MONSTRCrossoverComponent::_drawSliderThumbs(Graphics& g) {
 
     for (size_t bandIndex {0}; bandIndex < _processor->numBands->get() - 1; bandIndex++) {
         const double crossoverXPos {
-            sliderValueToXPos(_processor->crossoverParameters[bandIndex]->get(), getWidth())
+            UIUtils::sliderValueToXPos(_processor->crossoverParameters[bandIndex]->get(), getWidth())
         };
 
         const Colour& topColour = bandColours[bandIndex % bandColours.size()].main;
@@ -270,18 +160,18 @@ void MONSTRCrossoverComponent::_drawSliderThumbs(Graphics& g) {
 
         p.clear();
         g.setColour(darkGrey);
-        p.addEllipse(crossoverXPos - SLIDER_THUMB_RADIUS,
-                     getHeight() * 0.5 - SLIDER_THUMB_RADIUS,
-                     SLIDER_THUMB_RADIUS * 2,
-                     SLIDER_THUMB_RADIUS * 2);
+        p.addEllipse(crossoverXPos - UIUtils::SLIDER_THUMB_RADIUS,
+                     getHeight() * 0.5 - UIUtils::SLIDER_THUMB_RADIUS,
+                     UIUtils::SLIDER_THUMB_RADIUS * 2,
+                     UIUtils::SLIDER_THUMB_RADIUS * 2);
         g.fillPath(p);
 
         p.clear();
         g.setColour(topColour);
         p.addCentredArc(crossoverXPos,
                         getHeight() * 0.5,
-                        SLIDER_THUMB_RADIUS,
-                        SLIDER_THUMB_RADIUS,
+                        UIUtils::SLIDER_THUMB_RADIUS,
+                        UIUtils::SLIDER_THUMB_RADIUS,
                         WECore::CoreMath::DOUBLE_PI,
                         0,
                         WECore::CoreMath::DOUBLE_PI,
@@ -292,8 +182,8 @@ void MONSTRCrossoverComponent::_drawSliderThumbs(Graphics& g) {
         g.setColour(bottomColour);
         p.addCentredArc(crossoverXPos,
                         getHeight() * 0.5,
-                        SLIDER_THUMB_RADIUS,
-                        SLIDER_THUMB_RADIUS,
+                        UIUtils::SLIDER_THUMB_RADIUS,
+                        UIUtils::SLIDER_THUMB_RADIUS,
                         0,
                         0,
                         WECore::CoreMath::DOUBLE_PI,
@@ -313,7 +203,7 @@ void MONSTRCrossoverComponent::_drawWidthRectangles(Graphics &g) {
         // isn't one
         const double nextCrossoverXPos {
             (bandIndex < numBands - 1) ?
-                sliderValueToXPos(_processor->crossoverParameters[bandIndex]->get(), getWidth()) :
+                UIUtils::sliderValueToXPos(_processor->crossoverParameters[bandIndex]->get(), getWidth()) :
                 getWidth()
         };
 
@@ -354,7 +244,7 @@ void MONSTRCrossoverComponent::_drawFrequencyText(Graphics &g) {
         const float crossoverValue {_processor->crossoverParameters[bandIndex]->get()};
 
         const double crossoverXPos {
-            sliderValueToXPos(crossoverValue, getWidth())
+            UIUtils::sliderValueToXPos(crossoverValue, getWidth())
         };
 
         const double crossoverHz {
