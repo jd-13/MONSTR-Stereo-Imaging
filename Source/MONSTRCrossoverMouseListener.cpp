@@ -30,8 +30,8 @@
 #include "WEFilters/StereoWidthProcessorParameters.h"
 
 MONSTRCrossoverMouseListener::MONSTRCrossoverMouseListener(MonstrAudioProcessor* newAudioProcessor)
-        : _processor(newAudioProcessor) {
-
+        : _processor(newAudioProcessor),
+          _dragParameter(nullptr) {
 
     // Initialise the parameter interactions
 
@@ -45,7 +45,9 @@ MONSTRCrossoverMouseListener::MONSTRCrossoverMouseListener(MonstrAudioProcessor*
             [bandIndex, defaultWidth, this](const MouseEvent& event) {
                 _processor->setBandWidth(bandIndex, UIUtils::YPosToWidthValue(event.getPosition().getY(), event.eventComponent->getHeight()));
             },
-            [bandIndex, defaultWidth, this]() { _processor->setBandWidth(bandIndex, defaultWidth); }
+            [bandIndex, defaultWidth, this]() { _processor->setBandWidth(bandIndex, defaultWidth); },
+            [bandIndex, this]() { _processor->bandParameters[bandIndex].width->beginChangeGesture(); },
+            [bandIndex, this]() { _processor->bandParameters[bandIndex].width->endChangeGesture(); }
         };
     }
 
@@ -55,7 +57,9 @@ MONSTRCrossoverMouseListener::MONSTRCrossoverMouseListener(MonstrAudioProcessor*
             [bandIndex, this](const MouseEvent& event) {
                 _processor->setCrossoverFrequency(bandIndex, UIUtils::XPosToSliderValue(event.getPosition().getX(), event.eventComponent->getWidth()));
             },
-            []() { /* Do nothing */ }
+            []() { /* Do nothing */ },
+            [bandIndex, this]() { _processor->crossoverParameters[bandIndex]->beginChangeGesture(); },
+            [bandIndex, this]() { _processor->crossoverParameters[bandIndex]->endChangeGesture(); }
         };
 
     }
@@ -66,22 +70,26 @@ MONSTRCrossoverMouseListener::~MONSTRCrossoverMouseListener() {
 }
 
 void MONSTRCrossoverMouseListener::mouseDown(const MouseEvent& event) {
-    FloatParameterInteraction* param {_getParameterInteraction(event)};
+    _dragParameter = _getParameterInteraction(event);
 
-    if (param != nullptr) {
-       _mouseDragCallback = param->dragCallback;
+    if (_dragParameter != nullptr) {
+        _dragParameter->beginGesture();
     }
 }
 
 void MONSTRCrossoverMouseListener::mouseDrag(const MouseEvent& event) {
 
-    if (_mouseDragCallback.has_value()) {
-        (*_mouseDragCallback)(event);
+    if (_dragParameter != nullptr) {
+        _dragParameter->dragCallback(event);
     }
 }
 
 void MONSTRCrossoverMouseListener::mouseUp(const MouseEvent& event) {
-    _mouseDragCallback.reset();
+
+    if (_dragParameter != nullptr) {
+        _dragParameter->endGesture();
+        _dragParameter = nullptr;
+    }
 }
 
 void MONSTRCrossoverMouseListener::mouseDoubleClick(const MouseEvent& event) {

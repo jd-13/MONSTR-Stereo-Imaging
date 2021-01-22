@@ -50,6 +50,8 @@ private:
     struct FloatParameterInteraction {
         std::function<void(const MouseEvent&)> dragCallback;
         std::function<void()> resetToDefault;
+        std::function<void()> beginGesture;
+        std::function<void()> endGesture;
     };
 
     std::array<FloatParameterInteraction, WECore::MONSTR::Parameters::_MAX_NUM_BANDS> _bandWidths;
@@ -57,7 +59,7 @@ private:
 
     MonstrAudioProcessor* _processor;
 
-    std::optional<std::function<void(const MouseEvent&)>> _mouseDragCallback;
+    FloatParameterInteraction* _dragParameter;
 
     FloatParameterInteraction* _getParameterInteraction(const MouseEvent& event);
 };
