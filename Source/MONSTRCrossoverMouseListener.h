@@ -24,10 +24,12 @@
 
 #pragma once
 
-#include <memory>
+#include <array>
+#include <optional>
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "PluginProcessor.h"
+#include "ParameterData.h"
 
 class MONSTRCrossoverMouseListener : public MouseListener {
 public:
@@ -44,7 +46,18 @@ public:
     void mouseDoubleClick(const MouseEvent& event) override;
 
 private:
+
+    struct FloatParameterInteraction {
+        std::function<void(const MouseEvent&)> dragCallback;
+        std::function<void()> resetToDefault;
+    };
+
+    std::array<FloatParameterInteraction, WECore::MONSTR::Parameters::_MAX_NUM_BANDS> _bandWidths;
+    std::array<FloatParameterInteraction, WECore::MONSTR::Parameters::_MAX_NUM_BANDS - 1> _crossoverFrequencies;
+
     MonstrAudioProcessor* _processor;
 
     std::optional<std::function<void(const MouseEvent&)>> _mouseDragCallback;
+
+    FloatParameterInteraction* _getParameterInteraction(const MouseEvent& event);
 };
