@@ -61,4 +61,6 @@ private:
     void _drawWidthRectangles(Graphics& g);
 
     void _drawFrequencyText(Graphics& g);
+
+    void _drawBandButtons(Graphics& g);
 };

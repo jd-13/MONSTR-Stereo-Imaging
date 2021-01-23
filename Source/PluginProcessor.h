@@ -75,12 +75,16 @@ public:
     void addBand();
     void removeBand();
     void setBandActive(size_t index, bool val);
+    void setBandMuted(size_t index, bool val);
+    void setBandSoloed(size_t index, bool val);
     void setBandWidth(size_t index, float val);
     void setCrossoverFrequency(size_t index, float val);
     /** @} */
 
     struct BandParametersWrapper {
         AudioParameterBool* isActive;
+        AudioParameterBool* isMuted;
+        AudioParameterBool* isSoloed;
         AudioParameterFloat* width;
     };
 

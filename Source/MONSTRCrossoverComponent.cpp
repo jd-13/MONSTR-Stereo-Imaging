@@ -68,6 +68,7 @@ void MONSTRCrossoverComponent::paint(Graphics &g) {
     _drawWidthRectangles(g);
     _drawSliderThumbs(g);
     _drawFrequencyText(g);
+    _drawBandButtons(g);
 }
 
 void MONSTRCrossoverComponent::_drawNeutralLine(Graphics &g) {
@@ -258,5 +259,56 @@ void MONSTRCrossoverComponent::_drawFrequencyText(Graphics &g) {
                    20,
                    Justification::centredLeft,
                    false);
+    }
+}
+
+void MONSTRCrossoverComponent::_drawBandButtons(Graphics &g) {
+
+    constexpr int CORNER_RADIUS {2};
+    constexpr int LINE_THICKNESS {1};
+
+    for (size_t bandIndex {0}; bandIndex < _processor->numBands->get() - 1; bandIndex++) {
+        const double crossoverXPos {
+            UIUtils::sliderValueToXPos(_processor->crossoverParameters[bandIndex]->get(), getWidth())
+        };
+
+        const double XPos {crossoverXPos - UIUtils::BAND_BUTTON_WIDTH - UIUtils::BAND_BUTTON_PADDING};
+
+        const Colour& activeColour = bandColours[(bandIndex) % bandColours.size()].main;
+
+        auto drawButton = [XPos, &activeColour, &g](String text, bool isActive, double YPos) {
+
+            if (isActive) {
+                g.setColour(activeColour);
+            } else {
+                g.setColour(lightGrey);
+            }
+
+            g.drawRoundedRectangle(XPos,
+                                   YPos,
+                                   UIUtils::BAND_BUTTON_WIDTH,
+                                   UIUtils::BAND_BUTTON_WIDTH,
+                                   CORNER_RADIUS,
+                                   LINE_THICKNESS);
+
+            g.drawText(text,
+                       XPos,
+                       YPos,
+                       UIUtils::BAND_BUTTON_WIDTH,
+                       UIUtils::BAND_BUTTON_WIDTH,
+                       Justification::centred);
+        };
+
+        drawButton("B",
+                   !_processor->bandParameters[bandIndex].isActive->get(),
+                   UIUtils::BAND_BUTTON_PADDING);
+
+        drawButton("M",
+                   _processor->bandParameters[bandIndex].isMuted->get(),
+                   2 * UIUtils::BAND_BUTTON_PADDING + UIUtils::BAND_BUTTON_WIDTH);
+
+        drawButton("S",
+                   _processor->bandParameters[bandIndex].isSoloed->get(),
+                   3 * UIUtils::BAND_BUTTON_PADDING + 2 * UIUtils::BAND_BUTTON_WIDTH);
     }
 }

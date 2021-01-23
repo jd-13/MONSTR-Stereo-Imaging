@@ -29,6 +29,9 @@ namespace UIUtils {
     constexpr int SLIDER_THUMB_RADIUS {6};
     constexpr int SLIDER_THUMB_TARGET_WIDTH {SLIDER_THUMB_RADIUS * 2};
 
+    constexpr int BAND_BUTTON_WIDTH {20};
+    constexpr int BAND_BUTTON_PADDING {4};
+
     inline double sliderValueToInternalLog(double sliderValue) {
         return std::pow(10, 1.0414 * sliderValue - 1) - 0.1;
     }

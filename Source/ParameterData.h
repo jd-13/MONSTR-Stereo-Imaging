@@ -34,16 +34,18 @@ const String NUMBANDS_STR = "NumBands";
 
 struct BandStrings {
     String isActive;
+    String isMuted;
+    String isSoloed;
     String width;
 };
 
 const std::array<BandStrings, WECore::MONSTR::Parameters::_MAX_NUM_BANDS> BAND_STRINGS {{
-    {"Band1Bypass", "Band1Width"},
-    {"Band2Bypass", "Band2Width"},
-    {"Band3Bypass", "Band3Width"},
-    {"Band4Bypass", "Band4Width"},
-    {"Band5Bypass", "Band5Width"},
-    {"Band6Bypass", "Band6Width"}
+    {"Band1Bypass", "Band1Mute", "Band1Solo", "Band1Width"},
+    {"Band2Bypass", "Band2Mute", "Band2Solo", "Band2Width"},
+    {"Band3Bypass", "Band3Mute", "Band3Solo", "Band3Width"},
+    {"Band4Bypass", "Band4Mute", "Band4Solo", "Band4Width"},
+    {"Band5Bypass", "Band5Mute", "Band5Solo", "Band5Width"},
+    {"Band6Bypass", "Band6Mute", "Band6Solo", "Band6Width"}
 }};
 
 const std::array<String, WECore::MONSTR::Parameters::_MAX_NUM_BANDS - 1> CROSSOVER_STRINGS {
