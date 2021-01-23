@@ -70,7 +70,7 @@ MONSTRCrossoverMouseListener::~MONSTRCrossoverMouseListener() {
 }
 
 void MONSTRCrossoverMouseListener::mouseDown(const MouseEvent& event) {
-    _dragParameter = _getParameterInteraction(event);
+    _dragParameter = _resolveParameterInteraction(event);
 
     if (_dragParameter != nullptr) {
         _dragParameter->beginGesture();
@@ -95,30 +95,68 @@ void MONSTRCrossoverMouseListener::mouseUp(const MouseEvent& event) {
 void MONSTRCrossoverMouseListener::mouseDoubleClick(const MouseEvent& event) {
 
     // This implements "double click to default" for the width parameters
-    FloatParameterInteraction* param {_getParameterInteraction(event)};
+    FloatParameterInteraction* param {_resolveParameterInteraction(event)};
 
     if (param != nullptr) {
        param->resetToDefault();
     }
 }
 
-MONSTRCrossoverMouseListener::FloatParameterInteraction* MONSTRCrossoverMouseListener::_getParameterInteraction(const MouseEvent& event) {
+MONSTRCrossoverMouseListener::FloatParameterInteraction* MONSTRCrossoverMouseListener::_resolveParameterInteraction(const MouseEvent& event) {
 
     FloatParameterInteraction* retVal {nullptr};
 
     const int mouseDownX {event.getMouseDownX()};
+    const int mouseDownY {event.getMouseDownY()};
 
     // For each available band, check if the cursor landed on a crossover frequency handle or on
     // the gaps in between
     const int numBands {_processor->numBands->get()};
 
     for (size_t bandIndex {0}; bandIndex < numBands; bandIndex++) {
-        const double crossoverXPos {
-            UIUtils::sliderValueToXPos(_processor->crossoverParameters[bandIndex]->get(), event.eventComponent->getWidth())
+        const double crossoverXPos {bandIndex < numBands - 1 ?
+            UIUtils::sliderValueToXPos(_processor->crossoverParameters[bandIndex]->get(), event.eventComponent->getWidth()) :
+            event.eventComponent->getWidth()
         };
 
-        if (mouseDownX < crossoverXPos - UIUtils::SLIDER_THUMB_TARGET_WIDTH) {
-            // Click landed below a crossover handle, so must be on the width
+        const double buttonXPos {UIUtils::crossoverXPosToButtonXPos(crossoverXPos)};
+
+        const bool isWithinButtonXRange {
+            mouseDownX > buttonXPos && mouseDownX < buttonXPos + UIUtils::BAND_BUTTON_WIDTH
+        };
+
+        const bool isOnTopButton {
+            isWithinButtonXRange &&
+            mouseDownY > UIUtils::getButtonYPos(0) && mouseDownY < UIUtils::getButtonYPos(0) + UIUtils::BAND_BUTTON_WIDTH
+        };
+
+        const bool isOnMiddleButton {
+            isWithinButtonXRange &&
+            mouseDownY > UIUtils::getButtonYPos(1) && mouseDownY < UIUtils::getButtonYPos(1) + UIUtils::BAND_BUTTON_WIDTH
+        };
+
+        const bool isOnBottomButton {
+            isWithinButtonXRange &&
+            mouseDownY > UIUtils::getButtonYPos(2) && mouseDownY < UIUtils::getButtonYPos(2) + UIUtils::BAND_BUTTON_WIDTH
+        };
+
+        if (isOnTopButton) {
+            // Landed on the bypass button
+            _processor->setBandActive(bandIndex, !_processor->bandParameters[bandIndex].isActive->get());
+            break;
+
+        } else if (isOnMiddleButton) {
+            // Landed on the mute button
+            _processor->setBandMuted(bandIndex, !_processor->bandParameters[bandIndex].isMuted->get());
+            break;
+
+        } else if (isOnBottomButton) {
+            // Landed on the solo button
+            _processor->setBandSoloed(bandIndex, !_processor->bandParameters[bandIndex].isSoloed->get());
+            break;
+
+        } else if (mouseDownX < crossoverXPos - UIUtils::SLIDER_THUMB_TARGET_WIDTH) {
+            // Click landed below a crossover handle but outside a button, so must be on the width
             retVal = &(_bandWidths[bandIndex]);
             break;
 
@@ -127,12 +165,6 @@ MONSTRCrossoverMouseListener::FloatParameterInteraction* MONSTRCrossoverMouseLis
             retVal = &(_crossoverFrequencies[bandIndex]);
             break;
         }
-    }
-
-    // We need to do one final check for if the cursor landed in the top band, above the highest
-    // crossover
-    if (retVal == nullptr) {
-        retVal =  &(_bandWidths[numBands - 1]);
     }
 
     return retVal;

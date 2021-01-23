@@ -57,4 +57,12 @@ namespace UIUtils {
     inline double YPosToWidthValue(int YPos, int componentHeight) {
         return 1 - std::min(std::max(0.0, YPos - componentHeight / 4.0) / (componentHeight / 2.0), 1.0);
     }
+
+    inline double crossoverXPosToButtonXPos(double crossoverXPos) {
+        return crossoverXPos - BAND_BUTTON_WIDTH - BAND_BUTTON_PADDING - SLIDER_THUMB_RADIUS;
+    }
+
+    inline double getButtonYPos(int index) {
+        return BAND_BUTTON_PADDING + index * (BAND_BUTTON_PADDING + BAND_BUTTON_WIDTH);
+    }
 }

@@ -61,5 +61,10 @@ private:
 
     FloatParameterInteraction* _dragParameter;
 
-    FloatParameterInteraction* _getParameterInteraction(const MouseEvent& event);
+    /**
+     * If the mouse event occured inside a button the function will handle it and return null,
+     * if the event occured inside a slider it will return the corresponding
+     * FloatParameterInteraction for it to be handled by the appropriate event handlers.
+     */
+    FloatParameterInteraction* _resolveParameterInteraction(const MouseEvent& event);
 };

@@ -220,6 +220,14 @@ void MONSTRCrossoverComponent::_drawWidthRectangles(Graphics &g) {
     double currentXPos {0};
     const int numBands {_processor->numBands->get()};
 
+    // Check if any bands are soloed
+    bool isSomethingSoloed {false};
+    for (size_t bandIndex {0}; bandIndex < numBands; bandIndex++) {
+        if (_processor->bandParameters[bandIndex].isSoloed->get()) {
+            isSomethingSoloed = true;
+        }
+    }
+
     for (size_t bandIndex {0}; bandIndex < numBands; bandIndex++) {
 
         // For the last band use the value of getWidth() rather than the next crossover as there
@@ -231,7 +239,13 @@ void MONSTRCrossoverComponent::_drawWidthRectangles(Graphics &g) {
         };
 
         // Band is grey if inactive
-        if (_processor->bandParameters[bandIndex].isActive->get()) {
+        const bool bandActive {
+            _processor->bandParameters[bandIndex].isActive->get() &&
+            !_processor->bandParameters[bandIndex].isMuted->get() &&
+            (!isSomethingSoloed || _processor->bandParameters[bandIndex].isSoloed->get())
+        };
+
+        if (bandActive) {
             g.setColour(bandColours[bandIndex % bandColours.size()].translucent);
         } else {
             g.setColour(lightGreyTrans);
@@ -287,12 +301,13 @@ void MONSTRCrossoverComponent::_drawFrequencyText(Graphics &g) {
 void MONSTRCrossoverComponent::_drawBandButtons(Graphics &g) {
 
 
-    for (size_t bandIndex {0}; bandIndex < _processor->numBands->get() - 1; bandIndex++) {
-        const double crossoverXPos {
-            UIUtils::sliderValueToXPos(_processor->crossoverParameters[bandIndex]->get(), getWidth())
+    for (size_t bandIndex {0}; bandIndex < _processor->numBands->get(); bandIndex++) {
+        const double crossoverXPos {bandIndex < _processor->numBands->get() - 1 ?
+            UIUtils::sliderValueToXPos(_processor->crossoverParameters[bandIndex]->get(), getWidth()) :
+            getWidth()
         };
 
-        const double XPos {crossoverXPos - UIUtils::BAND_BUTTON_WIDTH - UIUtils::BAND_BUTTON_PADDING};
+        const double XPos {UIUtils::crossoverXPosToButtonXPos(crossoverXPos)};
 
         const Colour& activeColour = bandColours[(bandIndex) % bandColours.size()].main;
 
@@ -300,18 +315,18 @@ void MONSTRCrossoverComponent::_drawBandButtons(Graphics &g) {
                        !_processor->bandParameters[bandIndex].isActive->get() ? activeColour : lightGrey,
                        g,
                        XPos,
-                       UIUtils::BAND_BUTTON_PADDING);
+                       UIUtils::getButtonYPos(0));
 
         drawBandButton("M",
                        _processor->bandParameters[bandIndex].isMuted->get() ? activeColour : lightGrey,
                        g,
                        XPos,
-                       2 * UIUtils::BAND_BUTTON_PADDING + UIUtils::BAND_BUTTON_WIDTH);
+                       UIUtils::getButtonYPos(1));
 
         drawBandButton("S",
                        _processor->bandParameters[bandIndex].isSoloed->get() ? activeColour : lightGrey,
                        g,
                        XPos,
-                       3 * UIUtils::BAND_BUTTON_PADDING + 2 * UIUtils::BAND_BUTTON_WIDTH);
+                       UIUtils::getButtonYPos(2));
     }
 }
