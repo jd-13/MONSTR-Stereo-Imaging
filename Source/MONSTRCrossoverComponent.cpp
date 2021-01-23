@@ -39,6 +39,28 @@ namespace {
         {Colour(255, 255, 0), Colour(static_cast<uint8_t>(255), 255, 0, 0.5f)},
         {Colour(30, 255, 0), Colour(static_cast<uint8_t>(30), 255, 0, 0.5f)}
     }};
+
+    void drawBandButton(String text, const Colour& colour, Graphics& g, double XPos, double YPos) {
+
+        constexpr int CORNER_RADIUS {2};
+        constexpr int LINE_THICKNESS {1};
+
+        g.setColour(colour);
+
+        g.drawRoundedRectangle(XPos,
+                               YPos,
+                               UIUtils::BAND_BUTTON_WIDTH,
+                               UIUtils::BAND_BUTTON_WIDTH,
+                               CORNER_RADIUS,
+                               LINE_THICKNESS);
+
+        g.drawText(text,
+                   XPos,
+                   YPos,
+                   UIUtils::BAND_BUTTON_WIDTH,
+                   UIUtils::BAND_BUTTON_WIDTH,
+                   Justification::centred);
+    }
 }
 
 const Colour MONSTRCrossoverComponent::lightGrey(200, 200, 200);
@@ -264,8 +286,6 @@ void MONSTRCrossoverComponent::_drawFrequencyText(Graphics &g) {
 
 void MONSTRCrossoverComponent::_drawBandButtons(Graphics &g) {
 
-    constexpr int CORNER_RADIUS {2};
-    constexpr int LINE_THICKNESS {1};
 
     for (size_t bandIndex {0}; bandIndex < _processor->numBands->get() - 1; bandIndex++) {
         const double crossoverXPos {
@@ -276,39 +296,22 @@ void MONSTRCrossoverComponent::_drawBandButtons(Graphics &g) {
 
         const Colour& activeColour = bandColours[(bandIndex) % bandColours.size()].main;
 
-        auto drawButton = [XPos, &activeColour, &g](String text, bool isActive, double YPos) {
-
-            if (isActive) {
-                g.setColour(activeColour);
-            } else {
-                g.setColour(lightGrey);
-            }
-
-            g.drawRoundedRectangle(XPos,
-                                   YPos,
-                                   UIUtils::BAND_BUTTON_WIDTH,
-                                   UIUtils::BAND_BUTTON_WIDTH,
-                                   CORNER_RADIUS,
-                                   LINE_THICKNESS);
-
-            g.drawText(text,
+        drawBandButton("B",
+                       !_processor->bandParameters[bandIndex].isActive->get() ? activeColour : lightGrey,
+                       g,
                        XPos,
-                       YPos,
-                       UIUtils::BAND_BUTTON_WIDTH,
-                       UIUtils::BAND_BUTTON_WIDTH,
-                       Justification::centred);
-        };
+                       UIUtils::BAND_BUTTON_PADDING);
 
-        drawButton("B",
-                   !_processor->bandParameters[bandIndex].isActive->get(),
-                   UIUtils::BAND_BUTTON_PADDING);
+        drawBandButton("M",
+                       _processor->bandParameters[bandIndex].isMuted->get() ? activeColour : lightGrey,
+                       g,
+                       XPos,
+                       2 * UIUtils::BAND_BUTTON_PADDING + UIUtils::BAND_BUTTON_WIDTH);
 
-        drawButton("M",
-                   _processor->bandParameters[bandIndex].isMuted->get(),
-                   2 * UIUtils::BAND_BUTTON_PADDING + UIUtils::BAND_BUTTON_WIDTH);
-
-        drawButton("S",
-                   _processor->bandParameters[bandIndex].isSoloed->get(),
-                   3 * UIUtils::BAND_BUTTON_PADDING + 2 * UIUtils::BAND_BUTTON_WIDTH);
+        drawBandButton("S",
+                       _processor->bandParameters[bandIndex].isSoloed->get() ? activeColour : lightGrey,
+                       g,
+                       XPos,
+                       3 * UIUtils::BAND_BUTTON_PADDING + 2 * UIUtils::BAND_BUTTON_WIDTH);
     }
 }
