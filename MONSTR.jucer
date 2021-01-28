@@ -17,6 +17,8 @@
     <GROUP id="{1E402055-9A34-3AEA-FE15-FACE7D5D6E2D}" name="Graphics">
       <FILE id="skGThj" name="MONSTR Background.png" compile="0" resource="1"
             file="Source/Graphics/MONSTR Background.png"/>
+      <FILE id="SD0Ikr" name="Montserrat-Regular.ttf" compile="0" resource="1"
+            file="Source/Graphics/Montserrat-Regular.ttf"/>
     </GROUP>
     <GROUP id="{54DDA0CD-EF70-78A2-BADE-B0BCA860E60F}" name="DSPFilters">
       <FILE id="NEx5Yr" name="Bessel.cpp" compile="1" resource="0" file="../WECore/DSPFilters/shared/DSPFilters/source/Bessel.cpp"/>

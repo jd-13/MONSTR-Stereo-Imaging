@@ -12,6 +12,10 @@ cd $WECORE_HOME
 echo "=== Using WE-Core $(git log --pretty=format:'%h' -n 1) ==="
 cd -
 
+echo "=== Downloading fonts ==="
+wget https://github.com/JulietaUla/Montserrat/raw/master/fonts/ttf/Montserrat-Regular.ttf \
+     -P $SCRIPT_DIR/../Source/Graphics
+
 echo "=== Setting module paths ==="
 sed -i 's#../JUCE/modules#/home/JUCE/modules#g' $SCRIPT_DIR/../MONSTR.jucer
 

@@ -34,41 +34,31 @@
 class MONSTRLookAndFeel : public LookAndFeel_V2 {
 public:
     MONSTRLookAndFeel();
-    
+
     ~MONSTRLookAndFeel();
-    
-    virtual void drawLinearSliderThumb(Graphics& g,
-                                       int x,
-                                       int y,
-                                       int width,
-                                       int height,
-                                       float sliderPos,
-                                       float minSliderPos,
-                                       float maxSliderPos,
-                                       const Slider::SliderStyle style,
-                                       Slider& slider) override;
-    
-    virtual void drawLinearSliderBackground(Graphics& g,
-                                            int x,
-                                            int y,
-                                            int width,
-                                            int height,
-                                            float sliderPos,
-                                            float minSliderPos,
-                                            float maxSliderPos,
-                                            const Slider::SliderStyle style,
-                                            Slider& slider) override;
-    
+
+    virtual void drawButtonBackground (Graphics& g,
+                                       Button& textButton,
+                                       const Colour& backgroundColour,
+                                       bool shouldDrawButtonAsHighlighted,
+                                       bool shouldDrawButtonAsDown) override;
+
+    virtual void drawButtonText (Graphics& g,
+                                 TextButton& textButton,
+                                 bool shouldDrawButtonAsHighlighted,
+                                 bool shouldDrawButtonAsDown) override;
+
     virtual void drawTooltip(Graphics& g,
                              const String& text,
                              int width,
                              int height) override;
-    
+
+    virtual Typeface::Ptr getTypefaceForFont(const Font& font) override;
+
 private:
+    Font _regularFont;
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MONSTRLookAndFeel)
-    
-    static const Colour lightGrey,
-                        darkGrey;
 };
 
 

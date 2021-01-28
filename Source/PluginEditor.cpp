@@ -24,6 +24,7 @@
 
 
 //[MiscUserDefs] You can add your own user definitions and misc code here...
+#include "UIUtils.h"
 //[/MiscUserDefs]
 
 //==============================================================================
@@ -37,21 +38,21 @@ MonstrAudioProcessorEditor::MonstrAudioProcessorEditor (MonstrAudioProcessor& ow
     addAndMakeVisible (crossoverView.get());
     crossoverView->setName ("Crossover View");
 
-    crossoverView->setBounds (40, 40, 560, 210);
+    crossoverView->setBounds (16, 40, 608, 210);
 
     AddBandBtn.reset (new juce::TextButton ("Add Band Button"));
     addAndMakeVisible (AddBandBtn.get());
-    AddBandBtn->setButtonText (TRANS("+"));
+    AddBandBtn->setButtonText (TRANS("Add Band"));
     AddBandBtn->addListener (this);
 
-    AddBandBtn->setBounds (336, 256, 40, 24);
+    AddBandBtn->setBounds (365, 256, 275, 34);
 
     RemoveBandBtn.reset (new juce::TextButton ("Remove Band Button"));
     addAndMakeVisible (RemoveBandBtn.get());
-    RemoveBandBtn->setButtonText (TRANS("-"));
+    RemoveBandBtn->setButtonText (TRANS("Remove Band"));
     RemoveBandBtn->addListener (this);
 
-    RemoveBandBtn->setBounds (256, 256, 40, 24);
+    RemoveBandBtn->setBounds (0, 256, 275, 34);
 
 
     //[UserPreSize]
@@ -62,6 +63,15 @@ MonstrAudioProcessorEditor::MonstrAudioProcessorEditor (MonstrAudioProcessor& ow
 
     //[Constructor] You can add your own custom stuff here..
     _assignLookAndFeelToAllChildren(customLookAndFeel);
+
+    // This is needed for the fonts to be applied
+    MONSTRLookAndFeel::setDefaultLookAndFeel(&customLookAndFeel);
+
+    AddBandBtn->setColour(TextButton::textColourOnId, UIUtils::mainHighlight);
+    RemoveBandBtn->setColour(TextButton::textColourOnId, UIUtils::mainHighlight);
+
+    AddBandBtn->setColour(TextButton::textColourOffId, UIUtils::lightGrey);
+    RemoveBandBtn->setColour(TextButton::textColourOffId, UIUtils::lightGrey);
 
     // Call this manually once to make sure the UI reflects the parameters' states correctly
     _onParameterUpdate();
@@ -173,12 +183,12 @@ BEGIN_JUCER_METADATA
   <BACKGROUND backgroundColour="ffffffff"/>
   <GENERICCOMPONENT name="Crossover View" id="e7b7ed6ee8457913" memberName="crossoverView"
                     virtualName="MONSTRCrossoverComponent" explicitFocusOrder="0"
-                    pos="40 40 560 210" class="juce::Component" params="getProcessor()"/>
+                    pos="16 40 608 210" class="juce::Component" params="getProcessor()"/>
   <TEXTBUTTON name="Add Band Button" id="9e80e2964e937f97" memberName="AddBandBtn"
-              virtualName="" explicitFocusOrder="0" pos="336 256 40 24" buttonText="+"
+              virtualName="" explicitFocusOrder="0" pos="365 256 275 34" buttonText="Add Band"
               connectedEdges="0" needsCallback="1" radioGroupId="0"/>
   <TEXTBUTTON name="Remove Band Button" id="2ef4417e3e0b973d" memberName="RemoveBandBtn"
-              virtualName="" explicitFocusOrder="0" pos="256 256 40 24" buttonText="-"
+              virtualName="" explicitFocusOrder="0" pos="0 256 275 34" buttonText="Remove Band"
               connectedEdges="0" needsCallback="1" radioGroupId="0"/>
 </JUCER_COMPONENT>
 

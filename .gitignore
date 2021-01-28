@@ -5,3 +5,4 @@ JuceLibraryCode/Juce*.h
 JuceLibraryCode/ReadMe.txt
 .DS_Store
 private
+Source/Graphics/Montserrat-*.ttf

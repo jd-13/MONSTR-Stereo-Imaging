@@ -29,30 +29,23 @@
 #include "UIUtils.h"
 
 namespace {
-    struct BandColour {
-        Colour main;
-        Colour translucent;
-    };
-
-    const std::array<BandColour, 3> bandColours {{
-        {Colour(250, 0, 0), Colour(static_cast<uint8_t>(250), 0, 0, 0.5f)}, // casts to remove constructor ambiguity
-        {Colour(255, 255, 0), Colour(static_cast<uint8_t>(255), 255, 0, 0.5f)},
-        {Colour(30, 255, 0), Colour(static_cast<uint8_t>(30), 255, 0, 0.5f)}
-    }};
 
     void drawBandButton(String text, const Colour& colour, Graphics& g, double XPos, double YPos) {
 
         constexpr int CORNER_RADIUS {2};
         constexpr int LINE_THICKNESS {1};
 
-        g.setColour(colour);
+        const Rectangle<float> buttonRectange(XPos,
+                                              YPos,
+                                              UIUtils::BAND_BUTTON_WIDTH,
+                                              UIUtils::BAND_BUTTON_WIDTH);
 
-        g.drawRoundedRectangle(XPos,
-                               YPos,
-                               UIUtils::BAND_BUTTON_WIDTH,
-                               UIUtils::BAND_BUTTON_WIDTH,
-                               CORNER_RADIUS,
-                               LINE_THICKNESS);
+        const Colour buttonBackground(static_cast<uint8_t>(0), 0, 0, 0.5f);
+        g.setColour(buttonBackground);
+        g.fillRoundedRectangle(buttonRectange, CORNER_RADIUS);
+
+        g.setColour(colour);
+        g.drawRoundedRectangle(buttonRectange, CORNER_RADIUS, LINE_THICKNESS);
 
         g.drawText(text,
                    XPos,
@@ -62,10 +55,6 @@ namespace {
                    Justification::centred);
     }
 }
-
-const Colour MONSTRCrossoverComponent::lightGrey(200, 200, 200);
-const Colour MONSTRCrossoverComponent::darkGrey(107, 107, 107);
-const Colour MONSTRCrossoverComponent::lightGreyTrans(static_cast<uint8_t>(200), 200, 200, 0.5f);
 
 MONSTRCrossoverComponent::MONSTRCrossoverComponent(MonstrAudioProcessor* newAudioProcessor)
         : _processor(newAudioProcessor) {
@@ -86,7 +75,6 @@ MONSTRCrossoverComponent::~MONSTRCrossoverComponent() {
 void MONSTRCrossoverComponent::paint(Graphics &g) {
 
     _drawNeutralLine(g);
-    _drawSine(g);
     _drawWidthRectangles(g);
     _drawSliderThumbs(g);
     _drawFrequencyText(g);
@@ -102,52 +90,8 @@ void MONSTRCrossoverComponent::_drawNeutralLine(Graphics &g) {
                                  getHeight() / 2),
                      1);
 
-    g.setColour(lightGrey);
+    g.setColour(UIUtils::lightGrey);
     g.strokePath(p, PathStrokeType(0.5f));
-}
-
-// Draws the sine wave behind each band
-void MONSTRCrossoverComponent::_drawSine(Graphics &g) {
-
-    Path p;
-    double absXPos {0};
-    int pointsDrawn {0};
-
-    // For each band, draw the points of the sine up until the next crossover then switch colour
-    const int numBands {_processor->numBands->get()};
-    for (size_t bandIndex {0}; bandIndex < numBands; bandIndex++) {
-
-        const double crossoverXPos {
-            UIUtils::sliderValueToXPos(_processor->crossoverParameters[bandIndex]->get(), getWidth())
-        };
-
-        // On the last band we don't really have another crossover point, we just need to keep going
-        // all the way to the right of the component
-        const int pointsToCrossoverXPos {
-            (bandIndex < numBands - 1) ?
-                static_cast<int>(sineWaveTable.size() * (crossoverXPos / getWidth())) :
-                static_cast<int>(sineWaveTable.size() - 1)
-        };
-
-        constexpr double SINE_Y_FACTOR {0.9};
-        const double sineYScale {getHeight() * SINE_Y_FACTOR};
-        const double sineYOffset {((1 - SINE_Y_FACTOR) / 2) * getHeight()};
-
-        p.clear();
-        p.startNewSubPath(absXPos * getWidth(), sineWaveTable[pointsDrawn] * sineYScale + sineYOffset);
-
-        pointsDrawn++;
-
-        for (; pointsDrawn <= pointsToCrossoverXPos; pointsDrawn++) {
-            absXPos = (1.0 / sineWaveTable.size()) * pointsDrawn;
-            p.lineTo(absXPos * getWidth(), sineWaveTable[pointsDrawn] * sineYScale + sineYOffset);
-        }
-
-        pointsDrawn--;
-
-        g.setColour(bandColours[bandIndex % bandColours.size()].main);
-        g.strokePath(p, PathStrokeType(2.0f));
-    }
 }
 
 void MONSTRCrossoverComponent::_drawSliderThumbs(Graphics& g) {
@@ -157,61 +101,16 @@ void MONSTRCrossoverComponent::_drawSliderThumbs(Graphics& g) {
             UIUtils::sliderValueToXPos(_processor->crossoverParameters[bandIndex]->get(), getWidth())
         };
 
-        const Colour& topColour = bandColours[bandIndex % bandColours.size()].main;
-        const Colour& bottomColour = bandColours[(bandIndex + 1) % bandColours.size()].main;
 
         Path p;
-        constexpr float lineWidth {1.5f};
+        constexpr float LINE_WIDTH {1.0f};
 
-        g.setColour(topColour);
-        p.addLineSegment(Line<float>(crossoverXPos,
-                                     0,
-                                     crossoverXPos,
-                                     getHeight() * 0.5),
+        constexpr int THUMB_HEIGHT {30};
+
+        g.setColour(UIUtils::darkGrey);
+        p.addLineSegment(Line<float>(crossoverXPos, 0, crossoverXPos, getHeight()),
                          1);
-        g.strokePath(p, PathStrokeType(lineWidth));
-
-        p.clear();
-
-        g.setColour(bottomColour);
-        p.addLineSegment(Line<float>(crossoverXPos,
-                                     getHeight() * 0.5,
-                                     crossoverXPos,
-                                     getHeight()),
-                         1);
-        g.strokePath(p, PathStrokeType(lineWidth));
-
-        p.clear();
-        g.setColour(darkGrey);
-        p.addEllipse(crossoverXPos - UIUtils::SLIDER_THUMB_RADIUS,
-                     getHeight() * 0.5 - UIUtils::SLIDER_THUMB_RADIUS,
-                     UIUtils::SLIDER_THUMB_RADIUS * 2,
-                     UIUtils::SLIDER_THUMB_RADIUS * 2);
-        g.fillPath(p);
-
-        p.clear();
-        g.setColour(topColour);
-        p.addCentredArc(crossoverXPos,
-                        getHeight() * 0.5,
-                        UIUtils::SLIDER_THUMB_RADIUS,
-                        UIUtils::SLIDER_THUMB_RADIUS,
-                        WECore::CoreMath::DOUBLE_PI,
-                        0,
-                        WECore::CoreMath::DOUBLE_PI,
-                        true);
-        g.strokePath(p, PathStrokeType(lineWidth));
-
-        p.clear();
-        g.setColour(bottomColour);
-        p.addCentredArc(crossoverXPos,
-                        getHeight() * 0.5,
-                        UIUtils::SLIDER_THUMB_RADIUS,
-                        UIUtils::SLIDER_THUMB_RADIUS,
-                        0,
-                        0,
-                        WECore::CoreMath::DOUBLE_PI,
-                        true);
-        g.strokePath(p, PathStrokeType(lineWidth));
+        g.strokePath(p, PathStrokeType(LINE_WIDTH));
     }
 }
 
@@ -245,38 +144,44 @@ void MONSTRCrossoverComponent::_drawWidthRectangles(Graphics &g) {
             (!isSomethingSoloed || _processor->bandParameters[bandIndex].isSoloed->get())
         };
 
-        if (bandActive) {
-            g.setColour(bandColours[bandIndex % bandColours.size()].translucent);
-        } else {
-            g.setColour(lightGreyTrans);
-        }
-
-        float ypos {0};
-        float height {0};
+        float rectYPos {0};
+        float rectHeight {0};
+        float lineHeight {0};
 
         // Move the width value to the range -0.5:0.5
         const double widthValue {_processor->bandParameters[bandIndex].width->get() - 0.5};
 
         if (widthValue > 0) {
-            height = (getHeight() / 2.0) * widthValue;
-            ypos = getHeight() / 2.0 - height;
+            rectHeight = (getHeight() / 2.0) * widthValue;
+            rectYPos = getHeight() / 2.0 - rectHeight;
+            lineHeight = rectYPos;
         } else {
-            ypos = getHeight() / 2.0;
-            height = (getHeight() / 2.0) * std::abs(widthValue);
+            rectYPos = getHeight() / 2.0;
+            rectHeight = (getHeight() / 2.0) * std::abs(widthValue);
+            lineHeight = rectYPos + rectHeight;
         }
 
-        g.fillRect(currentXPos, ypos, nextCrossoverXPos - currentXPos, height);
+        if (bandActive) {
+            g.setColour(UIUtils::mainHighlight);
+            g.drawLine(currentXPos, lineHeight, nextCrossoverXPos, lineHeight, 0.5f);
+
+            g.setColour(UIUtils::transHighlight);
+        } else {
+            g.setColour(UIUtils::lightGreyTrans);
+        }
+
+        g.fillRect(currentXPos, rectYPos, nextCrossoverXPos - currentXPos, rectHeight);
 
         currentXPos = nextCrossoverXPos;
     }
 }
 
 void MONSTRCrossoverComponent::_drawFrequencyText(Graphics &g) {
-    constexpr double fractionOfHeight {0.9};
-    constexpr int spacing {5};
+    constexpr double fractionOfHeight {0.85};
+    constexpr int spacing {10};
 
     for (size_t bandIndex {0}; bandIndex < _processor->numBands->get() - 1; bandIndex++) {
-        g.setColour(bandColours[(bandIndex + 1) % bandColours.size()].main);
+        g.setColour(UIUtils::mainHighlight);
 
         const float crossoverValue {_processor->crossoverParameters[bandIndex]->get()};
 
@@ -288,18 +193,32 @@ void MONSTRCrossoverComponent::_drawFrequencyText(Graphics &g) {
             WECore::MONSTR::Parameters::CROSSOVER_FREQUENCY.NormalisedToInternal(crossoverValue)
         };
 
-        g.drawText(String(static_cast<int>(crossoverHz)) + " Hz",
-                   crossoverXPos + spacing,
-                   getHeight() * fractionOfHeight,
-                   60,
-                   20,
-                   Justification::centredLeft,
-                   false);
+        GlyphArrangement ga;
+        ga.addLineOfText(Font(16.0f), String(static_cast<int>(crossoverHz)) + " Hz", 0, 0);
+
+        Path p;
+        ga.createPath(p);
+
+        Rectangle<float> pathBounds = p.getBounds();
+
+        p.applyTransform(
+            AffineTransform().rotated(WECore::CoreMath::DOUBLE_PI / 2,
+                                      pathBounds.getCentreX(),
+                                      pathBounds.getCentreY()).translated(crossoverXPos - pathBounds.getWidth() / 2.0 + spacing,
+                                                                          getHeight() * fractionOfHeight)
+
+
+        );
+
+        g.fillPath(p);
     }
 }
 
 void MONSTRCrossoverComponent::_drawBandButtons(Graphics &g) {
 
+    const Colour bypassColour(252, 252, 22);
+    const Colour muteColour(252, 0, 0);
+    const Colour soloColour(252, 137, 22);
 
     for (size_t bandIndex {0}; bandIndex < _processor->numBands->get(); bandIndex++) {
         const double crossoverXPos {bandIndex < _processor->numBands->get() - 1 ?
@@ -309,22 +228,20 @@ void MONSTRCrossoverComponent::_drawBandButtons(Graphics &g) {
 
         const double XPos {UIUtils::crossoverXPosToButtonXPos(crossoverXPos)};
 
-        const Colour& activeColour = bandColours[(bandIndex) % bandColours.size()].main;
-
         drawBandButton("B",
-                       !_processor->bandParameters[bandIndex].isActive->get() ? activeColour : lightGrey,
+                       !_processor->bandParameters[bandIndex].isActive->get() ? bypassColour : UIUtils::lightGrey,
                        g,
                        XPos,
                        UIUtils::getButtonYPos(0));
 
         drawBandButton("M",
-                       _processor->bandParameters[bandIndex].isMuted->get() ? activeColour : lightGrey,
+                       _processor->bandParameters[bandIndex].isMuted->get() ? muteColour : UIUtils::lightGrey,
                        g,
                        XPos,
                        UIUtils::getButtonYPos(1));
 
         drawBandButton("S",
-                       _processor->bandParameters[bandIndex].isSoloed->get() ? activeColour : lightGrey,
+                       _processor->bandParameters[bandIndex].isSoloed->get() ? soloColour : UIUtils::lightGrey,
                        g,
                        XPos,
                        UIUtils::getButtonYPos(2));

@@ -24,52 +24,61 @@
 
 #include "MONSTRLookAndFeel.h"
 
-// Initialise static members
-const Colour MONSTRLookAndFeel::lightGrey(200, 200, 200);
-const Colour MONSTRLookAndFeel::darkGrey(107, 107, 107);
+#include "UIUtils.h"
 
+MONSTRLookAndFeel::MONSTRLookAndFeel() {
+    _regularFont = Font(Typeface::createSystemTypefaceFor(BinaryData::MontserratRegular_ttf,
+                                                          BinaryData::MontserratRegular_ttfSize));
 
-MONSTRLookAndFeel::MONSTRLookAndFeel() : LookAndFeel_V2() {
+    jassert(_regularFont.getTypefaceName().isNotEmpty());
 }
 
 MONSTRLookAndFeel::~MONSTRLookAndFeel() {
-    
 }
 
-
-void MONSTRLookAndFeel::drawLinearSliderThumb(Graphics& /*g*/,
-                                              int /*x*/,
-                                              int /*y*/,
-                                              int /*width*/,
-                                              int /*height*/,
-                                              float /*sliderPos*/,
-                                              float /*minSliderPos*/,
-                                              float /*maxSliderPos*/,
-                                              const Slider::SliderStyle /*style*/,
-                                              juce::Slider& /*slider*/) {
-    // do nothing
+void MONSTRLookAndFeel::drawButtonBackground(Graphics& /*g*/,
+                                             Button& /*textButton*/,
+                                             const Colour& /*backgroundColour*/,
+                                             bool /*shouldDrawButtonAsHighlighted*/,
+                                             bool /*shouldDrawButtonAsDown*/) {
+    // Do nothing
 }
 
-void MONSTRLookAndFeel::drawLinearSliderBackground(Graphics& /*g*/,
-                                                   int /*x*/,
-                                                   int /*y*/,
-                                                   int /*width*/,
-                                                   int /*height*/,
-                                                   float /*sliderPos*/,
-                                                   float /*minSliderPos*/,
-                                                   float /*maxSliderPos*/,
-                                                   const Slider::SliderStyle /*style*/,
-                                                   Slider& /*slider*/) {
-    // do nothing
+void MONSTRLookAndFeel::drawButtonText(Graphics& g,
+                                       TextButton& textButton,
+                                       bool /*shouldDrawButtonAsHighlighted*/,
+                                       bool /*shouldDrawButtonAsDown*/) {
+
+    if (textButton.isEnabled()) {
+        g.setColour(textButton.findColour(TextButton::textColourOnId));
+    } else {
+        g.setColour(textButton.findColour(TextButton::textColourOffId));
+    }
+
+    Font font;
+    font.setTypefaceName(getTypefaceForFont(font)->getName());
+    g.setFont(font);
+
+    g.drawFittedText(textButton.getButtonText(),
+                     0,
+                     0,
+                     textButton.getWidth(),
+                     textButton.getHeight(),
+                     Justification::centred,
+                     0);
 }
 
 void MONSTRLookAndFeel::drawTooltip(Graphics& g,
-                                     const String& text,
-                                     int width,
-                                     int height) {
-    g.setColour(lightGrey);
+                                    const String& text,
+                                    int width,
+                                    int height) {
+    g.setColour(UIUtils::lightGrey);
     g.fillRect(0, 0, width, height);
-    
-    g.setColour(darkGrey);
+
+    g.setColour(UIUtils::darkGrey);
     g.drawFittedText(text, 0, 0, width, height, Justification::centred, 3);
+}
+
+Typeface::Ptr MONSTRLookAndFeel::getTypefaceForFont(const Font& /*font*/) {
+    return _regularFont.getTypeface();
 }

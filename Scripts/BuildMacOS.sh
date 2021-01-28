@@ -12,6 +12,10 @@ cd $WECORE_HOME
 echo "=== Using WE-Core $(git log --pretty=format:'%h' -n 1) ==="
 cd -
 
+echo "=== Downloading fonts ==="
+wget https://github.com/JulietaUla/Montserrat/raw/master/fonts/ttf/Montserrat-Regular.ttf \
+     -P $SCRIPT_DIR/../Source/Graphics
+
 echo "=== Downloading JUCE ==="
 wget https://github.com/juce-framework/JUCE/releases/download/6.0.7/juce-6.0.7-osx.zip \
      -P $SCRIPT_DIR/..

@@ -44,17 +44,11 @@ public:
 private:
     std::array<double, 200>sineWaveTable;
 
-    static const Colour lightGrey,
-                        darkGrey,
-                        lightGreyTrans;
-
     MonstrAudioProcessor* _processor;
 
     std::unique_ptr<MONSTRCrossoverMouseListener> _mouseListener;
 
     void _drawNeutralLine(Graphics& g);
-
-    void _drawSine(Graphics& g);
 
     void _drawSliderThumbs(Graphics& g);
 

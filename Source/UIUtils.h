@@ -32,6 +32,12 @@ namespace UIUtils {
     constexpr int BAND_BUTTON_WIDTH {20};
     constexpr int BAND_BUTTON_PADDING {4};
 
+    const Colour lightGrey(200, 200, 200);
+    const Colour darkGrey(107, 107, 107);
+    const Colour lightGreyTrans(static_cast<uint8_t>(200), 200, 200, 0.5f);
+    const Colour mainHighlight(135, 252, 2);
+    const Colour transHighlight(static_cast<uint8_t>(135), 252, 2, 0.5f);
+
     inline double sliderValueToInternalLog(double sliderValue) {
         return std::pow(10, 1.0414 * sliderValue - 1) - 0.1;
     }
