@@ -24,6 +24,12 @@
 
 #pragma once
 
+namespace {
+    constexpr double LOG_SCALE {1.0414};
+    constexpr double LOG_OFFSET_1 {0.1};
+    constexpr double LOG_OFFSET_2 {1};
+}
+
 namespace UIUtils {
     // The radius is used for drawing, and the target width for mouse events
     constexpr int SLIDER_THUMB_RADIUS {6};
@@ -38,14 +44,24 @@ namespace UIUtils {
     const Colour mainHighlight(135, 252, 2);
     const Colour transHighlight(static_cast<uint8_t>(135), 252, 2, 0.5f);
 
+
+    /**
+     * Maps a linear scaled value in the range 0:1 to a log scaled value in the same range.
+     */
     inline double sliderValueToInternalLog(double sliderValue) {
-        return std::pow(10, 1.0414 * sliderValue - 1) - 0.1;
+        return std::pow(10, LOG_SCALE * sliderValue - LOG_OFFSET_2) - LOG_OFFSET_1;
     }
 
+    /**
+     * Maps a log scaled value in the range 0:1 to a linear scaled value in the same range.
+     */
     inline double internalLogToSliderValue(double internalValue) {
-        return (std::log10(internalValue + 0.1) + 1) / 1.0414;
+        return (std::log10(internalValue + LOG_OFFSET_1) + LOG_OFFSET_2) / LOG_SCALE;
     }
 
+    /**
+     * Converts a crossover frequency value between 0 and 1 to an x coordinate.
+     */
     inline double sliderValueToXPos(double sliderValue, int componentWidth) {
         const double MARGIN_PX {componentWidth * 0.05};
         const double realRange {componentWidth - 2 * MARGIN_PX};
@@ -53,6 +69,9 @@ namespace UIUtils {
         return (internalLogToSliderValue(sliderValue) * realRange) + MARGIN_PX;
     }
 
+    /**
+     * Converts an x coordinate to a crossover frequency parameter value between 0 and 1.
+     */
     inline double XPosToSliderValue(int XPos, int componentWidth) {
         const double MARGIN_PX {componentWidth * 0.05};
         const double realRange {componentWidth - 2 * MARGIN_PX};
@@ -60,14 +79,23 @@ namespace UIUtils {
         return sliderValueToInternalLog(std::max(XPos - MARGIN_PX, 0.0) / realRange);
     }
 
+    /**
+     * Converts a y coordinate to a width parameter value between 0 and 1.
+     */
     inline double YPosToWidthValue(int YPos, int componentHeight) {
         return 1 - std::min(std::max(0.0, YPos - componentHeight / 4.0) / (componentHeight / 2.0), 1.0);
     }
 
+    /**
+     * Returns the band button region x coordinate for a given crossover frequency x coordinate.
+     */
     inline double crossoverXPosToButtonXPos(double crossoverXPos) {
         return crossoverXPos - BAND_BUTTON_WIDTH - BAND_BUTTON_PADDING - SLIDER_THUMB_RADIUS;
     }
 
+    /**
+     * Returns the button y coordinate for a given button number.
+     */
     inline double getButtonYPos(int index) {
         return BAND_BUTTON_PADDING + index * (BAND_BUTTON_PADDING + BAND_BUTTON_WIDTH);
     }
