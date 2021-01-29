@@ -20,7 +20,7 @@ MonstrAudioProcessor::MonstrAudioProcessor()
     namespace SP = WECore::StereoWidth::Parameters;
 
     constexpr float WIDTH_PRECISION {0.01f};
-    constexpr float FREQ_PRECISION {0.001f};
+    constexpr float FREQ_PRECISION {0.0001f};
 
     registerParameter(bandParameters[0].isActive, BAND_STRINGS[0].isActive, MP::BANDSWITCH_DEFAULT, [&](bool val) { setBandActive(0, val); });
     registerParameter(bandParameters[0].width, BAND_STRINGS[0].width, &SP::WIDTH, SP::WIDTH.defaultValue, WIDTH_PRECISION, [&](float val) { setBandWidth(0, val); });
@@ -60,7 +60,7 @@ MonstrAudioProcessor::MonstrAudioProcessor()
 
     registerParameter(bandParameters[4].isMuted, BAND_STRINGS[4].isMuted, MP::BANDMUTED_DEFAULT, [&](bool val) { setBandMuted(4, val); });
     registerParameter(bandParameters[4].isSoloed, BAND_STRINGS[4].isSoloed, MP::BANDSOLO_DEFAULT, [&](bool val) { setBandSoloed(4, val); });
-    
+
     registerParameter(bandParameters[5].isMuted, BAND_STRINGS[5].isMuted, MP::BANDMUTED_DEFAULT, [&](bool val) { setBandMuted(5, val); });
     registerParameter(bandParameters[5].isSoloed, BAND_STRINGS[5].isSoloed, MP::BANDSOLO_DEFAULT, [&](bool val) { setBandSoloed(5, val); });
 

@@ -25,9 +25,10 @@
 #pragma once
 
 namespace {
-    constexpr double LOG_SCALE {1.0414};
-    constexpr double LOG_OFFSET_1 {0.1};
-    constexpr double LOG_OFFSET_2 {1};
+    // These are tuned experimentally to get the desired log curve and crossings close to 0,0 and 1,1.
+    constexpr double LOG_SCALE {3.00043};
+    constexpr double LOG_OFFSET_1 {0.001};
+    constexpr double LOG_OFFSET_2 {3};
 }
 
 namespace UIUtils {
