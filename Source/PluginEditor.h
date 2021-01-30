@@ -38,6 +38,7 @@
                                                                     //[/Comments]
 */
 class MonstrAudioProcessorEditor  : public WECore::JUCEPlugin::CoreProcessorEditor,
+                                    public Timer,
                                     public juce::Button::Listener
 {
 public:
@@ -47,6 +48,7 @@ public:
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
+    void timerCallback() override;
     MonstrAudioProcessor* getProcessor() const {
         return static_cast<MonstrAudioProcessor*>(getAudioProcessor());
     }
@@ -69,6 +71,7 @@ private:
     std::unique_ptr<MONSTRCrossoverComponent> crossoverView;
     std::unique_ptr<juce::TextButton> AddBandBtn;
     std::unique_ptr<juce::TextButton> RemoveBandBtn;
+    std::unique_ptr<MONSTRWidthLabel> widthValueLbl;
 
 
     //==============================================================================

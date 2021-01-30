@@ -54,6 +54,17 @@ MonstrAudioProcessorEditor::MonstrAudioProcessorEditor (MonstrAudioProcessor& ow
 
     RemoveBandBtn->setBounds (0, 256, 275, 34);
 
+    widthValueLbl.reset (new MONSTRWidthLabel ("Width Value Label",
+                                               juce::String()));
+    addAndMakeVisible (widthValueLbl.get());
+    widthValueLbl->setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+    widthValueLbl->setJustificationType (juce::Justification::centred);
+    widthValueLbl->setEditable (false, false, false);
+    widthValueLbl->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    widthValueLbl->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
+
+    widthValueLbl->setBounds (288, 261, 64, 24);
+
 
     //[UserPreSize]
     //[/UserPreSize]
@@ -62,6 +73,8 @@ MonstrAudioProcessorEditor::MonstrAudioProcessorEditor (MonstrAudioProcessor& ow
 
 
     //[Constructor] You can add your own custom stuff here..
+    startTimer(60);
+
     _assignLookAndFeelToAllChildren(customLookAndFeel);
 
     // This is needed for the fonts to be applied
@@ -73,6 +86,9 @@ MonstrAudioProcessorEditor::MonstrAudioProcessorEditor (MonstrAudioProcessor& ow
     AddBandBtn->setColour(TextButton::textColourOffId, UIUtils::lightGrey);
     RemoveBandBtn->setColour(TextButton::textColourOffId, UIUtils::lightGrey);
 
+    widthValueLbl->setColour(Label::textColourId, UIUtils::mainHighlight);
+    crossoverView->start(widthValueLbl.get());
+
     // Call this manually once to make sure the UI reflects the parameters' states correctly
     _onParameterUpdate();
     //[/Constructor]
@@ -81,11 +97,14 @@ MonstrAudioProcessorEditor::MonstrAudioProcessorEditor (MonstrAudioProcessor& ow
 MonstrAudioProcessorEditor::~MonstrAudioProcessorEditor()
 {
     //[Destructor_pre]. You can add your own custom destruction code here..
+    crossoverView->stop();
+    widthValueLbl->stop();
     //[/Destructor_pre]
 
     crossoverView = nullptr;
     AddBandBtn = nullptr;
     RemoveBandBtn = nullptr;
+    widthValueLbl = nullptr;
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -145,6 +164,10 @@ void MonstrAudioProcessorEditor::buttonClicked (juce::Button* buttonThatWasClick
 
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
+void MonstrAudioProcessorEditor::timerCallback() {
+    widthValueLbl->refreshValue();
+}
+
 void MonstrAudioProcessorEditor::_onParameterUpdate() {
     crossoverView->repaint();
 
@@ -176,7 +199,7 @@ void MonstrAudioProcessorEditor::_onParameterUpdate() {
 BEGIN_JUCER_METADATA
 
 <JUCER_COMPONENT documentType="Component" className="MonstrAudioProcessorEditor"
-                 componentName="" parentClasses="public WECore::JUCEPlugin::CoreProcessorEditor"
+                 componentName="" parentClasses="public WECore::JUCEPlugin::CoreProcessorEditor, public Timer"
                  constructorParams="MonstrAudioProcessor&amp; ownerFilter" variableInitialisers="CoreProcessorEditor(ownerFilter)"
                  snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330"
                  fixedSize="1" initialWidth="640" initialHeight="290">
@@ -190,6 +213,11 @@ BEGIN_JUCER_METADATA
   <TEXTBUTTON name="Remove Band Button" id="2ef4417e3e0b973d" memberName="RemoveBandBtn"
               virtualName="" explicitFocusOrder="0" pos="0 256 275 34" buttonText="Remove Band"
               connectedEdges="0" needsCallback="1" radioGroupId="0"/>
+  <LABEL name="Width Value Label" id="b0626778082c566d" memberName="widthValueLbl"
+         virtualName="MONSTRWidthLabel" explicitFocusOrder="0" pos="288 261 64 24"
+         edTextCol="ff000000" edBkgCol="0" labelText="" editableSingleClick="0"
+         editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
+         fontsize="15.0" kerning="0.0" bold="0" italic="0" justification="36"/>
 </JUCER_COMPONENT>
 
 END_JUCER_METADATA

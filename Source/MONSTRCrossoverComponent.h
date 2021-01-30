@@ -33,6 +33,8 @@
 #include "MONSTRLookAndFeel.h"
 #include "PluginProcessor.h"
 
+class MONSTRWidthLabel;
+
 class MONSTRCrossoverComponent : public Component {
 public:
 
@@ -40,6 +42,10 @@ public:
     virtual ~MONSTRCrossoverComponent();
 
     void paint(Graphics& g) override;
+
+    void start(MONSTRWidthLabel* widthValueLabel) { _mouseListener->start(widthValueLabel); }
+
+    void stop() { _mouseListener->stop(); }
 
 private:
     std::array<double, 200>sineWaveTable;

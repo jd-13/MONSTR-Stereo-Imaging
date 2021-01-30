@@ -54,6 +54,10 @@
               file="Source/MONSTRLookAndFeel.cpp"/>
         <FILE id="rJ5ICP" name="MONSTRLookAndFeel.h" compile="0" resource="0"
               file="Source/MONSTRLookAndFeel.h"/>
+        <FILE id="FuvYqn" name="MONSTRWidthLabel.cpp" compile="1" resource="0"
+              file="Source/MONSTRWidthLabel.cpp"/>
+        <FILE id="twOFQn" name="MONSTRWidthLabel.h" compile="0" resource="0"
+              file="Source/MONSTRWidthLabel.h"/>
         <FILE id="sPgsPl" name="PluginEditor.cpp" compile="1" resource="0"
               file="Source/PluginEditor.cpp"/>
         <FILE id="Zq8WyY" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>

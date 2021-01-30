@@ -31,7 +31,8 @@
 
 MONSTRCrossoverMouseListener::MONSTRCrossoverMouseListener(MonstrAudioProcessor* newAudioProcessor)
         : _processor(newAudioProcessor),
-          _dragParameter(nullptr) {
+          _dragParameter(nullptr),
+          _widthValueLabel(nullptr) {
 
     // Initialise the parameter interactions
 
@@ -67,6 +68,17 @@ MONSTRCrossoverMouseListener::MONSTRCrossoverMouseListener(MonstrAudioProcessor*
 }
 
 MONSTRCrossoverMouseListener::~MONSTRCrossoverMouseListener() {
+}
+
+void MONSTRCrossoverMouseListener::mouseMove(const MouseEvent& event) {
+    _updateWidthValueLabel(event);
+}
+
+void MONSTRCrossoverMouseListener::mouseExit(const MouseEvent& event) {
+    // Clear the width label if the cursor isn't inside the component
+    if (_widthValueLabel != nullptr) {
+        _widthValueLabel->stop();
+    }
 }
 
 void MONSTRCrossoverMouseListener::mouseDown(const MouseEvent& event) {
@@ -168,4 +180,27 @@ MONSTRCrossoverMouseListener::FloatParameterInteraction* MONSTRCrossoverMouseLis
     }
 
     return retVal;
+}
+
+void MONSTRCrossoverMouseListener::_updateWidthValueLabel(const MouseEvent& event) {
+
+    const int mouseDownX {event.getMouseDownX()};
+
+    // For each available band, check if the cursor is currently inside it
+    const int numBands {_processor->numBands->get()};
+
+    for (size_t bandIndex {0}; bandIndex < numBands; bandIndex++) {
+        const double crossoverXPos {bandIndex < numBands - 1 ?
+            UIUtils::sliderValueToXPos(_processor->crossoverParameters[bandIndex]->get(), event.eventComponent->getWidth()) :
+            event.eventComponent->getWidth()
+        };
+
+        if (mouseDownX < crossoverXPos) {
+            // Pass the parameter to the value label
+            if (_widthValueLabel != nullptr) {
+                _widthValueLabel->setTargetParameter(_processor->bandParameters[bandIndex].width);
+            }
+            break;
+        }
+    }
 }

@@ -28,6 +28,7 @@
 #include <optional>
 
 #include "../JuceLibraryCode/JuceHeader.h"
+#include "MONSTRWidthLabel.h"
 #include "PluginProcessor.h"
 #include "ParameterData.h"
 
@@ -37,6 +38,10 @@ public:
     MONSTRCrossoverMouseListener(MonstrAudioProcessor* newAudioProcessor);
     virtual ~MONSTRCrossoverMouseListener();
 
+    void mouseMove(const MouseEvent& event) override;
+
+    void mouseExit(const MouseEvent& event) override;
+
     void mouseDown(const MouseEvent& event) override;
 
     void mouseDrag(const MouseEvent& event) override;
@@ -44,6 +49,10 @@ public:
     void mouseUp(const MouseEvent& event) override;
 
     void mouseDoubleClick(const MouseEvent& event) override;
+
+    void start(MONSTRWidthLabel* widthValueLabel) { _widthValueLabel = widthValueLabel; }
+
+    void stop() { _widthValueLabel = nullptr; }
 
 private:
 
@@ -61,10 +70,14 @@ private:
 
     FloatParameterInteraction* _dragParameter;
 
+    MONSTRWidthLabel* _widthValueLabel;
+
     /**
      * If the mouse event occured inside a button the function will handle it and return null,
      * if the event occured inside a slider it will return the corresponding
      * FloatParameterInteraction for it to be handled by the appropriate event handlers.
      */
     FloatParameterInteraction* _resolveParameterInteraction(const MouseEvent& event);
+
+    void _updateWidthValueLabel(const MouseEvent& event);
 };
