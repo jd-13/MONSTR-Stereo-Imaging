@@ -27,6 +27,14 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
+/**
+ * A custom label which when refreshValue is called will read in the value from the specified
+ * parameter and displays its value.
+ *
+ * The reason it is done this way rather than using the LabelReadoutSlider as in other plugins, is
+ * that updating the label value continuously for every parameter change causes the crossover
+ * component to repaint at a much slower rate and makes the UI feel a little laggy.
+ */
 class MONSTRWidthLabel : public Label {
 public:
 
