@@ -30,15 +30,12 @@
 
 namespace {
 
-    void drawBandButton(String text, const Colour& colour, Graphics& g, double XPos, double YPos) {
+    void drawBandButton(String text, const Colour& colour, Graphics& g, double crossoverXPos, double index) {
 
         constexpr int CORNER_RADIUS {2};
         constexpr int LINE_THICKNESS {1};
 
-        const Rectangle<float> buttonRectange(XPos,
-                                              YPos,
-                                              UIUtils::BAND_BUTTON_WIDTH,
-                                              UIUtils::BAND_BUTTON_WIDTH);
+        const Rectangle<float> buttonRectange = UIUtils::getButtonBounds(crossoverXPos, index);
 
         const Colour buttonBackground(static_cast<uint8_t>(0), 0, 0, 0.5f);
         g.setColour(buttonBackground);
@@ -221,24 +218,22 @@ void MONSTRCrossoverComponent::_drawBandButtons(Graphics &g) {
             getWidth()
         };
 
-        const double XPos {UIUtils::crossoverXPosToButtonXPos(crossoverXPos)};
-
         drawBandButton("B",
                        !_processor->bandParameters[bandIndex].isActive->get() ? bypassColour : UIUtils::lightGrey,
                        g,
-                       XPos,
-                       UIUtils::getButtonYPos(0));
+                       crossoverXPos,
+                       0);
 
         drawBandButton("M",
                        _processor->bandParameters[bandIndex].isMuted->get() ? muteColour : UIUtils::lightGrey,
                        g,
-                       XPos,
-                       UIUtils::getButtonYPos(1));
+                       crossoverXPos,
+                       1);
 
         drawBandButton("S",
                        _processor->bandParameters[bandIndex].isSoloed->get() ? soloColour : UIUtils::lightGrey,
                        g,
-                       XPos,
-                       UIUtils::getButtonYPos(2));
+                       crossoverXPos,
+                       2);
     }
 }

@@ -24,6 +24,8 @@
 
 #pragma once
 
+#include "../JuceLibraryCode/JuceHeader.h"
+
 namespace {
     // These are tuned experimentally to get the desired log curve and crossings close to 0,0 and 1,1.
     constexpr double LOG_SCALE {3.00043};
@@ -88,16 +90,13 @@ namespace UIUtils {
     }
 
     /**
-     * Returns the band button region x coordinate for a given crossover frequency x coordinate.
+     * Returns a rectangle representing the position of a button for the given crossover position
+     * and index.
      */
-    inline double crossoverXPosToButtonXPos(double crossoverXPos) {
-        return crossoverXPos - BAND_BUTTON_WIDTH - BAND_BUTTON_PADDING - SLIDER_THUMB_RADIUS;
-    }
-
-    /**
-     * Returns the button y coordinate for a given button number.
-     */
-    inline double getButtonYPos(int index) {
-        return BAND_BUTTON_PADDING + index * (BAND_BUTTON_PADDING + BAND_BUTTON_WIDTH);
+    inline Rectangle<float> getButtonBounds(double crossoverXPos, int index) {
+        return Rectangle<float>(crossoverXPos - BAND_BUTTON_WIDTH - BAND_BUTTON_PADDING - SLIDER_THUMB_RADIUS,
+                                BAND_BUTTON_PADDING + index * (BAND_BUTTON_PADDING + BAND_BUTTON_WIDTH),
+                                BAND_BUTTON_WIDTH,
+                                BAND_BUTTON_WIDTH);
     }
 }

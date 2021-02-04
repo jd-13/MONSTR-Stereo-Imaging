@@ -131,38 +131,17 @@ MONSTRCrossoverMouseListener::FloatParameterInteraction* MONSTRCrossoverMouseLis
             event.eventComponent->getWidth()
         };
 
-        const double buttonXPos {UIUtils::crossoverXPosToButtonXPos(crossoverXPos)};
-
-        const bool isWithinButtonXRange {
-            mouseDownX > buttonXPos && mouseDownX < buttonXPos + UIUtils::BAND_BUTTON_WIDTH
-        };
-
-        const bool isOnTopButton {
-            isWithinButtonXRange &&
-            mouseDownY > UIUtils::getButtonYPos(0) && mouseDownY < UIUtils::getButtonYPos(0) + UIUtils::BAND_BUTTON_WIDTH
-        };
-
-        const bool isOnMiddleButton {
-            isWithinButtonXRange &&
-            mouseDownY > UIUtils::getButtonYPos(1) && mouseDownY < UIUtils::getButtonYPos(1) + UIUtils::BAND_BUTTON_WIDTH
-        };
-
-        const bool isOnBottomButton {
-            isWithinButtonXRange &&
-            mouseDownY > UIUtils::getButtonYPos(2) && mouseDownY < UIUtils::getButtonYPos(2) + UIUtils::BAND_BUTTON_WIDTH
-        };
-
-        if (isOnTopButton) {
+        if (UIUtils::getButtonBounds(crossoverXPos, 0).contains(mouseDownX, mouseDownY)) {
             // Landed on the bypass button
             _processor->setBandActive(bandIndex, !_processor->bandParameters[bandIndex].isActive->get());
             break;
 
-        } else if (isOnMiddleButton) {
+        } else if (UIUtils::getButtonBounds(crossoverXPos, 1).contains(mouseDownX, mouseDownY)) {
             // Landed on the mute button
             _processor->setBandMuted(bandIndex, !_processor->bandParameters[bandIndex].isMuted->get());
             break;
 
-        } else if (isOnBottomButton) {
+        } else if (UIUtils::getButtonBounds(crossoverXPos, 2).contains(mouseDownX, mouseDownY)) {
             // Landed on the solo button
             _processor->setBandSoloed(bandIndex, !_processor->bandParameters[bandIndex].isSoloed->get());
             break;
