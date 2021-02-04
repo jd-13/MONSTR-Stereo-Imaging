@@ -47,12 +47,7 @@ namespace {
         g.setColour(colour);
         g.drawRoundedRectangle(buttonRectange, CORNER_RADIUS, LINE_THICKNESS);
 
-        g.drawText(text,
-                   XPos,
-                   YPos,
-                   UIUtils::BAND_BUTTON_WIDTH,
-                   UIUtils::BAND_BUTTON_WIDTH,
-                   Justification::centred);
+        g.drawText(text, buttonRectange, Justification::centred);
     }
 }
 
