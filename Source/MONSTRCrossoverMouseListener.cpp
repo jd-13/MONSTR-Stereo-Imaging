@@ -56,7 +56,32 @@ MONSTRCrossoverMouseListener::MONSTRCrossoverMouseListener(MonstrAudioProcessor*
 
         _crossoverFrequencies[bandIndex] = {
             [bandIndex, this](const MouseEvent& event) {
-                _processor->setCrossoverFrequency(bandIndex, UIUtils::XPosToSliderValue(event.getPosition().getX(), event.eventComponent->getWidth()));
+
+                constexpr double MIN_SPACING {
+                    2 * UIUtils::SLIDER_THUMB_RADIUS + UIUtils::BAND_BUTTON_WIDTH
+                };
+
+                const int currentXPos {event.getPosition().getX()};
+                const int componentWidth {event.eventComponent->getWidth()};
+
+                _processor->setCrossoverFrequency(bandIndex, UIUtils::XPosToSliderValue(currentXPos, componentWidth));
+
+                // Check if this crossover handle is getting too close to another and move it if
+                // needed
+                for (int crossoverIndex {0}; crossoverIndex < WECore::MONSTR::Parameters::NUM_BANDS.maxValue - 1; crossoverIndex++) {
+                    const double otherXPos {
+                        UIUtils::sliderValueToXPos(_processor->crossoverParameters[crossoverIndex]->get(), componentWidth)
+                    };
+
+                    const double requiredGap {MIN_SPACING * std::abs(bandIndex - crossoverIndex)};
+                    const double actualGap {std::abs(currentXPos - otherXPos)};
+
+                    if (crossoverIndex < bandIndex && actualGap < requiredGap) {
+                        _processor->setCrossoverFrequency(crossoverIndex, UIUtils::XPosToSliderValue(currentXPos - requiredGap, componentWidth));
+                    } else if (crossoverIndex > bandIndex && actualGap < requiredGap) {
+                        _processor->setCrossoverFrequency(crossoverIndex, UIUtils::XPosToSliderValue(currentXPos + requiredGap, componentWidth));
+                    }
+                }
             },
             []() { /* Do nothing */ },
             [bandIndex, this]() { _processor->crossoverParameters[bandIndex]->beginChangeGesture(); },

@@ -94,7 +94,7 @@ namespace UIUtils {
      * and index.
      */
     inline Rectangle<float> getButtonBounds(double crossoverXPos, int index) {
-        return Rectangle<float>(crossoverXPos - BAND_BUTTON_WIDTH - BAND_BUTTON_PADDING - SLIDER_THUMB_RADIUS,
+        return Rectangle<float>(crossoverXPos - BAND_BUTTON_WIDTH - SLIDER_THUMB_RADIUS,
                                 BAND_BUTTON_PADDING + index * (BAND_BUTTON_PADDING + BAND_BUTTON_WIDTH),
                                 BAND_BUTTON_WIDTH,
                                 BAND_BUTTON_WIDTH);
