@@ -42,14 +42,22 @@
     </GROUP>
     <GROUP id="{893CC731-9921-30A1-C72A-2337643309C3}" name="Source">
       <GROUP id="{AB2D53B4-98E6-6EC7-2DE3-F1C924AB3ADD}" name="GUI">
-        <FILE id="eSe46d" name="MONSTRCrossoverComponent.cpp" compile="1" resource="0"
-              file="Source/MONSTRCrossoverComponent.cpp"/>
-        <FILE id="ovY5LC" name="MONSTRCrossoverComponent.h" compile="0" resource="0"
-              file="Source/MONSTRCrossoverComponent.h"/>
+        <FILE id="E4puPZ" name="MONSTRCrossoverImagerComponent.cpp" compile="1"
+              resource="0" file="Source/MONSTRCrossoverImagerComponent.cpp"/>
+        <FILE id="gj619s" name="MONSTRCrossoverImagerComponent.h" compile="0"
+              resource="0" file="Source/MONSTRCrossoverImagerComponent.h"/>
+        <FILE id="eSe46d" name="MONSTRCrossoverParameterComponent.cpp" compile="1"
+              resource="0" file="Source/MONSTRCrossoverParameterComponent.cpp"/>
+        <FILE id="ovY5LC" name="MONSTRCrossoverParameterComponent.h" compile="0"
+              resource="0" file="Source/MONSTRCrossoverParameterComponent.h"/>
         <FILE id="FgxE0j" name="MONSTRCrossoverMouseListener.cpp" compile="1"
               resource="0" file="Source/MONSTRCrossoverMouseListener.cpp"/>
         <FILE id="T7nSb4" name="MONSTRCrossoverMouseListener.h" compile="0"
               resource="0" file="Source/MONSTRCrossoverMouseListener.h"/>
+        <FILE id="EBWbC8" name="MONSTRCrossoverWrapperComponent.cpp" compile="1"
+              resource="0" file="Source/MONSTRCrossoverWrapperComponent.cpp"/>
+        <FILE id="cz4rDz" name="MONSTRCrossoverWrapperComponent.h" compile="0"
+              resource="0" file="Source/MONSTRCrossoverWrapperComponent.h"/>
         <FILE id="UYLJO7" name="MONSTRLookAndFeel.cpp" compile="1" resource="0"
               file="Source/MONSTRLookAndFeel.cpp"/>
         <FILE id="rJ5ICP" name="MONSTRLookAndFeel.h" compile="0" resource="0"
@@ -63,6 +71,10 @@
         <FILE id="Zq8WyY" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
       </GROUP>
       <FILE id="a6dwX2" name="ParameterData.h" compile="0" resource="0" file="Source/ParameterData.h"/>
+      <FILE id="X81K6x" name="MONSTRBandProcessor.cpp" compile="1" resource="0"
+            file="Source/MONSTRBandProcessor.cpp"/>
+      <FILE id="vukzG9" name="MONSTRBandProcessor.h" compile="0" resource="0"
+            file="Source/MONSTRBandProcessor.h"/>
       <FILE id="igpjzx" name="MONSTR.cpp" compile="1" resource="0" file="Source/MONSTR.cpp"/>
       <FILE id="t20NmX" name="MONSTR.h" compile="0" resource="0" file="Source/MONSTR.h"/>
       <FILE id="R55giV" name="PluginProcessor.cpp" compile="1" resource="0"

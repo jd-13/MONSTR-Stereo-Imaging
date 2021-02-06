@@ -23,7 +23,7 @@
 #include "JuceHeader.h"
 #include "PluginProcessor.h"
 #include "MONSTRLookAndFeel.h"
-#include "MONSTRCrossoverComponent.h"
+#include "MONSTRCrossoverWrapperComponent.h"
 #include "CoreJUCEPlugin/CoreProcessorEditor.h"
 //[/Headers]
 
@@ -68,7 +68,7 @@ private:
     //[/UserVariables]
 
     //==============================================================================
-    std::unique_ptr<MONSTRCrossoverComponent> crossoverView;
+    std::unique_ptr<MONSTRCrossoverWrapperComponent> crossoverWrapper;
     std::unique_ptr<juce::TextButton> AddBandBtn;
     std::unique_ptr<juce::TextButton> RemoveBandBtn;
     std::unique_ptr<MONSTRWidthLabel> widthValueLbl;

@@ -1,9 +1,9 @@
 /*
- *	File:		MONSTRCrossoverComponent.h
+ *	File:		MONSTRCrossoverImagerComponent.h
  *
  *	Version:	1.0.0
  *
- *	Created:	06/03/2016
+ *	Created:	06/02/2021
  *
  *	This file is part of MONSTR.
  *
@@ -24,43 +24,19 @@
 
 #pragma once
 
-#include <array>
-#include <memory>
-#include <optional>
-
 #include "../JuceLibraryCode/JuceHeader.h"
-#include "MONSTRCrossoverMouseListener.h"
-#include "MONSTRLookAndFeel.h"
+
 #include "PluginProcessor.h"
 
-class MONSTRWidthLabel;
-
-class MONSTRCrossoverComponent : public Component {
+/**
+ * Draws the calculated width for each band behind the crossover controls.
+ */
+class MONSTRCrossoverImagerComponent : public Component {
 public:
-
-    MONSTRCrossoverComponent(MonstrAudioProcessor* newAudioProcessor);
-    virtual ~MONSTRCrossoverComponent();
+    MONSTRCrossoverImagerComponent(MonstrAudioProcessor* processor);
 
     void paint(Graphics& g) override;
 
-    void start(MONSTRWidthLabel* widthValueLabel) { _mouseListener->start(widthValueLabel); }
-
-    void stop() { _mouseListener->stop(); }
-
 private:
-    std::array<double, 200>sineWaveTable;
-
     MonstrAudioProcessor* _processor;
-
-    std::unique_ptr<MONSTRCrossoverMouseListener> _mouseListener;
-
-    void _drawNeutralLine(Graphics& g);
-
-    void _drawSliderThumbs(Graphics& g);
-
-    void _drawWidthRectangles(Graphics& g);
-
-    void _drawFrequencyText(Graphics& g);
-
-    void _drawBandButtons(Graphics& g);
 };

@@ -34,11 +34,11 @@ MonstrAudioProcessorEditor::MonstrAudioProcessorEditor (MonstrAudioProcessor& ow
     //[Constructor_pre] You can add your own custom stuff here..
     //[/Constructor_pre]
 
-    crossoverView.reset (new MONSTRCrossoverComponent (getProcessor()));
-    addAndMakeVisible (crossoverView.get());
-    crossoverView->setName ("Crossover View");
+    crossoverWrapper.reset (new MONSTRCrossoverWrapperComponent (getProcessor()));
+    addAndMakeVisible (crossoverWrapper.get());
+    crossoverWrapper->setName ("Crossover View");
 
-    crossoverView->setBounds (16, 40, 608, 210);
+    crossoverWrapper->setBounds (16, 40, 608, 210);
 
     AddBandBtn.reset (new juce::TextButton ("Add Band Button"));
     addAndMakeVisible (AddBandBtn.get());
@@ -87,7 +87,7 @@ MonstrAudioProcessorEditor::MonstrAudioProcessorEditor (MonstrAudioProcessor& ow
     RemoveBandBtn->setColour(TextButton::textColourOffId, UIUtils::lightGrey);
 
     widthValueLbl->setColour(Label::textColourId, UIUtils::mainHighlight);
-    crossoverView->start(widthValueLbl.get());
+    crossoverWrapper->start(widthValueLbl.get());
 
     // Call this manually once to make sure the UI reflects the parameters' states correctly
     _onParameterUpdate();
@@ -97,11 +97,11 @@ MonstrAudioProcessorEditor::MonstrAudioProcessorEditor (MonstrAudioProcessor& ow
 MonstrAudioProcessorEditor::~MonstrAudioProcessorEditor()
 {
     //[Destructor_pre]. You can add your own custom destruction code here..
-    crossoverView->stop();
+    crossoverWrapper->stop();
     widthValueLbl->stop();
     //[/Destructor_pre]
 
-    crossoverView = nullptr;
+    crossoverWrapper = nullptr;
     AddBandBtn = nullptr;
     RemoveBandBtn = nullptr;
     widthValueLbl = nullptr;
@@ -157,7 +157,7 @@ void MonstrAudioProcessorEditor::buttonClicked (juce::Button* buttonThatWasClick
     }
 
     //[UserbuttonClicked_Post]
-    crossoverView->repaint();
+    crossoverWrapper->onParameterUpdate();
     //[/UserbuttonClicked_Post]
 }
 
@@ -166,10 +166,11 @@ void MonstrAudioProcessorEditor::buttonClicked (juce::Button* buttonThatWasClick
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
 void MonstrAudioProcessorEditor::timerCallback() {
     widthValueLbl->refreshValue();
+    crossoverWrapper->onImagerUpdate();
 }
 
 void MonstrAudioProcessorEditor::_onParameterUpdate() {
-    crossoverView->repaint();
+    crossoverWrapper->onParameterUpdate();
 
     MonstrAudioProcessor* ourProcessor {getProcessor()};
 
@@ -204,8 +205,8 @@ BEGIN_JUCER_METADATA
                  snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330"
                  fixedSize="1" initialWidth="640" initialHeight="290">
   <BACKGROUND backgroundColour="ffffffff"/>
-  <GENERICCOMPONENT name="Crossover View" id="e7b7ed6ee8457913" memberName="crossoverView"
-                    virtualName="MONSTRCrossoverComponent" explicitFocusOrder="0"
+  <GENERICCOMPONENT name="Crossover View" id="e7b7ed6ee8457913" memberName="crossoverWrapper"
+                    virtualName="MONSTRCrossoverWrapperComponent" explicitFocusOrder="0"
                     pos="16 40 608 210" class="juce::Component" params="getProcessor()"/>
   <TEXTBUTTON name="Add Band Button" id="9e80e2964e937f97" memberName="AddBandBtn"
               virtualName="" explicitFocusOrder="0" pos="365 256 275 34" buttonText="Add Band"

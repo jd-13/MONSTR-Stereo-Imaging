@@ -1,5 +1,5 @@
 /*
- *	File:		MONSTRCrossoverComponent.cpp
+ *	File:		MONSTRCrossoverParameterComponent.cpp
  *
  *	Version:	1.0.0
  *
@@ -22,7 +22,7 @@
  *
  */
 
-#include "MONSTRCrossoverComponent.h"
+#include "MONSTRCrossoverParameterComponent.h"
 
 #include <algorithm>
 #include "WEFilters/StereoWidthProcessorParameters.h"
@@ -48,23 +48,11 @@ namespace {
     }
 }
 
-MONSTRCrossoverComponent::MONSTRCrossoverComponent(MonstrAudioProcessor* newAudioProcessor)
+MONSTRCrossoverParameterComponent::MONSTRCrossoverParameterComponent(MonstrAudioProcessor* newAudioProcessor)
         : _processor(newAudioProcessor) {
-
-    // Generate sine wave table
-    for (size_t iii {0}; iii < sineWaveTable.size(); iii++) {
-        double xVal {(1.0 / sineWaveTable.size()) * iii};
-        sineWaveTable[iii] = sin(pow(M_E, 1.5 * xVal + 1.83)) / 2 + 0.5;
-    }
-
-    _mouseListener = std::make_unique<MONSTRCrossoverMouseListener>(_processor);
-    addMouseListener(_mouseListener.get(), false);
 }
 
-MONSTRCrossoverComponent::~MONSTRCrossoverComponent() {
-}
-
-void MONSTRCrossoverComponent::paint(Graphics &g) {
+void MONSTRCrossoverParameterComponent::paint(Graphics &g) {
 
     _drawNeutralLine(g);
     _drawWidthRectangles(g);
@@ -73,7 +61,7 @@ void MONSTRCrossoverComponent::paint(Graphics &g) {
     _drawBandButtons(g);
 }
 
-void MONSTRCrossoverComponent::_drawNeutralLine(Graphics &g) {
+void MONSTRCrossoverParameterComponent::_drawNeutralLine(Graphics &g) {
 
     Path p;
     p.addLineSegment(Line<float>(0,
@@ -86,7 +74,7 @@ void MONSTRCrossoverComponent::_drawNeutralLine(Graphics &g) {
     g.strokePath(p, PathStrokeType(0.5f));
 }
 
-void MONSTRCrossoverComponent::_drawSliderThumbs(Graphics& g) {
+void MONSTRCrossoverParameterComponent::_drawSliderThumbs(Graphics& g) {
 
     for (size_t bandIndex {0}; bandIndex < _processor->numBands->get() - 1; bandIndex++) {
         const double crossoverXPos {
@@ -106,7 +94,7 @@ void MONSTRCrossoverComponent::_drawSliderThumbs(Graphics& g) {
     }
 }
 
-void MONSTRCrossoverComponent::_drawWidthRectangles(Graphics &g) {
+void MONSTRCrossoverParameterComponent::_drawWidthRectangles(Graphics &g) {
 
     double currentXPos {0};
     const int numBands {_processor->numBands->get()};
@@ -168,7 +156,7 @@ void MONSTRCrossoverComponent::_drawWidthRectangles(Graphics &g) {
     }
 }
 
-void MONSTRCrossoverComponent::_drawFrequencyText(Graphics &g) {
+void MONSTRCrossoverParameterComponent::_drawFrequencyText(Graphics &g) {
     constexpr double fractionOfHeight {0.85};
     constexpr int spacing {10};
 
@@ -206,7 +194,7 @@ void MONSTRCrossoverComponent::_drawFrequencyText(Graphics &g) {
     }
 }
 
-void MONSTRCrossoverComponent::_drawBandButtons(Graphics &g) {
+void MONSTRCrossoverParameterComponent::_drawBandButtons(Graphics &g) {
 
     const Colour bypassColour(252, 252, 22);
     const Colour muteColour(252, 0, 0);

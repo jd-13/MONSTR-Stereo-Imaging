@@ -93,6 +93,8 @@ public:
     std::array<BandParametersWrapper, WECore::MONSTR::Parameters::_MAX_NUM_BANDS> bandParameters;
     std::array<AudioParameterFloat*, WECore::MONSTR::Parameters::_MAX_NUM_BANDS - 1> crossoverParameters;
 
+    double getProcessedWidthValue(size_t index) const;
+
 private:
     MONSTR mMONSTR;
 

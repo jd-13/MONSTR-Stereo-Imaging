@@ -26,8 +26,9 @@
 #define MONSTR_H_INCLUDED
 
 #include "MONSTRFilters/MONSTRCrossover.h"
+
 #include "../JuceLibraryCode/JuceHeader.h"
-#include "WEFilters/StereoWidthProcessor.h"
+#include "MONSTRBandProcessor.h"
 
 class MONSTR {
 public:
@@ -35,7 +36,7 @@ public:
     ~MONSTR() = default;
 
     WECore::MONSTR::MONSTRCrossover<float> mCrossover;
-    std::array<std::shared_ptr<WECore::StereoWidth::StereoWidthProcessor<float>>, WECore::MONSTR::Parameters::_MAX_NUM_BANDS> processors;
+    std::array<std::shared_ptr<MONSTRBandProcessor>, WECore::MONSTR::Parameters::_MAX_NUM_BANDS> processors;
 
     /* Process2in2out
      *

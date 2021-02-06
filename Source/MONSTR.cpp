@@ -27,7 +27,7 @@
 MONSTR::MONSTR() {
     // Assign all the StereoWidthProcessors
     for (size_t index {0}; index < processors.size(); index++) {
-        processors[index] = std::make_shared<WECore::StereoWidth::StereoWidthProcessor<float>>();
+        processors[index] = std::make_shared<MONSTRBandProcessor>();
         mCrossover.setEffectsProcessor(index, processors[index]);
     }
 }
@@ -38,4 +38,8 @@ void MONSTR::Process2in2out(float* leftSample, float* rightSample, size_t numSam
 
 void MONSTR::setSampleRate(double newSampleRate) {
     mCrossover.setSampleRate(newSampleRate);
+
+    for (size_t index {0}; index < processors.size(); index++) {
+        processors[index]->setSampleRate(newSampleRate);
+    }
 }

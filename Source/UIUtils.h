@@ -46,7 +46,7 @@ namespace UIUtils {
     const Colour lightGreyTrans(static_cast<uint8_t>(200), 200, 200, 0.5f);
     const Colour mainHighlight(135, 252, 2);
     const Colour transHighlight(static_cast<uint8_t>(135), 252, 2, 0.5f);
-
+    const Colour imagerColour(static_cast<uint8_t>(255), 255, 255, 0.2f);
 
     /**
      * Maps a linear scaled value in the range 0:1 to a log scaled value in the same range.

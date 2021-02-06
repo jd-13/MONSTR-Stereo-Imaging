@@ -257,6 +257,16 @@ void MonstrAudioProcessor::setCrossoverFrequency(size_t index, float val) {
     }
 }
 
+double MonstrAudioProcessor::getProcessedWidthValue(size_t index) const {
+    double retVal {0};
+
+    if (index < bandParameters.size()) {
+        retVal = mMONSTR.processors[index]->getProcessedWidthValue();
+    }
+
+    return retVal;
+}
+
 void MonstrAudioProcessor::_refreshCrossoverParameters() {
     for (size_t index {0}; index < mMONSTR.mCrossover.getNumBands() - 1; index++) {
 
