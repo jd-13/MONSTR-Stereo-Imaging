@@ -76,7 +76,7 @@ void MONSTRCrossoverParameterComponent::_drawNeutralLine(Graphics &g) {
 
 void MONSTRCrossoverParameterComponent::_drawSliderThumbs(Graphics& g) {
 
-    for (size_t bandIndex {0}; bandIndex < _processor->numBands->get() - 1; bandIndex++) {
+    for (int bandIndex {0}; bandIndex < _processor->numBands->get() - 1; bandIndex++) {
         const double crossoverXPos {
             UIUtils::sliderValueToXPos(_processor->crossoverParameters[bandIndex]->get(), getWidth())
         };
@@ -101,13 +101,13 @@ void MONSTRCrossoverParameterComponent::_drawWidthRectangles(Graphics &g) {
 
     // Check if any bands are soloed
     bool isSomethingSoloed {false};
-    for (size_t bandIndex {0}; bandIndex < numBands; bandIndex++) {
+    for (int bandIndex {0}; bandIndex < numBands; bandIndex++) {
         if (_processor->bandParameters[bandIndex].isSoloed->get()) {
             isSomethingSoloed = true;
         }
     }
 
-    for (size_t bandIndex {0}; bandIndex < numBands; bandIndex++) {
+    for (int bandIndex {0}; bandIndex < numBands; bandIndex++) {
 
         // For the last band use the value of getWidth() rather than the next crossover as there
         // isn't one
@@ -160,7 +160,7 @@ void MONSTRCrossoverParameterComponent::_drawFrequencyText(Graphics &g) {
     constexpr double fractionOfHeight {0.85};
     constexpr int spacing {10};
 
-    for (size_t bandIndex {0}; bandIndex < _processor->numBands->get() - 1; bandIndex++) {
+    for (int bandIndex {0}; bandIndex < _processor->numBands->get() - 1; bandIndex++) {
         g.setColour(UIUtils::mainHighlight);
 
         const float crossoverValue {_processor->crossoverParameters[bandIndex]->get()};
@@ -200,7 +200,7 @@ void MONSTRCrossoverParameterComponent::_drawBandButtons(Graphics &g) {
     const Colour muteColour(252, 0, 0);
     const Colour soloColour(252, 137, 22);
 
-    for (size_t bandIndex {0}; bandIndex < _processor->numBands->get(); bandIndex++) {
+    for (int bandIndex {0}; bandIndex < _processor->numBands->get(); bandIndex++) {
         const double crossoverXPos {bandIndex < _processor->numBands->get() - 1 ?
             UIUtils::sliderValueToXPos(_processor->crossoverParameters[bandIndex]->get(), getWidth()) :
             getWidth()
