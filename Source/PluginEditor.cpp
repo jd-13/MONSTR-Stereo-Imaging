@@ -73,7 +73,7 @@ MonstrAudioProcessorEditor::MonstrAudioProcessorEditor (MonstrAudioProcessor& ow
 
 
     //[Constructor] You can add your own custom stuff here..
-    startTimer(60);
+    startTimer(40);
 
     _assignLookAndFeelToAllChildren(customLookAndFeel);
 
@@ -123,7 +123,7 @@ void MonstrAudioProcessorEditor::paint (juce::Graphics& g)
     //[UserPaint] Add your own custom painting code here..
 
     Image bg {ImageCache::getFromMemory(BinaryData::MONSTR_Background_png, BinaryData::MONSTR_Background_pngSize)};
-    g.drawImage(bg, 0, 0, 640, 290, 0, 0, 5 * 640, 5 * 290);
+    g.drawImage(bg, 0, 0, 640, 290, 0, 0, 2 * 640, 2 * 290);
 
     //[/UserPaint]
 }
