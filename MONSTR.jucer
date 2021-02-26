@@ -21,24 +21,10 @@
             file="Source/Graphics/Montserrat-Regular.ttf"/>
     </GROUP>
     <GROUP id="{54DDA0CD-EF70-78A2-BADE-B0BCA860E60F}" name="DSPFilters">
-      <FILE id="NEx5Yr" name="Bessel.cpp" compile="1" resource="0" file="../WECore/DSPFilters/shared/DSPFilters/source/Bessel.cpp"/>
       <FILE id="ZAhsNd" name="Biquad.cpp" compile="1" resource="0" file="../WECore/DSPFilters/shared/DSPFilters/source/Biquad.cpp"/>
       <FILE id="DiKHjv" name="Butterworth.cpp" compile="1" resource="0" file="../WECore/DSPFilters/shared/DSPFilters/source/Butterworth.cpp"/>
       <FILE id="y1OMz4" name="Cascade.cpp" compile="1" resource="0" file="../WECore/DSPFilters/shared/DSPFilters/source/Cascade.cpp"/>
-      <FILE id="WSU68D" name="ChebyshevI.cpp" compile="1" resource="0" file="../WECore/DSPFilters/shared/DSPFilters/source/ChebyshevI.cpp"/>
-      <FILE id="QDCfEZ" name="ChebyshevII.cpp" compile="1" resource="0" file="../WECore/DSPFilters/shared/DSPFilters/source/ChebyshevII.cpp"/>
-      <FILE id="Yy0xPk" name="Custom.cpp" compile="1" resource="0" file="../WECore/DSPFilters/shared/DSPFilters/source/Custom.cpp"/>
-      <FILE id="TrlGPp" name="Design.cpp" compile="1" resource="0" file="../WECore/DSPFilters/shared/DSPFilters/source/Design.cpp"/>
-      <FILE id="k2unxy" name="Documentation.cpp" compile="1" resource="0"
-            file="../WECore/DSPFilters/shared/DSPFilters/source/Documentation.cpp"/>
-      <FILE id="foM98L" name="Elliptic.cpp" compile="1" resource="0" file="../WECore/DSPFilters/shared/DSPFilters/source/Elliptic.cpp"/>
-      <FILE id="kCX8Hy" name="Filter.cpp" compile="1" resource="0" file="../WECore/DSPFilters/shared/DSPFilters/source/Filter.cpp"/>
-      <FILE id="jFDZyh" name="Legendre.cpp" compile="1" resource="0" file="../WECore/DSPFilters/shared/DSPFilters/source/Legendre.cpp"/>
-      <FILE id="OkUeWe" name="Param.cpp" compile="1" resource="0" file="../WECore/DSPFilters/shared/DSPFilters/source/Param.cpp"/>
       <FILE id="NTQmNl" name="PoleFilter.cpp" compile="1" resource="0" file="../WECore/DSPFilters/shared/DSPFilters/source/PoleFilter.cpp"/>
-      <FILE id="cms4R0" name="RBJ.cpp" compile="1" resource="0" file="../WECore/DSPFilters/shared/DSPFilters/source/RBJ.cpp"/>
-      <FILE id="QItWYH" name="RootFinder.cpp" compile="1" resource="0" file="../WECore/DSPFilters/shared/DSPFilters/source/RootFinder.cpp"/>
-      <FILE id="NAjeKN" name="State.cpp" compile="1" resource="0" file="../WECore/DSPFilters/shared/DSPFilters/source/State.cpp"/>
     </GROUP>
     <GROUP id="{893CC731-9921-30A1-C72A-2337643309C3}" name="Source">
       <GROUP id="{AB2D53B4-98E6-6EC7-2DE3-F1C924AB3ADD}" name="GUI">
