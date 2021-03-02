@@ -219,35 +219,35 @@ void MonstrAudioProcessor::removeBand() {
 }
 
 void MonstrAudioProcessor::setBandActive(size_t index, bool val) {
-    if (index < bandParameters.size()) {
+    if (index < mMONSTR.mCrossover.getNumBands()) {
         mMONSTR.mCrossover.setIsActive(index, val);
         bandParameters[index].isActive->setValueNotifyingHost(val);
     }
 }
 
 void MonstrAudioProcessor::setBandMuted(size_t index, bool val) {
-    if (index < bandParameters.size()) {
+    if (index < mMONSTR.mCrossover.getNumBands()) {
         mMONSTR.mCrossover.setIsMuted(index, val);
         bandParameters[index].isMuted->setValueNotifyingHost(val);
     }
 }
 
 void MonstrAudioProcessor::setBandSoloed(size_t index, bool val) {
-    if (index < bandParameters.size()) {
+    if (index < mMONSTR.mCrossover.getNumBands()) {
         mMONSTR.mCrossover.setIsSoloed(index, val);
         bandParameters[index].isSoloed->setValueNotifyingHost(val);
     }
 }
 
 void MonstrAudioProcessor::setBandWidth(size_t index, float val) {
-    if (index < bandParameters.size()) {
+    if (index < mMONSTR.mCrossover.getNumBands()) {
         mMONSTR.processors[index]->setWidth(WECore::StereoWidth::Parameters::WIDTH.NormalisedToInternal(val));
         bandParameters[index].width->setValueNotifyingHost(val);
     }
 }
 
 void MonstrAudioProcessor::setCrossoverFrequency(size_t index, float val) {
-    if (index < crossoverParameters.size()) {
+    if (index < mMONSTR.mCrossover.getNumBands() - 1) {
         mMONSTR.mCrossover.setCrossoverFrequency(index, WECore::MONSTR::Parameters::CROSSOVER_FREQUENCY.NormalisedToInternal(val));
         crossoverParameters[index]->setValueNotifyingHost(val);
 
