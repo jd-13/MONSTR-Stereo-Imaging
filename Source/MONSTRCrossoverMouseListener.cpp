@@ -66,7 +66,7 @@ MONSTRCrossoverMouseListener::MONSTRCrossoverMouseListener(MonstrAudioProcessor*
 
                 // Check if this crossover handle is getting too close to another and move it if
                 // needed
-                for (int crossoverIndex {0}; crossoverIndex < WECore::MONSTR::Parameters::NUM_BANDS.maxValue - 1; crossoverIndex++) {
+                for (int crossoverIndex {0}; crossoverIndex < _processor->numBands->get() - 1; crossoverIndex++) {
                     const double otherXPos {
                         UIUtils::sliderValueToXPos(_processor->crossoverParameters[crossoverIndex]->get(), componentWidth)
                     };
