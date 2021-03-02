@@ -28,7 +28,7 @@ namespace {
     }
 }
 
-MONSTRWidthLabel::MONSTRWidthLabel(const String& componentName, const String& labelText) :
+MONSTRWidthLabel::MONSTRWidthLabel(const String& /*componentName*/, const String& /*labelText*/) :
         _targetParameter(nullptr) {
 }
 

@@ -41,7 +41,7 @@ MONSTRCrossoverMouseListener::MONSTRCrossoverMouseListener(MonstrAudioProcessor*
     for (int bandIndex {0}; bandIndex < WECore::MONSTR::Parameters::NUM_BANDS.maxValue; bandIndex++) {
 
         _bandWidths[bandIndex] = {
-            [bandIndex, defaultWidth, this](const MouseEvent& event) {
+            [bandIndex, this](const MouseEvent& event) {
                 _processor->setBandWidth(bandIndex, UIUtils::YPosToWidthValue(event.getPosition().getY(), event.eventComponent->getHeight()));
             },
             [bandIndex, defaultWidth, this]() { _processor->setBandWidth(bandIndex, defaultWidth); },
@@ -97,7 +97,7 @@ void MONSTRCrossoverMouseListener::mouseMove(const MouseEvent& event) {
     _updateWidthValueLabel(event);
 }
 
-void MONSTRCrossoverMouseListener::mouseExit(const MouseEvent& event) {
+void MONSTRCrossoverMouseListener::mouseExit(const MouseEvent& /*event*/) {
     // Clear the width label if the cursor isn't inside the component
     if (_widthValueLabel != nullptr) {
         _widthValueLabel->stop();
@@ -119,7 +119,7 @@ void MONSTRCrossoverMouseListener::mouseDrag(const MouseEvent& event) {
     }
 }
 
-void MONSTRCrossoverMouseListener::mouseUp(const MouseEvent& event) {
+void MONSTRCrossoverMouseListener::mouseUp(const MouseEvent& /*event*/) {
 
     if (_dragParameter != nullptr) {
         _dragParameter->endGesture();

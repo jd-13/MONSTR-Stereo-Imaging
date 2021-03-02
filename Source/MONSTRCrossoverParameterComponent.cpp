@@ -83,8 +83,6 @@ void MONSTRCrossoverParameterComponent::_drawSliderThumbs(Graphics& g) {
         Path p;
         constexpr float LINE_WIDTH {1.0f};
 
-        constexpr int THUMB_HEIGHT {30};
-
         g.setColour(UIUtils::darkGrey);
         p.addLineSegment(Line<float>(crossoverXPos, 0, crossoverXPos, getHeight()),
                          1);
