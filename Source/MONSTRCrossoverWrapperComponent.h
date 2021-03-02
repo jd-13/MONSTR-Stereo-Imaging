@@ -1,8 +1,6 @@
 /*
  *	File:		MONSTRCrossoverWrapperComponent.h
  *
- *	Version:	1.0.0
- *
  *	Created:	06/02/2021
  *
  *	This file is part of MONSTR.

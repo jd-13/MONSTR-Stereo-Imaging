@@ -1,8 +1,6 @@
 /*
  *	File:		MONSTRWidthLabel.cpp
  *
- *	Version:	1.0.0
- *
  *	Created:	30/01/2021
  *
  *	This file is part of MONSTR.

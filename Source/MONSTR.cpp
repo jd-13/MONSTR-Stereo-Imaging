@@ -1,8 +1,6 @@
 /*
  *	File:		MONSTR.cpp
  *
- *	Version:	1.0.0
- *
  *	Created:	21/01/2016
  *
  *	This file is part of MONSTR.

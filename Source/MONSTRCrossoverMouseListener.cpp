@@ -1,8 +1,6 @@
 /*
  *	File:		MONSTRCrossoverMouseListener.cpp
  *
- *	Version:	1.0.0
- *
  *	Created:	21/01/2021
  *
  *	This file is part of MONSTR.

@@ -1,8 +1,6 @@
 /*
  *	File:		ParameterData.h
  *
- *	Version:	0.01.00
- *
  *	Created:	21/01/2016
  *
  *	This file is part of MONSTR.

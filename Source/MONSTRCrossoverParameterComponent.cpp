@@ -1,8 +1,6 @@
 /*
  *	File:		MONSTRCrossoverParameterComponent.cpp
  *
- *	Version:	1.0.0
- *
  *	Created:	06/03/2016
  *
  *	This file is part of MONSTR.
