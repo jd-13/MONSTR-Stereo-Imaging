@@ -22,6 +22,15 @@ MonstrAudioProcessor::MonstrAudioProcessor()
     constexpr float WIDTH_PRECISION {0.01f};
     constexpr float FREQ_PRECISION {0.0001f};
 
+    // numBands must be restored first (otherwise we can't set the band parameters)
+    auto restoreBands = [&](int val) {
+        mMONSTR.mCrossover.setNumBands(val);
+        numBands->setValueNotifyingHost(numBands->getNormalisableRange().convertTo0to1(mMONSTR.mCrossover.getNumBands()));
+        _refreshCrossoverParameters();
+    };
+
+    registerParameter(numBands, NUMBANDS_STR, &MP::NUM_BANDS, MP::NUM_BANDS.defaultValue, restoreBands);
+
     registerParameter(bandParameters[0].isActive, BAND_STRINGS[0].isActive, MP::BANDSWITCH_DEFAULT, [&](bool val) { setBandActive(0, val); });
     registerParameter(bandParameters[0].width, BAND_STRINGS[0].width, &SP::WIDTH, SP::WIDTH.defaultValue, WIDTH_PRECISION, [&](float val) { setBandWidth(0, val); });
     registerParameter(crossoverParameters[0], CROSSOVER_STRINGS[0], &MP::CROSSOVER_FREQUENCY, MP::CROSSOVER_LOWER_DEFAULT, FREQ_PRECISION, [&](float val) { setCrossoverFrequency(0, val); });
@@ -63,15 +72,6 @@ MonstrAudioProcessor::MonstrAudioProcessor()
 
     registerParameter(bandParameters[5].isMuted, BAND_STRINGS[5].isMuted, MP::BANDMUTED_DEFAULT, [&](bool val) { setBandMuted(5, val); });
     registerParameter(bandParameters[5].isSoloed, BAND_STRINGS[5].isSoloed, MP::BANDSOLO_DEFAULT, [&](bool val) { setBandSoloed(5, val); });
-
-    auto restoreBands = [&](int val) {
-        mMONSTR.mCrossover.setNumBands(val);
-        numBands->setValueNotifyingHost(numBands->getNormalisableRange().convertTo0to1(mMONSTR.mCrossover.getNumBands()));
-        _refreshCrossoverParameters();
-    };
-
-    registerParameter(numBands, NUMBANDS_STR, &MP::NUM_BANDS, MP::NUM_BANDS.defaultValue, restoreBands);
-
 }
 
 MonstrAudioProcessor::~MonstrAudioProcessor()
