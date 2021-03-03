@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <JUCERPROJECT id="hCIed0" name="MONSTR" projectType="audioplug" version="2.0.0"
-              bundleIdentifier="com.whiteelephantaudio.MONSTR" includeBinaryInAppConfig="1"
+              bundleIdentifier="com.whiteelephantaudio.MONSTRv2" includeBinaryInAppConfig="1"
               buildVST="0" buildVST3="1" buildAU="1" buildRTAS="0" buildAAX="0"
-              pluginName="MONSTR" pluginDesc="MONSTR" pluginManufacturer="White Elephant Audio"
-              pluginManufacturerCode="WEle" pluginCode="Mnsr" pluginChannelConfigs="{2, 2}"
+              pluginName="MONSTRv2" pluginDesc="MONSTRv2" pluginManufacturer="White Elephant Audio"
+              pluginManufacturerCode="Wela" pluginCode="Wms2" pluginChannelConfigs="{2, 2}"
               pluginIsSynth="0" pluginWantsMidiIn="0" pluginProducesMidiOut="0"
               pluginSilenceInIsSilenceOut="1" pluginEditorRequiresKeys="0"
               pluginAUExportPrefix="MONSTRAU" pluginRTASCategory="" aaxIdentifier="com.whiteelephantaudio.MONSTR"
