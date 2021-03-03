@@ -279,6 +279,36 @@ void MonstrAudioProcessor::_refreshCrossoverParameters() {
     }
 }
 
+std::vector<juce::String> MonstrAudioProcessor::_provideParamNamesForMigration() {
+    return std::vector<juce::String> {
+        BAND_STRINGS[0].isActive,
+        BAND_STRINGS[0].width,
+        CROSSOVER_STRINGS[0],
+
+        BAND_STRINGS[1].isActive,
+        BAND_STRINGS[1].width,
+        CROSSOVER_STRINGS[1],
+
+        BAND_STRINGS[2].isActive,
+        BAND_STRINGS[2].width
+    };
+}
+
+void MonstrAudioProcessor::_migrateParamValues(std::vector<float>& paramValues) {
+    if (paramValues.size() == 8) {
+        const ParameterDefinition::RangedParameter<double> CROSSOVERLOWER(40, 500, 100);
+        const ParameterDefinition::RangedParameter<double> CROSSOVERUPPER(3000, 19500, 5000);
+
+        paramValues[1] = WECore::StereoWidth::Parameters::WIDTH.NormalisedToInternal(paramValues[1]);
+        paramValues[2] = CROSSOVERLOWER.NormalisedToInternal(paramValues[2]);
+
+        paramValues[4] = WECore::StereoWidth::Parameters::WIDTH.NormalisedToInternal(paramValues[4]);
+        paramValues[5] = CROSSOVERUPPER.NormalisedToInternal(paramValues[5]);
+
+        paramValues[7] = WECore::StereoWidth::Parameters::WIDTH.NormalisedToInternal(paramValues[7]);
+    }
+}
+
 //==============================================================================
 // This creates new instances of the plugin..
 AudioProcessor* JUCE_CALLTYPE createPluginFilter()
