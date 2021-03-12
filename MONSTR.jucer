@@ -103,7 +103,7 @@
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" libraryPath="/usr/X11R6/lib/" isDebug="0" optimisation="3"
                        targetName="MONSTR" headerPath="~/WEA/WECore/WECore&#10;~/WEA/WECore/DSPFilters/shared/DSPFilters/include"
-                       linkTimeOptimisation="0"/>
+                       linkTimeOptimisation="1"/>
         <CONFIGURATION name="Release" libraryPath="/usr/X11R6/lib/" isDebug="0" optimisation="3"
                        targetName="MONSTR"/>
       </CONFIGURATIONS>
