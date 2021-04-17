@@ -14,8 +14,9 @@ ECHO "=== Downloading fonts ==="
 powershell -Command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; Invoke-WebRequest https://github.com/JulietaUla/Montserrat/raw/master/fonts/ttf/Montserrat-Regular.ttf -OutFile %SCRIPT_DIR%..\Source\Graphics\Montserrat-Regular.ttf}"
 
 ECHO "=== Downloading JUCE ==="
-powershell -Command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; Invoke-WebRequest https://github.com/juce-framework/JUCE/releases/download/6.0.7/juce-6.0.7-windows.zip -OutFile %SCRIPT_DIR%..\juce-6.0.7-windows.zip}"
-powershell -Command "& {Expand-Archive -LiteralPath %SCRIPT_DIR%..\juce-6.0.7-windows.zip -DestinationPath %SCRIPT_DIR%..}"
+set JUCE_VERSION=6.0.8
+powershell -Command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; Invoke-WebRequest https://github.com/juce-framework/JUCE/releases/download/%JUCE_VERSION%/juce-%JUCE_VERSION%-windows.zip -OutFile %SCRIPT_DIR%..\juce-%JUCE_VERSION%-windows.zip}"
+powershell -Command "& {Expand-Archive -LiteralPath %SCRIPT_DIR%..\juce-%JUCE_VERSION%-windows.zip -DestinationPath %SCRIPT_DIR%..}"
 
 ECHO "=== Setting module paths ==="
 powershell -Command "& {$PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'; (get-content %SCRIPT_DIR%..\MONSTR.jucer).replace(\"..\JUCE\modules\",\"JUCE\modules\") | out-file -filepath %SCRIPT_DIR%..\MONSTR.jucer}"
