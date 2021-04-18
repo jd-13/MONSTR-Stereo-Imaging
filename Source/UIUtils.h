@@ -24,6 +24,9 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
+#include "MONSTRFilters/MONSTRParameters.h"
+#include "WEFilters/StereoWidthProcessorParameters.h"
+
 namespace {
     // These are tuned experimentally to get the desired log curve and crossings close to 0,0 and 1,1.
     constexpr double LOG_SCALE {3.00043};
@@ -61,30 +64,32 @@ namespace UIUtils {
     }
 
     /**
-     * Converts a crossover frequency value between 0 and 1 to an x coordinate.
+     * Converts a crossover frequency value between in the internal parameter range to an x coordinate.
      */
     inline double sliderValueToXPos(double sliderValue, int componentWidth) {
         const double MARGIN_PX {componentWidth * 0.05};
         const double realRange {componentWidth - 2 * MARGIN_PX};
 
-        return (internalLogToSliderValue(sliderValue) * realRange) + MARGIN_PX;
+        const double normalisedSliderValue {WECore::MONSTR::Parameters::CROSSOVER_FREQUENCY.InternalToNormalised(sliderValue)};
+
+        return (internalLogToSliderValue(normalisedSliderValue) * realRange) + MARGIN_PX;
     }
 
     /**
-     * Converts an x coordinate to a crossover frequency parameter value between 0 and 1.
+     * Converts an x coordinate to a crossover frequency parameter value in the internal parameter range.
      */
     inline double XPosToSliderValue(int XPos, int componentWidth) {
         const double MARGIN_PX {componentWidth * 0.05};
         const double realRange {componentWidth - 2 * MARGIN_PX};
 
-        return sliderValueToInternalLog(std::max(XPos - MARGIN_PX, 0.0) / realRange);
+        return WECore::MONSTR::Parameters::CROSSOVER_FREQUENCY.NormalisedToInternal(sliderValueToInternalLog(std::max(XPos - MARGIN_PX, 0.0) / realRange));
     }
 
     /**
-     * Converts a y coordinate to a width parameter value between 0 and 1.
+     * Converts a y coordinate to a width parameter value in the internal parameter range.
      */
     inline double YPosToWidthValue(int YPos, int componentHeight) {
-        return 1 - std::min(std::max(0.0, YPos - componentHeight / 4.0) / (componentHeight / 2.0), 1.0);
+        return WECore::StereoWidth::Parameters::WIDTH.NormalisedToInternal(1 - std::min(std::max(0.0, YPos - componentHeight / 4.0) / (componentHeight / 2.0), 1.0));
     }
 
     /**

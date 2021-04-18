@@ -61,23 +61,13 @@ public:
     /**
      * Parameter setters.
      *
-     * For float parameters a value in the normalised 0 to 1 range is expected.
+     * For float parameters a value in the internal parameter range is expected.
      *
-     * For int parameters are used to represent menu items, the integer value in the real range of
-     * the parameter (eg. 0 to 4) is expected.
-     *
-     * For bool parameters they can only be true or false anyway.
-     *
-     * These do not call the ChangeBroadcaster as the UI will already know about these changes since
-     * it is the only one calling these methods.
+
      */
     /** @{ */
     void addBand();
     void removeBand();
-    void setBandActive(size_t index, bool val);
-    void setBandMuted(size_t index, bool val);
-    void setBandSoloed(size_t index, bool val);
-    void setBandWidth(size_t index, float val);
     void setCrossoverFrequency(size_t index, float val);
     /** @} */
 
@@ -101,8 +91,9 @@ private:
     void _refreshCrossoverParameters();
 
     std::vector<juce::String> _provideParamNamesForMigration() override;
-
     void _migrateParamValues(std::vector<float>& paramValues) override;
+
+    void _onParameterUpdate() override;
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MonstrAudioProcessor)

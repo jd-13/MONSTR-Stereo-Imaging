@@ -31,47 +31,40 @@ MonstrAudioProcessor::MonstrAudioProcessor()
 
     registerParameter(numBands, NUMBANDS_STR, &MP::NUM_BANDS, MP::NUM_BANDS.defaultValue, restoreBands);
 
-    registerParameter(bandParameters[0].isActive, BAND_STRINGS[0].isActive, MP::BANDSWITCH_DEFAULT, [&](bool val) { setBandActive(0, val); });
-    registerParameter(bandParameters[0].width, BAND_STRINGS[0].width, &SP::WIDTH, SP::WIDTH.defaultValue, WIDTH_PRECISION, [&](float val) { setBandWidth(0, val); });
+    registerParameter(bandParameters[0].isActive, BAND_STRINGS[0].isActive, MP::BANDSWITCH_DEFAULT);
+    registerParameter(bandParameters[0].isMuted, BAND_STRINGS[0].isMuted, MP::BANDMUTED_DEFAULT);
+    registerParameter(bandParameters[0].isSoloed, BAND_STRINGS[0].isSoloed, MP::BANDSOLO_DEFAULT);
+    registerParameter(bandParameters[0].width, BAND_STRINGS[0].width, &SP::WIDTH, SP::WIDTH.defaultValue, WIDTH_PRECISION);
     registerParameter(crossoverParameters[0], CROSSOVER_STRINGS[0], &MP::CROSSOVER_FREQUENCY, MP::CROSSOVER_LOWER_DEFAULT, FREQ_PRECISION, [&](float val) { setCrossoverFrequency(0, val); });
 
-    registerParameter(bandParameters[1].isActive, BAND_STRINGS[1].isActive, MP::BANDSWITCH_DEFAULT, [&](bool val) { setBandActive(1, val); });
-    registerParameter(bandParameters[1].width, BAND_STRINGS[1].width, &SP::WIDTH, SP::WIDTH.defaultValue, WIDTH_PRECISION, [&](float val) { setBandWidth(1, val); });
+    registerParameter(bandParameters[1].isActive, BAND_STRINGS[1].isActive, MP::BANDSWITCH_DEFAULT);
+    registerParameter(bandParameters[1].isMuted, BAND_STRINGS[1].isMuted, MP::BANDMUTED_DEFAULT);
+    registerParameter(bandParameters[1].isSoloed, BAND_STRINGS[1].isSoloed, MP::BANDSOLO_DEFAULT);
+    registerParameter(bandParameters[1].width, BAND_STRINGS[1].width, &SP::WIDTH, SP::WIDTH.defaultValue, WIDTH_PRECISION);
     registerParameter(crossoverParameters[1], CROSSOVER_STRINGS[1], &MP::CROSSOVER_FREQUENCY, MP::CROSSOVER_UPPER_DEFAULT, FREQ_PRECISION, [&](float val) { setCrossoverFrequency(1, val); });
 
-    registerParameter(bandParameters[2].isActive, BAND_STRINGS[2].isActive, MP::BANDSWITCH_DEFAULT, [&](bool val) { setBandActive(2, val); });
-    registerParameter(bandParameters[2].width, BAND_STRINGS[2].width, &SP::WIDTH, SP::WIDTH.defaultValue, WIDTH_PRECISION, [&](float val) { setBandWidth(2, val); });
+    registerParameter(bandParameters[2].isActive, BAND_STRINGS[2].isActive, MP::BANDSWITCH_DEFAULT);
+    registerParameter(bandParameters[2].isMuted, BAND_STRINGS[2].isMuted, MP::BANDMUTED_DEFAULT);
+    registerParameter(bandParameters[2].isSoloed, BAND_STRINGS[2].isSoloed, MP::BANDSOLO_DEFAULT);
+    registerParameter(bandParameters[2].width, BAND_STRINGS[2].width, &SP::WIDTH, SP::WIDTH.defaultValue, WIDTH_PRECISION);
     registerParameter(crossoverParameters[2], CROSSOVER_STRINGS[2], &MP::CROSSOVER_FREQUENCY, MP::CROSSOVER_FREQUENCY.defaultValue, FREQ_PRECISION, [&](float val) { setCrossoverFrequency(2, val); });
 
-    registerParameter(bandParameters[3].isActive, BAND_STRINGS[3].isActive, MP::BANDSWITCH_DEFAULT, [&](bool val) { setBandActive(3, val); });
-    registerParameter(bandParameters[3].width, BAND_STRINGS[3].width, &SP::WIDTH, SP::WIDTH.defaultValue, WIDTH_PRECISION, [&](float val) { setBandWidth(3, val); });
+    registerParameter(bandParameters[3].isActive, BAND_STRINGS[3].isActive, MP::BANDSWITCH_DEFAULT);
+    registerParameter(bandParameters[3].isMuted, BAND_STRINGS[3].isMuted, MP::BANDMUTED_DEFAULT);
+    registerParameter(bandParameters[3].isSoloed, BAND_STRINGS[3].isSoloed, MP::BANDSOLO_DEFAULT);
+    registerParameter(bandParameters[3].width, BAND_STRINGS[3].width, &SP::WIDTH, SP::WIDTH.defaultValue, WIDTH_PRECISION);
     registerParameter(crossoverParameters[3], CROSSOVER_STRINGS[3], &MP::CROSSOVER_FREQUENCY, MP::CROSSOVER_FREQUENCY.defaultValue, FREQ_PRECISION, [&](float val) { setCrossoverFrequency(3, val); });
 
-    registerParameter(bandParameters[4].isActive, BAND_STRINGS[4].isActive, MP::BANDSWITCH_DEFAULT, [&](bool val) { setBandActive(4, val); });
-    registerParameter(bandParameters[4].width, BAND_STRINGS[4].width, &SP::WIDTH, SP::WIDTH.defaultValue, WIDTH_PRECISION, [&](float val) { setBandWidth(4, val); });
+    registerParameter(bandParameters[4].isActive, BAND_STRINGS[4].isActive, MP::BANDSWITCH_DEFAULT);
+    registerParameter(bandParameters[4].isMuted, BAND_STRINGS[4].isMuted, MP::BANDMUTED_DEFAULT);
+    registerParameter(bandParameters[4].isSoloed, BAND_STRINGS[4].isSoloed, MP::BANDSOLO_DEFAULT);
+    registerParameter(bandParameters[4].width, BAND_STRINGS[4].width, &SP::WIDTH, SP::WIDTH.defaultValue, WIDTH_PRECISION);
     registerParameter(crossoverParameters[4], CROSSOVER_STRINGS[4], &MP::CROSSOVER_FREQUENCY, MP::CROSSOVER_FREQUENCY.defaultValue, FREQ_PRECISION, [&](float val) { setCrossoverFrequency(4, val); });
 
-    registerParameter(bandParameters[5].isActive, BAND_STRINGS[5].isActive, MP::BANDSWITCH_DEFAULT, [&](bool val) { setBandActive(5, val); });
-    registerParameter(bandParameters[5].width, BAND_STRINGS[5].width, &SP::WIDTH, SP::WIDTH.defaultValue, WIDTH_PRECISION, [&](float val) { setBandWidth(5, val); });
-
-    // New parameters must be registered last to preserve backwards compatibility
-    registerParameter(bandParameters[0].isMuted, BAND_STRINGS[0].isMuted, MP::BANDMUTED_DEFAULT, [&](bool val) { setBandMuted(0, val); });
-    registerParameter(bandParameters[0].isSoloed, BAND_STRINGS[0].isSoloed, MP::BANDSOLO_DEFAULT, [&](bool val) { setBandSoloed(0, val); });
-
-    registerParameter(bandParameters[1].isMuted, BAND_STRINGS[1].isMuted, MP::BANDMUTED_DEFAULT, [&](bool val) { setBandMuted(1, val); });
-    registerParameter(bandParameters[1].isSoloed, BAND_STRINGS[1].isSoloed, MP::BANDSOLO_DEFAULT, [&](bool val) { setBandSoloed(1, val); });
-
-    registerParameter(bandParameters[2].isMuted, BAND_STRINGS[2].isMuted, MP::BANDMUTED_DEFAULT, [&](bool val) { setBandMuted(2, val); });
-    registerParameter(bandParameters[2].isSoloed, BAND_STRINGS[2].isSoloed, MP::BANDSOLO_DEFAULT, [&](bool val) { setBandSoloed(2, val); });
-
-    registerParameter(bandParameters[3].isMuted, BAND_STRINGS[3].isMuted, MP::BANDMUTED_DEFAULT, [&](bool val) { setBandMuted(3, val); });
-    registerParameter(bandParameters[3].isSoloed, BAND_STRINGS[3].isSoloed, MP::BANDSOLO_DEFAULT, [&](bool val) { setBandSoloed(3, val); });
-
-    registerParameter(bandParameters[4].isMuted, BAND_STRINGS[4].isMuted, MP::BANDMUTED_DEFAULT, [&](bool val) { setBandMuted(4, val); });
-    registerParameter(bandParameters[4].isSoloed, BAND_STRINGS[4].isSoloed, MP::BANDSOLO_DEFAULT, [&](bool val) { setBandSoloed(4, val); });
-
-    registerParameter(bandParameters[5].isMuted, BAND_STRINGS[5].isMuted, MP::BANDMUTED_DEFAULT, [&](bool val) { setBandMuted(5, val); });
-    registerParameter(bandParameters[5].isSoloed, BAND_STRINGS[5].isSoloed, MP::BANDSOLO_DEFAULT, [&](bool val) { setBandSoloed(5, val); });
+    registerParameter(bandParameters[5].isActive, BAND_STRINGS[5].isActive, MP::BANDSWITCH_DEFAULT);
+    registerParameter(bandParameters[5].isMuted, BAND_STRINGS[5].isMuted, MP::BANDMUTED_DEFAULT);
+    registerParameter(bandParameters[5].isSoloed, BAND_STRINGS[5].isSoloed, MP::BANDSOLO_DEFAULT);
+    registerParameter(bandParameters[5].width, BAND_STRINGS[5].width, &SP::WIDTH, SP::WIDTH.defaultValue, WIDTH_PRECISION);
 }
 
 MonstrAudioProcessor::~MonstrAudioProcessor()
@@ -218,38 +211,9 @@ void MonstrAudioProcessor::removeBand() {
     numBands->setValueNotifyingHost(numBands->getNormalisableRange().convertTo0to1(mMONSTR.mCrossover.getNumBands()));
 }
 
-void MonstrAudioProcessor::setBandActive(size_t index, bool val) {
-    if (index < mMONSTR.mCrossover.getNumBands()) {
-        mMONSTR.mCrossover.setIsActive(index, val);
-        bandParameters[index].isActive->setValueNotifyingHost(val);
-    }
-}
-
-void MonstrAudioProcessor::setBandMuted(size_t index, bool val) {
-    if (index < mMONSTR.mCrossover.getNumBands()) {
-        mMONSTR.mCrossover.setIsMuted(index, val);
-        bandParameters[index].isMuted->setValueNotifyingHost(val);
-    }
-}
-
-void MonstrAudioProcessor::setBandSoloed(size_t index, bool val) {
-    if (index < mMONSTR.mCrossover.getNumBands()) {
-        mMONSTR.mCrossover.setIsSoloed(index, val);
-        bandParameters[index].isSoloed->setValueNotifyingHost(val);
-    }
-}
-
-void MonstrAudioProcessor::setBandWidth(size_t index, float val) {
-    if (index < mMONSTR.mCrossover.getNumBands()) {
-        mMONSTR.processors[index]->setWidth(WECore::StereoWidth::Parameters::WIDTH.NormalisedToInternal(val));
-        bandParameters[index].width->setValueNotifyingHost(val);
-    }
-}
-
 void MonstrAudioProcessor::setCrossoverFrequency(size_t index, float val) {
     if (index < mMONSTR.mCrossover.getNumBands() - 1) {
-        mMONSTR.mCrossover.setCrossoverFrequency(index, WECore::MONSTR::Parameters::CROSSOVER_FREQUENCY.NormalisedToInternal(val));
-        crossoverParameters[index]->setValueNotifyingHost(val);
+        mMONSTR.mCrossover.setCrossoverFrequency(index, val);
 
         // Changing the frequency of one crossover may affect others if they also need to be moved -
         // make sure the UI and host parameters are updated
@@ -307,6 +271,20 @@ void MonstrAudioProcessor::_migrateParamValues(std::vector<float>& paramValues) 
 
         paramValues[7] = WECore::StereoWidth::Parameters::WIDTH.NormalisedToInternal(paramValues[7]);
     }
+}
+
+void MonstrAudioProcessor::_onParameterUpdate() {
+
+    for (size_t index {0}; index < mMONSTR.mCrossover.getNumBands(); index++) {
+        mMONSTR.mCrossover.setIsActive(index, bandParameters[index].isActive->get());
+        mMONSTR.mCrossover.setIsMuted(index, bandParameters[index].isMuted->get());
+        mMONSTR.mCrossover.setIsSoloed(index, bandParameters[index].isSoloed->get());
+        mMONSTR.processors[index]->setWidth(bandParameters[index].width->get());
+    }
+
+    // We can't update the crossover frequencies here, as we would need to call
+    // _refreshCrossoverParameters() which would cause this to be called again, which would call
+    // _refreshCrossoverParameters() again, etc
 }
 
 //==============================================================================

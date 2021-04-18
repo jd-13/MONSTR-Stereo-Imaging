@@ -24,7 +24,7 @@
 
 namespace {
     double widthValueToLabelValue(double value) {
-        return value * 2 - 1;
+        return value - 1;
     }
 }
 

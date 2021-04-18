@@ -125,7 +125,7 @@ void MONSTRCrossoverParameterComponent::_drawWidthRectangles(Graphics &g) {
         float lineHeight {0};
 
         // Move the width value to the range -0.5:0.5
-        const double widthValue {_processor->bandParameters[bandIndex].width->get() - 0.5};
+        const double widthValue {_processor->bandParameters[bandIndex].width->get() / 2 - 0.5};
 
         if (widthValue > 0) {
             rectHeight = (getHeight() / 2.0) * widthValue;
@@ -165,12 +165,8 @@ void MONSTRCrossoverParameterComponent::_drawFrequencyText(Graphics &g) {
             UIUtils::sliderValueToXPos(crossoverValue, getWidth())
         };
 
-        const double crossoverHz {
-            WECore::MONSTR::Parameters::CROSSOVER_FREQUENCY.NormalisedToInternal(crossoverValue)
-        };
-
         GlyphArrangement ga;
-        ga.addLineOfText(Font(16.0f), String(static_cast<int>(crossoverHz)) + " Hz", 0, 0);
+        ga.addLineOfText(Font(16.0f), String(static_cast<int>(crossoverValue)) + " Hz", 0, 0);
 
         Path p;
         ga.createPath(p);

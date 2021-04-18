@@ -34,17 +34,15 @@ MONSTRCrossoverMouseListener::MONSTRCrossoverMouseListener(MonstrAudioProcessor*
 
     // Initialise the parameter interactions
 
-    const double defaultWidth {
-        WECore::StereoWidth::Parameters::WIDTH.InternalToNormalised(WECore::StereoWidth::Parameters::WIDTH.defaultValue)
-    };
+    const double defaultWidth {WECore::StereoWidth::Parameters::WIDTH.defaultValue};
 
     for (int bandIndex {0}; bandIndex < WECore::MONSTR::Parameters::NUM_BANDS.maxValue; bandIndex++) {
 
         _bandWidths[bandIndex] = {
             [bandIndex, this](const MouseEvent& event) {
-                _processor->setBandWidth(bandIndex, UIUtils::YPosToWidthValue(event.getPosition().getY(), event.eventComponent->getHeight()));
+                _processor->setParameterValueInternal(_processor->bandParameters[bandIndex].width, UIUtils::YPosToWidthValue(event.getPosition().getY(), event.eventComponent->getHeight()));
             },
-            [bandIndex, defaultWidth, this]() { _processor->setBandWidth(bandIndex, defaultWidth); },
+            [bandIndex, defaultWidth, this]() { _processor->setParameterValueInternal(_processor->bandParameters[bandIndex].width, defaultWidth); },
             [bandIndex, this]() { _processor->bandParameters[bandIndex].width->beginChangeGesture(); },
             [bandIndex, this]() { _processor->bandParameters[bandIndex].width->endChangeGesture(); }
         };
@@ -156,17 +154,20 @@ MONSTRCrossoverMouseListener::FloatParameterInteraction* MONSTRCrossoverMouseLis
 
         if (UIUtils::getButtonBounds(crossoverXPos, 0).contains(mouseDownX, mouseDownY)) {
             // Landed on the bypass button
-            _processor->setBandActive(bandIndex, !_processor->bandParameters[bandIndex].isActive->get());
+            AudioParameterBool* thisParameter = _processor->bandParameters[bandIndex].isActive;
+            _processor->setParameterValueInternal(thisParameter, !thisParameter->get());
             break;
 
         } else if (UIUtils::getButtonBounds(crossoverXPos, 1).contains(mouseDownX, mouseDownY)) {
             // Landed on the mute button
-            _processor->setBandMuted(bandIndex, !_processor->bandParameters[bandIndex].isMuted->get());
+            AudioParameterBool* thisParameter = _processor->bandParameters[bandIndex].isMuted;
+            _processor->setParameterValueInternal(thisParameter, !thisParameter->get());
             break;
 
         } else if (UIUtils::getButtonBounds(crossoverXPos, 2).contains(mouseDownX, mouseDownY)) {
             // Landed on the solo button
-            _processor->setBandSoloed(bandIndex, !_processor->bandParameters[bandIndex].isSoloed->get());
+            AudioParameterBool* thisParameter = _processor->bandParameters[bandIndex].isSoloed;
+            _processor->setParameterValueInternal(thisParameter, !thisParameter->get());
             break;
 
         } else if (mouseDownX < crossoverXPos - UIUtils::SLIDER_THUMB_TARGET_WIDTH) {
