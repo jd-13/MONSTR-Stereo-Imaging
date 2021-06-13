@@ -31,6 +31,12 @@ powershell -Command "& {$PSDefaultParameterValues['Out-File:Encoding'] = 'utf8';
 ECHO "=== Generating project ==="
 %SCRIPT_DIR%..\JUCE\Projucer --resave %SCRIPT_DIR%..\MONSTR.jucer
 
+ECHO "=== Applying workaround for JUCE 6.0.8 on latest VS ==="
+cd %SCRIPT_DIR%..\Builds\VisualStudio2019
+findstr /v ProgramDataBaseFileName MONSTR_SharedCode.vcxproj > MONSTR_SharedCode.vcxproj.tmp
+erase MONSTR_SharedCode.vcxproj
+rename MONSTR_SharedCode.vcxproj.tmp MONSTR_SharedCode.vcxproj
+
 ECHO "=== Starting build ==="
 cd %SCRIPT_DIR%..\Builds\VisualStudio2019
 msbuild -version

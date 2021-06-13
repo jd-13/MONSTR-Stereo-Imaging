@@ -54,21 +54,20 @@ jobs:
           name: monstr-macOS
           path: Scripts/dist
 
-# Disabled until JUCE is updated to work with latest VS version
-  # BuildWindows:
-  #   runs-on: windows-2019
+  BuildWindows:
+    runs-on: windows-2019
 
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #       with:
-  #         submodules: true
-  #     - name: SetupMSBuild
-  #       uses: microsoft/setup-msbuild@v1.0.2
-  #     - name: RunBuild
-  #       shell: cmd
-  #       run: Scripts\BuildWindows.bat
-  #     - uses: actions/upload-artifact@v2
-  #       if: ${{ success() }}
-  #       with:
-  #         name: monstr-windows
-  #         path: Builds/VisualStudio2019/x64/Debug/VST3/*.vst3
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+      - name: SetupMSBuild
+        uses: microsoft/setup-msbuild@v1.0.2
+      - name: RunBuild
+        shell: cmd
+        run: Scripts\BuildWindows.bat
+      - uses: actions/upload-artifact@v2
+        if: ${{ success() }}
+        with:
+          name: monstr-windows
+          path: Builds/VisualStudio2019/x64/Debug/VST3/*.vst3
