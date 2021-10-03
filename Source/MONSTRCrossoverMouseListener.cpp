@@ -79,9 +79,9 @@ MONSTRCrossoverMouseListener::MONSTRCrossoverMouseListener(MonstrAudioProcessor*
                     }
                 }
             },
-            []() { /* Do nothing */ },
-            [bandIndex, this]() { _processor->crossoverParameters[bandIndex]->beginChangeGesture(); },
-            [bandIndex, this]() { _processor->crossoverParameters[bandIndex]->endChangeGesture(); }
+            []() { /* Do nothing - doesn't have a default to reset to */ },
+            [bandIndex, this]() { /* Do nothing - parameter isn't public so no need to send change gesture */ },
+            [bandIndex, this]() { /* Do nothing - parameter isn't public so no need to send change gesture */ }
         };
 
     }
