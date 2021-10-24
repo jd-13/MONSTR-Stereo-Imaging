@@ -18,6 +18,7 @@
 
 // (You can add your own code in this section, and the Projucer will not overwrite it)
 #define JUCE_VST3_CAN_REPLACE_VST2 0
+#define JUCE_USE_CURL 0
 
 // [END_USER_CODE_SECTION]
 
