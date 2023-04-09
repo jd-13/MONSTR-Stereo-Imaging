@@ -7,7 +7,7 @@
   the "//[xyz]" and "//[/xyz]" sections will be retained when the file is loaded
   and re-saved.
 
-  Created with Projucer version: 6.0.8
+  Created with Projucer version: 7.0.5
 
   ------------------------------------------------------------------------------
 
@@ -25,6 +25,7 @@
 #include "MONSTRLookAndFeel.h"
 #include "MONSTRCrossoverWrapperComponent.h"
 #include "CoreJUCEPlugin/CoreProcessorEditor.h"
+#include "CoreJUCEPlugin/TooltipLabelUpdater.h"
 //[/Headers]
 
 
@@ -63,6 +64,7 @@ public:
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
     MONSTRLookAndFeel customLookAndFeel;
+    WECore::JUCEPlugin::TooltipLabelUpdater _tooltipLabelUpdater;
 
     virtual void _onParameterUpdate() override;
     //[/UserVariables]
@@ -72,6 +74,7 @@ private:
     std::unique_ptr<juce::TextButton> AddBandBtn;
     std::unique_ptr<juce::TextButton> RemoveBandBtn;
     std::unique_ptr<MONSTRWidthLabel> widthValueLbl;
+    std::unique_ptr<juce::Label> tooltipLbl;
 
 
     //==============================================================================
