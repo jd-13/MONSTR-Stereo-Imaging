@@ -30,7 +30,8 @@
 MONSTRCrossoverMouseListener::MONSTRCrossoverMouseListener(MonstrAudioProcessor* newAudioProcessor)
         : _processor(newAudioProcessor),
           _dragParameter(nullptr),
-          _widthValueLabel(nullptr) {
+          _widthValueLabel(nullptr),
+          _tooltipLabel(nullptr) {
 
     // Initialise the parameter interactions
 
@@ -93,6 +94,7 @@ MONSTRCrossoverMouseListener::~MONSTRCrossoverMouseListener() {
 
 void MONSTRCrossoverMouseListener::mouseMove(const MouseEvent& event) {
     _updateWidthValueLabel(event);
+    _updateTooltip(event);
 }
 
 void MONSTRCrossoverMouseListener::mouseExit(const MouseEvent& /*event*/) {
@@ -186,7 +188,6 @@ MONSTRCrossoverMouseListener::FloatParameterInteraction* MONSTRCrossoverMouseLis
 }
 
 void MONSTRCrossoverMouseListener::_updateWidthValueLabel(const MouseEvent& event) {
-
     const int mouseDownX {event.getMouseDownX()};
 
     // For each available band, check if the cursor is currently inside it
@@ -203,7 +204,64 @@ void MONSTRCrossoverMouseListener::_updateWidthValueLabel(const MouseEvent& even
             if (_widthValueLabel != nullptr) {
                 _widthValueLabel->setTargetParameter(_processor->bandParameters[bandIndex].width);
             }
+
+            if (_tooltipLabel != nullptr) {
+                _tooltipLabel->setText("Band " + juce::String(bandIndex), juce::NotificationType::dontSendNotification);
+            }
             break;
         }
     }
 }
+
+void MONSTRCrossoverMouseListener::_updateTooltip(const MouseEvent& event) {
+    const int mouseDownX {event.getMouseDownX()};
+    const int mouseDownY {event.getMouseDownY()};
+
+    // For each available band, check if the cursor landed on a crossover frequency handle or on
+    // the gaps in between
+    const int numBands {_processor->numBands->get()};
+
+    for (size_t bandIndex {0}; bandIndex < numBands; bandIndex++) {
+        const double crossoverXPos {bandIndex < numBands - 1 ?
+            UIUtils::sliderValueToXPos(_processor->crossoverParameters[bandIndex]->get(), event.eventComponent->getWidth()) :
+            event.eventComponent->getWidth()
+        };
+
+        if (UIUtils::getButtonBounds(crossoverXPos, 0).contains(mouseDownX, mouseDownY)) {
+            // Landed on the bypass button
+            if (_tooltipLabel != nullptr) {
+                _tooltipLabel->setText("Bypasses the width processing for this band", juce::NotificationType::dontSendNotification);
+            }
+            break;
+
+        } else if (UIUtils::getButtonBounds(crossoverXPos, 1).contains(mouseDownX, mouseDownY)) {
+            // Landed on the mute button
+            if (_tooltipLabel != nullptr) {
+                _tooltipLabel->setText("Mutes this band", juce::NotificationType::dontSendNotification);
+            }
+            break;
+
+        } else if (UIUtils::getButtonBounds(crossoverXPos, 2).contains(mouseDownX, mouseDownY)) {
+            // Landed on the solo button
+            if (_tooltipLabel != nullptr) {
+                _tooltipLabel->setText("Soloes this band", juce::NotificationType::dontSendNotification);
+            }
+            break;
+
+        } else if (mouseDownX < crossoverXPos - UIUtils::SLIDER_THUMB_TARGET_WIDTH) {
+            // Landed below a crossover handle but outside a button, so must be on the width
+            if (_tooltipLabel != nullptr) {
+                _tooltipLabel->setText("Drag up or down to increase or decrease the stereo width of this band", juce::NotificationType::dontSendNotification);
+            }
+            break;
+
+        } else if (mouseDownX < crossoverXPos + UIUtils::SLIDER_THUMB_TARGET_WIDTH) {
+            // Landed on a crossover handle
+            if (_tooltipLabel != nullptr) {
+                _tooltipLabel->setText("Drag left or right to change the crossover frequency", juce::NotificationType::dontSendNotification);
+            }
+            break;
+        }
+    }
+}
+

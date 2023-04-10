@@ -38,7 +38,7 @@ public:
 
     void resized() override;
 
-    void start(MONSTRWidthLabel* widthValueLabel);
+    void start(MONSTRWidthLabel* widthValueLabel, juce::Label* tooltipLabel);
     void stop();
 
     void onImagerUpdate();

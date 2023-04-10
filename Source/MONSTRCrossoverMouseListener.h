@@ -48,9 +48,15 @@ public:
 
     void mouseDoubleClick(const MouseEvent& event) override;
 
-    void start(MONSTRWidthLabel* widthValueLabel) { _widthValueLabel = widthValueLabel; }
+    void start(MONSTRWidthLabel* widthValueLabel, juce::Label* tooltipLabel) {
+        _widthValueLabel = widthValueLabel;
+        _tooltipLabel = tooltipLabel;
+    }
 
-    void stop() { _widthValueLabel = nullptr; }
+    void stop() {
+        _widthValueLabel = nullptr;
+        _tooltipLabel = nullptr;
+    }
 
 private:
 
@@ -70,6 +76,8 @@ private:
 
     MONSTRWidthLabel* _widthValueLabel;
 
+    juce::Label* _tooltipLabel;
+
     /**
      * If the mouse event occured inside a button the function will handle it and return null,
      * if the event occured inside a slider it will return the corresponding
@@ -78,4 +86,5 @@ private:
     FloatParameterInteraction* _resolveParameterInteraction(const MouseEvent& event);
 
     void _updateWidthValueLabel(const MouseEvent& event);
+    void _updateTooltip(const MouseEvent& event);
 };

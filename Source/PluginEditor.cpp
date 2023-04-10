@@ -105,7 +105,7 @@ MonstrAudioProcessorEditor::MonstrAudioProcessorEditor (MonstrAudioProcessor& ow
     RemoveBandBtn->setColour(TextButton::textColourOffId, UIUtils::lightGrey);
 
     widthValueLbl->setColour(Label::textColourId, UIUtils::mainHighlight);
-    crossoverWrapper->start(widthValueLbl.get());
+    crossoverWrapper->start(widthValueLbl.get(), tooltipLbl.get());
 
     // Call this manually once to make sure the UI reflects the parameters' states correctly
     _onParameterUpdate();

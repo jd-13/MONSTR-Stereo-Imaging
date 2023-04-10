@@ -41,8 +41,8 @@ void MONSTRCrossoverWrapperComponent::resized() {
     _imagerComponent->setBounds(getLocalBounds());
 }
 
-void MONSTRCrossoverWrapperComponent::start(MONSTRWidthLabel* widthValueLabel) {
-    _mouseListener->start(widthValueLabel);
+void MONSTRCrossoverWrapperComponent::start(MONSTRWidthLabel* widthValueLabel, juce::Label* tooltipLabel) {
+    _mouseListener->start(widthValueLabel, tooltipLabel);
 }
 
 void MONSTRCrossoverWrapperComponent::stop() {
