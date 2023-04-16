@@ -23,18 +23,16 @@
 #ifndef MONSTR_H_INCLUDED
 #define MONSTR_H_INCLUDED
 
-#include "MONSTRFilters/MONSTRCrossover.h"
-
 #include "../JuceLibraryCode/JuceHeader.h"
-#include "MONSTRBandProcessor.h"
+
+#include "CrossoverState.hpp"
 
 class MONSTR {
 public:
     MONSTR();
     ~MONSTR() = default;
 
-    WECore::MONSTR::MONSTRCrossover<float> mCrossover;
-    std::array<std::shared_ptr<MONSTRBandProcessor>, WECore::MONSTR::Parameters::_MAX_NUM_BANDS> processors;
+    std::shared_ptr<CrossoverState> crossoverState;
 
     /* Process2in2out
      *
@@ -45,11 +43,11 @@ public:
      *       inRightSample   Pointer to the right sample to be processed
      *       numSamples      Number of samples loaded into the buffer
      */
-    void Process2in2out(float* leftSample, float* rightSample, size_t numSamples);
+    void Process2in2out(juce::AudioBuffer<float>& buffer);
 
-    void setSampleRate(double newSampleRate);
+    void prepareToPlay(double sampleRate, int samplesPerBlock);
 
-
+    void reset();
 private:
 };
 

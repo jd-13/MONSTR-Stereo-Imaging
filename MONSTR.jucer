@@ -20,12 +20,6 @@
       <FILE id="SD0Ikr" name="Montserrat-Regular.ttf" compile="0" resource="1"
             file="Source/Graphics/Montserrat-Regular.ttf"/>
     </GROUP>
-    <GROUP id="{54DDA0CD-EF70-78A2-BADE-B0BCA860E60F}" name="DSPFilters">
-      <FILE id="ZAhsNd" name="Biquad.cpp" compile="1" resource="0" file="../WECore/DSPFilters/shared/DSPFilters/source/Biquad.cpp"/>
-      <FILE id="DiKHjv" name="Butterworth.cpp" compile="1" resource="0" file="../WECore/DSPFilters/shared/DSPFilters/source/Butterworth.cpp"/>
-      <FILE id="y1OMz4" name="Cascade.cpp" compile="1" resource="0" file="../WECore/DSPFilters/shared/DSPFilters/source/Cascade.cpp"/>
-      <FILE id="NTQmNl" name="PoleFilter.cpp" compile="1" resource="0" file="../WECore/DSPFilters/shared/DSPFilters/source/PoleFilter.cpp"/>
-    </GROUP>
     <GROUP id="{893CC731-9921-30A1-C72A-2337643309C3}" name="Source">
       <GROUP id="{AB2D53B4-98E6-6EC7-2DE3-F1C924AB3ADD}" name="GUI">
         <FILE id="E4puPZ" name="MONSTRCrossoverImagerComponent.cpp" compile="1"
@@ -56,11 +50,17 @@
               file="Source/PluginEditor.cpp"/>
         <FILE id="Zq8WyY" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
       </GROUP>
+      <FILE id="ETZx9v" name="CrossoverMutators.cpp" compile="1" resource="0"
+            file="Source/CrossoverMutators.cpp"/>
+      <FILE id="qRNlnB" name="CrossoverMutators.hpp" compile="0" resource="0"
+            file="Source/CrossoverMutators.hpp"/>
+      <FILE id="FW2oV8" name="CrossoverProcessors.cpp" compile="1" resource="0"
+            file="Source/CrossoverProcessors.cpp"/>
+      <FILE id="lFQoBl" name="CrossoverProcessors.hpp" compile="0" resource="0"
+            file="Source/CrossoverProcessors.hpp"/>
+      <FILE id="Rc9wpx" name="CrossoverState.hpp" compile="0" resource="0"
+            file="Source/CrossoverState.hpp"/>
       <FILE id="a6dwX2" name="ParameterData.h" compile="0" resource="0" file="Source/ParameterData.h"/>
-      <FILE id="X81K6x" name="MONSTRBandProcessor.cpp" compile="1" resource="0"
-            file="Source/MONSTRBandProcessor.cpp"/>
-      <FILE id="vukzG9" name="MONSTRBandProcessor.h" compile="0" resource="0"
-            file="Source/MONSTRBandProcessor.h"/>
       <FILE id="igpjzx" name="MONSTR.cpp" compile="1" resource="0" file="Source/MONSTR.cpp"/>
       <FILE id="t20NmX" name="MONSTR.h" compile="0" resource="0" file="Source/MONSTR.h"/>
       <FILE id="R55giV" name="PluginProcessor.cpp" compile="1" resource="0"
@@ -74,7 +74,7 @@
                vstFolder="~/SDKs/VST3 SDK" postbuildCommand="">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" osxArchitecture="64BitIntel" isDebug="0" optimisation="3"
-                       targetName="MONSTR" customXcodeFlags="" headerPath="../../../WECore/WECore&#10;../../../WECore/DSPFilters/shared/DSPFilters/include"
+                       targetName="MONSTR" customXcodeFlags="" headerPath="../../../WECore/WECore"
                        libraryPath="" linkTimeOptimisation="1"/>
         <CONFIGURATION name="Release" isDebug="0" optimisation="3" targetName="MONSTR"/>
       </CONFIGURATIONS>
@@ -96,13 +96,14 @@
         <MODULEPATH id="juce_audio_utils" path="../../../../../SDKs/JUCE/modules"/>
         <MODULEPATH id="juce_box2d" path="../../../../../SDKs/JUCE/modules"/>
         <MODULEPATH id="juce_osc" path="../../../../../SDKs/JUCE/modules"/>
+        <MODULEPATH id="juce_dsp" path="../../../../../SDKs/JUCE/modules"/>
       </MODULEPATHS>
     </XCODE_MAC>
     <LINUX_MAKE targetFolder="Builds/LinuxMakefile" vstFolder="~/SDKs/VST3 SDK"
                 vst3Folder="~/SDKs/VST3 SDK">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" libraryPath="/usr/X11R6/lib/" isDebug="0" optimisation="3"
-                       targetName="MONSTR" headerPath="~/WEA/WECore/WECore&#10;~/WEA/WECore/DSPFilters/shared/DSPFilters/include"/>
+                       targetName="MONSTR" headerPath="~/WEA/WECore/WECore"/>
         <CONFIGURATION name="Release" libraryPath="/usr/X11R6/lib/" isDebug="0" optimisation="3"
                        targetName="MONSTR"/>
       </CONFIGURATIONS>
@@ -124,11 +125,12 @@
         <MODULEPATH id="juce_audio_utils" path="../JUCE/modules"/>
         <MODULEPATH id="juce_box2d" path="../JUCE/modules"/>
         <MODULEPATH id="juce_osc" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_dsp" path="../../../../../SDKs/JUCE/modules"/>
       </MODULEPATHS>
     </LINUX_MAKE>
     <VS2019 targetFolder="Builds/VisualStudio2019">
       <CONFIGURATIONS>
-        <CONFIGURATION isDebug="0" name="Debug" headerPath="%USERPROFILE%\WEA\WECore\WECore&#10;%USERPROFILE%\WEA\WECore\DSPFilters\shared\DSPFilters\include"
+        <CONFIGURATION isDebug="0" name="Debug" headerPath="%USERPROFILE%\WEA\WECore\WECore"
                        defines="_HAS_TR1_NAMESPACE" linkTimeOptimisation="1" optimisation="3"/>
         <CONFIGURATION isDebug="0" name="Release"/>
       </CONFIGURATIONS>
@@ -150,6 +152,7 @@
         <MODULEPATH id="juce_audio_formats" path="..\JUCE\modules"/>
         <MODULEPATH id="juce_audio_devices" path="..\JUCE\modules"/>
         <MODULEPATH id="juce_audio_basics" path="..\JUCE\modules"/>
+        <MODULEPATH id="juce_dsp" path="../../../../../SDKs/JUCE/modules"/>
       </MODULEPATHS>
     </VS2019>
   </EXPORTFORMATS>
@@ -164,6 +167,7 @@
     <MODULES id="juce_core" showAllCode="1" useLocalCopy="0"/>
     <MODULES id="juce_cryptography" showAllCode="1" useLocalCopy="0"/>
     <MODULES id="juce_data_structures" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_dsp" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
     <MODULES id="juce_events" showAllCode="1" useLocalCopy="0"/>
     <MODULES id="juce_graphics" showAllCode="1" useLocalCopy="0"/>
     <MODULES id="juce_gui_basics" showAllCode="1" useLocalCopy="0"/>

@@ -21,23 +21,20 @@
  */
 
 #include "MONSTR.h"
+#include "CrossoverProcessors.hpp"
 
 MONSTR::MONSTR() {
-    // Assign all the StereoWidthProcessors
-    for (size_t index {0}; index < processors.size(); index++) {
-        processors[index] = std::make_shared<MONSTRBandProcessor>();
-        mCrossover.setEffectsProcessor(index, processors[index]);
-    }
+    crossoverState = createDefaultCrossoverState();
 }
 
-void MONSTR::Process2in2out(float* leftSample, float* rightSample, size_t numSamples) {
-    mCrossover.Process2in2out(leftSample, rightSample, numSamples);
+void MONSTR::Process2in2out(juce::AudioBuffer<float>& buffer) {
+    CrossoverProcessors::processBlock(*crossoverState.get(), buffer);
 }
 
-void MONSTR::setSampleRate(double newSampleRate) {
-    mCrossover.setSampleRate(newSampleRate);
+void MONSTR::prepareToPlay(double sampleRate, int samplesPerBlock) {
+    CrossoverProcessors::prepareToPlay(*crossoverState.get(), sampleRate, samplesPerBlock);
+}
 
-    for (size_t index {0}; index < processors.size(); index++) {
-        processors[index]->setSampleRate(newSampleRate);
-    }
+void MONSTR::reset() {
+    CrossoverProcessors::reset(*crossoverState.get());
 }

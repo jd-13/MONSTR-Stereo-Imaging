@@ -24,10 +24,6 @@ powershell -Command "& {$PSDefaultParameterValues['Out-File:Encoding'] = 'utf8';
 ECHO "=== Updating include paths ==="
 powershell -Command "& {$PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'; (get-content %SCRIPT_DIR%..\MONSTR.jucer).replace(\"%%USERPROFILE%%\WEA\WECore\WECore\",\"..\..\WECore\WECore\") | out-file -filepath %SCRIPT_DIR%..\MONSTR.jucer}"
 
-ECHO "=== Setting DSPFilters path ==="
-powershell -Command "& {$PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'; (get-content %SCRIPT_DIR%..\MONSTR.jucer).replace(\"%%USERPROFILE%%\WEA\WECore\DSPFilters\",\"..\..\WECore\DSPFilters\") | out-file -filepath %SCRIPT_DIR%..\MONSTR.jucer}"
-powershell -Command "& {$PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'; (get-content %SCRIPT_DIR%..\MONSTR.jucer).replace(\"../WECore/DSPFilters/shared/DSPFilters/source\",\"WECore\DSPFilters\shared\DSPFilters\source\") | out-file -filepath %SCRIPT_DIR%..\MONSTR.jucer}"
-
 ECHO "=== Generating project ==="
 %SCRIPT_DIR%..\JUCE\Projucer --resave %SCRIPT_DIR%..\MONSTR.jucer
 

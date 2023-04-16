@@ -11,6 +11,7 @@
 #include "PluginProcessor.h"
 
 #include "PluginEditor.h"
+#include "CrossoverMutators.hpp"
 #include "WEFilters/StereoWidthProcessorParameters.h"
 
 //==============================================================================
@@ -24,8 +25,11 @@ MonstrAudioProcessor::MonstrAudioProcessor()
 
     // numBands must be restored first (otherwise we can't set the band parameters)
     auto restoreBands = [&](int val) {
-        mMONSTR.mCrossover.setNumBands(val);
-        numBands->setValueNotifyingHost(numBands->getNormalisableRange().convertTo0to1(mMONSTR.mCrossover.getNumBands()));
+        for (int bandIndex {0}; bandIndex < val; bandIndex++) {
+            CrossoverMutators::addBand(mMONSTR.crossoverState);
+        }
+
+        numBands->setValueNotifyingHost(numBands->getNormalisableRange().convertTo0to1(CrossoverMutators::getNumBands(mMONSTR.crossoverState)));
         _refreshCrossoverParameters();
     };
 
@@ -35,13 +39,13 @@ MonstrAudioProcessor::MonstrAudioProcessor()
     registerParameter(bandParameters[0].isMuted, BAND_STRINGS[0].isMuted, MP::BANDMUTED_DEFAULT);
     registerParameter(bandParameters[0].isSoloed, BAND_STRINGS[0].isSoloed, MP::BANDSOLO_DEFAULT);
     registerParameter(bandParameters[0].width, BAND_STRINGS[0].width, &SP::WIDTH, SP::WIDTH.defaultValue, WIDTH_PRECISION);
-    registerPrivateParameter(crossoverParameters[0], CROSSOVER_STRINGS[0], &MP::CROSSOVER_FREQUENCY, MP::CROSSOVER_LOWER_DEFAULT, FREQ_PRECISION, [&](float val) { setCrossoverFrequency(0, val); });
+    registerPrivateParameter(crossoverParameters[0], CROSSOVER_STRINGS[0], &MP::CROSSOVER_FREQUENCY, MP::CROSSOVER_FREQUENCY.defaultValue, FREQ_PRECISION, [&](float val) { setCrossoverFrequency(0, val); });
 
     registerParameter(bandParameters[1].isActive, BAND_STRINGS[1].isActive, MP::BANDSWITCH_DEFAULT);
     registerParameter(bandParameters[1].isMuted, BAND_STRINGS[1].isMuted, MP::BANDMUTED_DEFAULT);
     registerParameter(bandParameters[1].isSoloed, BAND_STRINGS[1].isSoloed, MP::BANDSOLO_DEFAULT);
     registerParameter(bandParameters[1].width, BAND_STRINGS[1].width, &SP::WIDTH, SP::WIDTH.defaultValue, WIDTH_PRECISION);
-    registerPrivateParameter(crossoverParameters[1], CROSSOVER_STRINGS[1], &MP::CROSSOVER_FREQUENCY, MP::CROSSOVER_UPPER_DEFAULT, FREQ_PRECISION, [&](float val) { setCrossoverFrequency(1, val); });
+    registerPrivateParameter(crossoverParameters[1], CROSSOVER_STRINGS[1], &MP::CROSSOVER_FREQUENCY, MP::CROSSOVER_FREQUENCY.defaultValue, FREQ_PRECISION, [&](float val) { setCrossoverFrequency(1, val); });
 
     registerParameter(bandParameters[2].isActive, BAND_STRINGS[2].isActive, MP::BANDSWITCH_DEFAULT);
     registerParameter(bandParameters[2].isMuted, BAND_STRINGS[2].isMuted, MP::BANDMUTED_DEFAULT);
@@ -153,7 +157,8 @@ void MonstrAudioProcessor::changeProgramName (int index, const String& newName)
 void MonstrAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     // Use this method as the place to do any pre-playback
-    mMONSTR.mCrossover.reset();
+    mMONSTR.prepareToPlay(getSampleRate(), getBlockSize());
+    mMONSTR.reset();
     // initialisation that you need..
 }
 
@@ -177,12 +182,7 @@ void MonstrAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& 
 
     // This is the place where you'd normally do the guts of your plugin's
     // audio processing...
-    float* inLeftSample {buffer.getWritePointer(0)};
-    float* inRightSample {buffer.getWritePointer(1)};
-
-    mMONSTR.setSampleRate(getSampleRate());
-
-    mMONSTR.Process2in2out(inLeftSample, inRightSample, buffer.getNumSamples());
+    mMONSTR.Process2in2out(buffer);
 }
 
 //==============================================================================
@@ -198,8 +198,8 @@ AudioProcessorEditor* MonstrAudioProcessor::createEditor()
 
 //==============================================================================
 void MonstrAudioProcessor::addBand() {
-    mMONSTR.mCrossover.addBand();
-    numBands->setValueNotifyingHost(numBands->getNormalisableRange().convertTo0to1(mMONSTR.mCrossover.getNumBands()));
+    CrossoverMutators::addBand(mMONSTR.crossoverState);
+    numBands->setValueNotifyingHost(numBands->getNormalisableRange().convertTo0to1(CrossoverMutators::getNumBands(mMONSTR.crossoverState)));
 
     // The crossover may rearrange some crossover frequencies to make the new band fit, as well as
     // parameters of the new band having been reset to their defaults - we need to make sure the UI
@@ -207,13 +207,13 @@ void MonstrAudioProcessor::addBand() {
     _refreshCrossoverParameters();
 }
 void MonstrAudioProcessor::removeBand() {
-    mMONSTR.mCrossover.removeBand();
-    numBands->setValueNotifyingHost(numBands->getNormalisableRange().convertTo0to1(mMONSTR.mCrossover.getNumBands()));
+    CrossoverMutators::removeBand(mMONSTR.crossoverState, CrossoverMutators::getNumBands(mMONSTR.crossoverState) - 1);
+    numBands->setValueNotifyingHost(numBands->getNormalisableRange().convertTo0to1(CrossoverMutators::getNumBands(mMONSTR.crossoverState)));
 }
 
 void MonstrAudioProcessor::setCrossoverFrequency(size_t index, float val) {
-    if (index < mMONSTR.mCrossover.getNumBands() - 1) {
-        mMONSTR.mCrossover.setCrossoverFrequency(index, val);
+    if (index < CrossoverMutators::getNumBands(mMONSTR.crossoverState) - 1) {
+        CrossoverMutators::setCrossoverFrequency(mMONSTR.crossoverState, index, val);
 
         // Changing the frequency of one crossover may affect others if they also need to be moved -
         // make sure the UI and host parameters are updated
@@ -224,19 +224,19 @@ void MonstrAudioProcessor::setCrossoverFrequency(size_t index, float val) {
 double MonstrAudioProcessor::getProcessedWidthValue(size_t index) const {
     double retVal {0};
 
-    if (index < bandParameters.size()) {
-        retVal = mMONSTR.processors[index]->getProcessedWidthValue();
+    if (index < CrossoverMutators::getNumBands(mMONSTR.crossoverState)) {
+        retVal = mMONSTR.crossoverState->bands[index].env.getLastOutput();
     }
 
     return retVal;
 }
 
 void MonstrAudioProcessor::_refreshCrossoverParameters() {
-    for (size_t index {0}; index < mMONSTR.mCrossover.getNumBands() - 1; index++) {
+    for (size_t index {0}; index < CrossoverMutators::getNumBands(mMONSTR.crossoverState) - 1; index++) {
 
         const double normalisedFrequency {
             WECore::MONSTR::Parameters::CROSSOVER_FREQUENCY.InternalToNormalised(
-                mMONSTR.mCrossover.getCrossoverFrequency(index))
+                CrossoverMutators::getCrossoverFrequency(mMONSTR.crossoverState, index))
         };
 
         crossoverParameters[index]->setValueNotifyingHost(normalisedFrequency);
@@ -275,11 +275,11 @@ void MonstrAudioProcessor::_migrateParamValues(std::vector<float>& paramValues) 
 
 void MonstrAudioProcessor::_onParameterUpdate() {
 
-    for (size_t index {0}; index < mMONSTR.mCrossover.getNumBands(); index++) {
-        mMONSTR.mCrossover.setIsActive(index, bandParameters[index].isActive->get());
-        mMONSTR.mCrossover.setIsMuted(index, bandParameters[index].isMuted->get());
-        mMONSTR.mCrossover.setIsSoloed(index, bandParameters[index].isSoloed->get());
-        mMONSTR.processors[index]->setWidth(bandParameters[index].width->get());
+    for (size_t index {0}; index < CrossoverMutators::getNumBands(mMONSTR.crossoverState); index++) {
+        CrossoverMutators::setIsBypassed(mMONSTR.crossoverState, index, !bandParameters[index].isActive->get());
+        CrossoverMutators::setIsMuted(mMONSTR.crossoverState, index, bandParameters[index].isMuted->get());
+        CrossoverMutators::setIsSoloed(mMONSTR.crossoverState, index, bandParameters[index].isSoloed->get());
+        CrossoverMutators::setWidth(mMONSTR.crossoverState, index, bandParameters[index].width->get());
     }
 
     // We can't update the crossover frequencies here, as we would need to call
