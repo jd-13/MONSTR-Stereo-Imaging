@@ -19,9 +19,6 @@ wget https://github.com/JulietaUla/Montserrat/raw/master/fonts/ttf/Montserrat-Re
 echo "=== Setting module paths ==="
 sed -i 's#../JUCE/modules#/home/JUCE/modules#g' $SCRIPT_DIR/../MONSTR.jucer
 
-echo "=== Setting DSPFilters path ==="
-sed -i 's#../WECore/DSPFilters#WECore/DSPFilters#g' $SCRIPT_DIR/../MONSTR.jucer
-
 echo "=== Generating makefile ==="
 $JUCE_PATH/Projucer --resave $SCRIPT_DIR/../MONSTR.jucer
 
