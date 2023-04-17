@@ -2,6 +2,7 @@
 
 #include <JuceHeader.h>
 #include "CrossoverState.hpp"
+#include "General/AudioSpinMutex.h"
 
 namespace CrossoverInterface {
     struct Crossover {
