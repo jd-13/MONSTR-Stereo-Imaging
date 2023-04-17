@@ -32,7 +32,11 @@ namespace CrossoverMutators {
         }
     }
 
-    void setCrossoverFrequency(std::shared_ptr<CrossoverState> state, size_t crossoverNumber, double val) {
+    bool setCrossoverFrequency(std::shared_ptr<CrossoverState> state, size_t crossoverNumber, double val) {
+        if (val > MAX_FREQ) {
+            return false;
+        }
+
         if (state->lowpassFilters.size() > crossoverNumber) {
             state->lowpassFilters[crossoverNumber].setCutoffFrequency(val);
             state->highpassFilters[crossoverNumber].setCutoffFrequency(val);
@@ -63,7 +67,11 @@ namespace CrossoverMutators {
                     setCrossoverFrequency(state, otherCrossoverIndex, val);
                 }
             }
+
+            return true;
         }
+
+        return false;
     }
 
     void setWidth(std::shared_ptr<CrossoverState> state, size_t bandNumber, float val) {
@@ -110,6 +118,16 @@ namespace CrossoverMutators {
         }
 
         return 0;
+    }
+
+    std::vector<double> getWidthMeterValues(std::shared_ptr<CrossoverState> state) {
+        std::vector<double> retVal;
+
+        for (int bandNumber {0}; bandNumber < CrossoverMutators::getNumBands(state); bandNumber++) {
+            retVal.push_back(state->bands[bandNumber].env.getLastOutput());
+        }
+
+        return retVal;
     }
 
     size_t getNumBands(std::shared_ptr<CrossoverState> state) {

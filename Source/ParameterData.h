@@ -27,6 +27,7 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "General/ParameterDefinition.h"
+#include "MONSTRFilters/MONSTRParameters.h"
 
 const String NUMBANDS_STR = "NumBands";
 

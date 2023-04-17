@@ -50,6 +50,10 @@
               file="Source/PluginEditor.cpp"/>
         <FILE id="Zq8WyY" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
       </GROUP>
+      <FILE id="FvRQvE" name="CrossoverInterface.cpp" compile="1" resource="0"
+            file="Source/CrossoverInterface.cpp"/>
+      <FILE id="EyNi8L" name="CrossoverInterface.hpp" compile="0" resource="0"
+            file="Source/CrossoverInterface.hpp"/>
       <FILE id="ETZx9v" name="CrossoverMutators.cpp" compile="1" resource="0"
             file="Source/CrossoverMutators.cpp"/>
       <FILE id="qRNlnB" name="CrossoverMutators.hpp" compile="0" resource="0"
@@ -61,8 +65,6 @@
       <FILE id="Rc9wpx" name="CrossoverState.hpp" compile="0" resource="0"
             file="Source/CrossoverState.hpp"/>
       <FILE id="a6dwX2" name="ParameterData.h" compile="0" resource="0" file="Source/ParameterData.h"/>
-      <FILE id="igpjzx" name="MONSTR.cpp" compile="1" resource="0" file="Source/MONSTR.cpp"/>
-      <FILE id="t20NmX" name="MONSTR.h" compile="0" resource="0" file="Source/MONSTR.h"/>
       <FILE id="R55giV" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="mIrjJg" name="PluginProcessor.h" compile="0" resource="0"

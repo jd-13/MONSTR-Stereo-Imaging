@@ -33,19 +33,20 @@ void MONSTRCrossoverImagerComponent::paint(Graphics& g) {
     double currentXPos {0};
     const int numBands {_processor->numBands->get()};
 
-    for (int bandIndex {0}; bandIndex < numBands; bandIndex++) {
+    const std::vector<double> widthValues {
+        CrossoverInterface::getWidthMeterValues(_processor->crossover)
+    };
 
+    for (int bandNumber {0}; bandNumber < widthValues.size(); bandNumber++) {
         // For the last band use the value of getWidth() rather than the next crossover as there
         // isn't one
         const double nextCrossoverXPos {
-            (bandIndex < numBands - 1) ?
-                UIUtils::sliderValueToXPos(_processor->crossoverParameters[bandIndex]->get(), getWidth()) :
+            (bandNumber < numBands - 1) ?
+                UIUtils::sliderValueToXPos(_processor->crossoverParameters[bandNumber]->get(), getWidth()) :
                 getWidth()
         };
 
-        const double widthValue {_processor->getProcessedWidthValue(bandIndex)};
-
-        const float rectHeight {(getHeight() / 2.0f) * static_cast<float>(widthValue)};
+        const float rectHeight {(getHeight() / 2.0f) * static_cast<float>(widthValues[bandNumber])};
 
         g.setColour(UIUtils::imagerColour);
 

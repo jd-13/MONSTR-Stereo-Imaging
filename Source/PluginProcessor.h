@@ -12,10 +12,9 @@
 #define PLUGINPROCESSOR_H_INCLUDED
 
 #include "../JuceLibraryCode/JuceHeader.h"
-#include "MONSTR.h"
 #include "ParameterData.h"
 #include "CoreJUCEPlugin/CoreAudioProcessor.h"
-
+#include "CrossoverInterface.hpp"
 
 //==============================================================================
 /**
@@ -23,6 +22,8 @@
 class MonstrAudioProcessor  : public WECore::JUCEPlugin::CoreAudioProcessor
 {
 public:
+    CrossoverInterface::Crossover crossover;
+
     //==============================================================================
     MonstrAudioProcessor();
     ~MonstrAudioProcessor();
@@ -30,6 +31,7 @@ public:
     //==============================================================================
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
+    void reset() override;
 
     void processBlock (AudioSampleBuffer&, MidiBuffer&) override;
 
@@ -83,11 +85,7 @@ public:
     std::array<BandParametersWrapper, WECore::MONSTR::Parameters::_MAX_NUM_BANDS> bandParameters;
     std::array<AudioParameterFloat*, WECore::MONSTR::Parameters::_MAX_NUM_BANDS - 1> crossoverParameters;
 
-    double getProcessedWidthValue(size_t index) const;
-
 private:
-    MONSTR mMONSTR;
-
     void _refreshCrossoverParameters();
 
     std::vector<juce::String> _provideParamNamesForMigration() override;
