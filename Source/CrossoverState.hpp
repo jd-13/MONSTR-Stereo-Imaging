@@ -45,11 +45,11 @@ inline std::shared_ptr<CrossoverState> createDefaultCrossoverState() {
 
     state->lowpassFilters.emplace_back();
     state->lowpassFilters[0].setType(juce::dsp::LinkwitzRileyFilterType::lowpass);
-    state->lowpassFilters[0].setCutoffFrequency(WECore::MONSTR::Parameters::CROSSOVER_DEFAULT);
+    state->lowpassFilters[0].setCutoffFrequency(WECore::MONSTR::Parameters::CROSSOVER_FREQUENCY.defaultValue);
 
     state->highpassFilters.emplace_back();
     state->highpassFilters[0].setType(juce::dsp::LinkwitzRileyFilterType::highpass);
-    state->highpassFilters[0].setCutoffFrequency(WECore::MONSTR::Parameters::CROSSOVER_DEFAULT);
+    state->highpassFilters[0].setCutoffFrequency(WECore::MONSTR::Parameters::CROSSOVER_FREQUENCY.defaultValue);
 
     state->buffers.emplace_back();
 
