@@ -24,7 +24,7 @@ MonstrAudioProcessor::MonstrAudioProcessor()
 
     // numBands must be restored first (otherwise we can't set the band parameters)
     auto restoreBands = [&](int val) {
-        for (int bandIndex {0}; bandIndex < val; bandIndex++) {
+        while (CrossoverInterface::getNumBands(crossover) < val) {
             CrossoverInterface::addBand(crossover);
         }
 
