@@ -13,8 +13,6 @@ For more details and a free download of the compiled plugin: https://www.whiteel
 
 JUCE: https://www.juce.com/  
 
-A Collection of Useful C++ Classes for Digital Signal Processing: https://github.com/vinniefalco/DSPFilters  
-
 WECore: https://github.com/jd-13/WE-Core  
 
 VST SDK: https://www.steinberg.net/en/company/developers.html  
