@@ -3,6 +3,7 @@
 #include <JuceHeader.h>
 #include "MONSTRFilters/MONSTRParameters.h"
 #include "WEFilters/AREnvelopeFollowerSquareLaw.h"
+#include "WEFilters/StereoWidthProcessorParameters.h"
 
 struct BandState {
     bool isBypassed;
@@ -12,7 +13,7 @@ struct BandState {
 
     WECore::AREnv::AREnvelopeFollowerSquareLaw env;
 
-    BandState() : isBypassed(false), isMuted(false), isSoloed(false), width(0.0f) {
+    BandState() : isBypassed(false), isMuted(false), isSoloed(false), width(WECore::StereoWidth::Parameters::WIDTH.defaultValue) {
         env.setAttackTimeMs(200);
         env.setReleaseTimeMs(500);
     }
