@@ -3,57 +3,6 @@ name: CI Main
 on: [push, pull_request]
 
 jobs:
-  BuildLinuxClang:
-    runs-on: ubuntu-latest
-    container: jackd13/audioplugins:clang10
-
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          submodules: true
-      - name: RunBuild
-        run: Scripts/BuildLinux.sh
-      - name: RunPluginval
-        run: Scripts/PluginvalLinux.sh
-      - uses: actions/upload-artifact@v2
-        if: ${{ success() }}
-        with:
-          name: monstr-linux-clang
-          path: Builds/LinuxMakefile/build/*.vst3
-
-  BuildLinuxGCC:
-    runs-on: ubuntu-latest
-    container: jackd13/audioplugins:gcc10
-
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          submodules: true
-      - name: RunBuild
-        run: Scripts/BuildLinux.sh
-      - name: RunPluginval
-        run: Scripts/PluginvalLinux.sh
-      - uses: actions/upload-artifact@v2
-        if: ${{ success() }}
-        with:
-          name: monstr-linux-gcc
-          path: Builds/LinuxMakefile/build/*.vst3
-
-  BuildMacOS:
-    runs-on: macos-12
-
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          submodules: true
-      - name: RunBuild
-        run: Scripts/BuildMacOS.sh
-      - uses: actions/upload-artifact@v2
-        if: ${{ success() }}
-        with:
-          name: monstr-macOS
-          path: Scripts/dist
-
   BuildWindows:
     runs-on: windows-2019
 
@@ -70,4 +19,4 @@ jobs:
         if: ${{ success() }}
         with:
           name: monstr-windows
-          path: Builds/VisualStudio2019/x64/Debug/VST3/*.vst3
+          path: Builds/VisualStudio2019/Win32/Debug/VST/*.vst
