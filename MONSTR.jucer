@@ -133,7 +133,8 @@
     <VS2019 targetFolder="Builds/VisualStudio2019">
       <CONFIGURATIONS>
         <CONFIGURATION isDebug="0" name="Debug" headerPath="%USERPROFILE%\WEA\WECore\WECore"
-                       defines="_HAS_TR1_NAMESPACE" linkTimeOptimisation="1" optimisation="3"/>
+                       defines="_HAS_TR1_NAMESPACE" linkTimeOptimisation="1" optimisation="3"
+                       winArchitecture="Win32"/>
         <CONFIGURATION isDebug="0" name="Release"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
