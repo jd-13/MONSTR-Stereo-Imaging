@@ -19,4 +19,4 @@ jobs:
         if: ${{ success() }}
         with:
           name: monstr-windows
-          path: Builds/VisualStudio2019/Win32/Debug/VST/*.vst
+          path: Builds/VisualStudio2019/Win32/Debug/VST3/*.vst3
