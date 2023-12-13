@@ -7,7 +7,7 @@
   the "//[xyz]" and "//[/xyz]" sections will be retained when the file is loaded
   and re-saved.
 
-  Created with Projucer version: 7.0.5
+  Created with Projucer version: 7.0.9
 
   ------------------------------------------------------------------------------
 
@@ -42,16 +42,16 @@ MonstrAudioProcessorEditor::MonstrAudioProcessorEditor (MonstrAudioProcessor& ow
 
     AddBandBtn.reset (new juce::TextButton ("Add Band Button"));
     addAndMakeVisible (AddBandBtn.get());
-    AddBandBtn->setTooltip (TRANS("Adds a new band"));
-    AddBandBtn->setButtonText (TRANS("Add Band"));
+    AddBandBtn->setTooltip (TRANS ("Adds a new band"));
+    AddBandBtn->setButtonText (TRANS ("Add Band"));
     AddBandBtn->addListener (this);
 
     AddBandBtn->setBounds (365, 256, 275, 34);
 
     RemoveBandBtn.reset (new juce::TextButton ("Remove Band Button"));
     addAndMakeVisible (RemoveBandBtn.get());
-    RemoveBandBtn->setTooltip (TRANS("Removes the highest band"));
-    RemoveBandBtn->setButtonText (TRANS("Remove Band"));
+    RemoveBandBtn->setTooltip (TRANS ("Removes the highest band"));
+    RemoveBandBtn->setButtonText (TRANS ("Remove Band"));
     RemoveBandBtn->addListener (this);
 
     RemoveBandBtn->setBounds (0, 256, 275, 34);

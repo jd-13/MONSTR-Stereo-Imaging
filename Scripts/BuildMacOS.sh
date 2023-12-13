@@ -17,7 +17,7 @@ wget https://github.com/JulietaUla/Montserrat/raw/master/fonts/ttf/Montserrat-Re
      -P $SCRIPT_DIR/../Source/Graphics
 
 echo "=== Downloading JUCE ==="
-JUCE_VERSION=7.0.5
+JUCE_VERSION=7.0.9
 wget https://github.com/juce-framework/JUCE/releases/download/$JUCE_VERSION/juce-$JUCE_VERSION-osx.zip \
      -P $SCRIPT_DIR/..
 unzip $SCRIPT_DIR/../juce-$JUCE_VERSION-osx.zip
