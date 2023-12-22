@@ -93,7 +93,9 @@ namespace CrossoverProcessors {
                 juce::dsp::ProcessContextReplacing context(block);
                 state.lowpassFilters[crossoverNumber].process(context);
 
-                processBand(state.bands[crossoverNumber], lowBuffer);
+                // Crop the internal buffer in case the DAW has provided a buffer smaller than the specified block size in prepareToPlay
+                juce::AudioBuffer<float> lowBufferCropped(lowBuffer.getArrayOfWritePointers(), lowBuffer.getNumChannels(), buffer.getNumSamples());
+                processBand(state.bands[crossoverNumber], lowBufferCropped);
             }
 
             {
@@ -103,7 +105,9 @@ namespace CrossoverProcessors {
 
                 // If this is the last band we need to apply the processing
                 if (crossoverNumber + 1 == numCrossovers) {
-                    processBand(state.bands[crossoverNumber + 1], highBuffer);
+                    // Crop the internal buffer in case the DAW has provided a buffer smaller than the specified block size in prepareToPlay
+                    juce::AudioBuffer<float> highBufferCropped(highBuffer.getArrayOfWritePointers(), highBuffer.getNumChannels(), buffer.getNumSamples());
+                    processBand(state.bands[crossoverNumber + 1], highBufferCropped);
                 }
             }
         }
@@ -119,7 +123,6 @@ namespace CrossoverProcessors {
                 juce::dsp::AudioBlock<float> block(juce::dsp::AudioBlock<float>(buffer).getSubsetChannelBlock(0, 2));
                 juce::dsp::ProcessContextReplacing context(block);
                 state.allpassFilters[crossoverNumber].process(context);
-
             }
 
             if (state.numBandsSoloed == 0 || state.bands[crossoverNumber + 1].isSoloed) {
