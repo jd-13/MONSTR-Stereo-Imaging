@@ -29,7 +29,6 @@
 
 MONSTRCrossoverMouseListener::MONSTRCrossoverMouseListener(MonstrAudioProcessor* newAudioProcessor)
         : _processor(newAudioProcessor),
-          _dragParameter(nullptr),
           _widthValueLabel(nullptr),
           _tooltipLabel(nullptr) {
 
@@ -39,21 +38,20 @@ MONSTRCrossoverMouseListener::MONSTRCrossoverMouseListener(MonstrAudioProcessor*
 
     for (int bandIndex {0}; bandIndex < WECore::MONSTR::Parameters::NUM_BANDS.maxValue; bandIndex++) {
 
-        _bandWidths[bandIndex] = {
+        _bandWidths[bandIndex] = FloatParameterInteraction(
             [bandIndex, this](const MouseEvent& event) {
                 _processor->setParameterValueInternal(_processor->bandParameters[bandIndex].width, UIUtils::YPosToWidthValue(event.getPosition().getY(), event.eventComponent->getHeight()));
             },
             [bandIndex, defaultWidth, this]() { _processor->setParameterValueInternal(_processor->bandParameters[bandIndex].width, defaultWidth); },
             [bandIndex, this]() { _processor->bandParameters[bandIndex].width->beginChangeGesture(); },
             [bandIndex, this]() { _processor->bandParameters[bandIndex].width->endChangeGesture(); }
-        };
+        );
     }
 
     for (int bandIndex {0}; bandIndex < WECore::MONSTR::Parameters::NUM_BANDS.maxValue - 1; bandIndex++) {
 
-        _crossoverFrequencies[bandIndex] = {
+        _crossoverFrequencies[bandIndex] = FloatParameterInteraction(
             [bandIndex, this](const MouseEvent& event) {
-
                 constexpr double MIN_SPACING {
                     2 * UIUtils::SLIDER_THUMB_RADIUS + UIUtils::BAND_BUTTON_WIDTH
                 };
@@ -83,8 +81,7 @@ MONSTRCrossoverMouseListener::MONSTRCrossoverMouseListener(MonstrAudioProcessor*
             []() { /* Do nothing - doesn't have a default to reset to */ },
             [bandIndex, this]() { /* Do nothing - parameter isn't public so no need to send change gesture */ },
             [bandIndex, this]() { /* Do nothing - parameter isn't public so no need to send change gesture */ }
-        };
-
+        );
     }
 
 }
@@ -106,41 +103,24 @@ void MONSTRCrossoverMouseListener::mouseExit(const MouseEvent& /*event*/) {
 
 void MONSTRCrossoverMouseListener::mouseDown(const MouseEvent& event) {
     _dragParameter = _resolveParameterInteraction(event);
-
-    if (_dragParameter != nullptr) {
-        _dragParameter->beginGesture();
-    }
+    _dragParameter.beginGesture();
 }
 
 void MONSTRCrossoverMouseListener::mouseDrag(const MouseEvent& event) {
-
-    if (_dragParameter != nullptr) {
-        _dragParameter->dragCallback(event);
-    }
+    _dragParameter.dragCallback(event);
 }
 
 void MONSTRCrossoverMouseListener::mouseUp(const MouseEvent& /*event*/) {
-
-    if (_dragParameter != nullptr) {
-        _dragParameter->endGesture();
-        _dragParameter = nullptr;
-    }
+    _dragParameter.endGesture();
+    _dragParameter = FloatParameterInteraction();
 }
 
 void MONSTRCrossoverMouseListener::mouseDoubleClick(const MouseEvent& event) {
-
     // This implements "double click to default" for the width parameters
-    FloatParameterInteraction* param {_resolveParameterInteraction(event)};
-
-    if (param != nullptr) {
-       param->resetToDefault();
-    }
+    _resolveParameterInteraction(event).resetToDefault();
 }
 
-MONSTRCrossoverMouseListener::FloatParameterInteraction* MONSTRCrossoverMouseListener::_resolveParameterInteraction(const MouseEvent& event) {
-
-    FloatParameterInteraction* retVal {nullptr};
-
+MONSTRCrossoverMouseListener::FloatParameterInteraction MONSTRCrossoverMouseListener::_resolveParameterInteraction(const MouseEvent& event) {
     const int mouseDownX {event.getMouseDownX()};
     const int mouseDownY {event.getMouseDownY()};
 
@@ -174,17 +154,14 @@ MONSTRCrossoverMouseListener::FloatParameterInteraction* MONSTRCrossoverMouseLis
 
         } else if (mouseDownX < crossoverXPos - UIUtils::SLIDER_THUMB_TARGET_WIDTH) {
             // Click landed below a crossover handle but outside a button, so must be on the width
-            retVal = &(_bandWidths[bandIndex]);
-            break;
-
+            return _bandWidths[bandIndex];
         } else if (mouseDownX < crossoverXPos + UIUtils::SLIDER_THUMB_TARGET_WIDTH) {
             // Click landed on a crossover handle
-            retVal = &(_crossoverFrequencies[bandIndex]);
-            break;
+            return _crossoverFrequencies[bandIndex];
         }
     }
 
-    return retVal;
+    return FloatParameterInteraction();
 }
 
 void MONSTRCrossoverMouseListener::_updateWidthValueLabel(const MouseEvent& event) {

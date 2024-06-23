@@ -65,6 +65,22 @@ private:
         std::function<void()> resetToDefault;
         std::function<void()> beginGesture;
         std::function<void()> endGesture;
+
+        FloatParameterInteraction() :
+            dragCallback([](const MouseEvent&) {}),
+            resetToDefault([]() {}),
+            beginGesture([]() {}),
+            endGesture([]() {}) { }
+
+        FloatParameterInteraction(
+                std::function<void(const MouseEvent&)> newDragCallback,
+                std::function<void()> newResetToDefault,
+                std::function<void()> newBeginGesture,
+                std::function<void()> newEndGesture) :
+            dragCallback(newDragCallback),
+            resetToDefault(newResetToDefault),
+            beginGesture(newBeginGesture),
+            endGesture(newEndGesture) { }
     };
 
     std::array<FloatParameterInteraction, WECore::MONSTR::Parameters::_MAX_NUM_BANDS> _bandWidths;
@@ -72,7 +88,7 @@ private:
 
     MonstrAudioProcessor* _processor;
 
-    FloatParameterInteraction* _dragParameter;
+    FloatParameterInteraction _dragParameter;
 
     MONSTRWidthLabel* _widthValueLabel;
 
@@ -83,7 +99,7 @@ private:
      * if the event occured inside a slider it will return the corresponding
      * FloatParameterInteraction for it to be handled by the appropriate event handlers.
      */
-    FloatParameterInteraction* _resolveParameterInteraction(const MouseEvent& event);
+    FloatParameterInteraction _resolveParameterInteraction(const MouseEvent& event);
 
     void _updateWidthValueLabel(const MouseEvent& event);
     void _updateTooltip(const MouseEvent& event);
