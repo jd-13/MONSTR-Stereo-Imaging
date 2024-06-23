@@ -124,7 +124,7 @@ namespace CrossoverMutators {
         std::vector<double> retVal;
 
         for (int bandNumber {0}; bandNumber < CrossoverMutators::getNumBands(state); bandNumber++) {
-            retVal.push_back(state->bands[bandNumber].env.getLastOutput());
+            retVal.push_back(state->bands[bandNumber].env->getLastOutput());
         }
 
         return retVal;

@@ -21,7 +21,7 @@ namespace {
 
             // Update the envelope
             for (size_t index {0}; index < buffer.getNumSamples(); index++) {
-                band.env.getNextOutput(leftSamples[index] - rightSamples[index]);
+                band.env->getNextOutput(leftSamples[index] - rightSamples[index]);
             }
         }
     }
@@ -47,7 +47,7 @@ namespace CrossoverProcessors {
         }
 
         for (BandState& band : state.bands) {
-            band.env.setSampleRate(sampleRate);
+            band.env->setSampleRate(sampleRate);
         }
 
         state.sampleRate = sampleRate;
@@ -72,7 +72,7 @@ namespace CrossoverProcessors {
         }
 
         for (BandState& band : state.bands) {
-            band.env.reset();
+            band.env->reset();
         }
     }
 

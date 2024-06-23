@@ -11,11 +11,15 @@ struct BandState {
     bool isSoloed;
     float width;
 
-    WECore::AREnv::AREnvelopeFollowerSquareLaw env;
+    std::unique_ptr<WECore::AREnv::AREnvelopeFollowerSquareLaw> env;
 
-    BandState() : isBypassed(false), isMuted(false), isSoloed(false), width(WECore::StereoWidth::Parameters::WIDTH.defaultValue) {
-        env.setAttackTimeMs(200);
-        env.setReleaseTimeMs(500);
+    BandState() : isBypassed(false),
+                  isMuted(false),
+                  isSoloed(false),
+                  width(WECore::StereoWidth::Parameters::WIDTH.defaultValue),
+                  env(std::make_unique<WECore::AREnv::AREnvelopeFollowerSquareLaw>()) {
+        env->setAttackTimeMs(200);
+        env->setReleaseTimeMs(500);
     }
 };
 
