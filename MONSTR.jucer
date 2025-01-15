@@ -77,7 +77,8 @@
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" osxArchitecture="64BitIntel" isDebug="0" optimisation="3"
                        targetName="MONSTR" customXcodeFlags="" headerPath="../../../WECore/WECore"
-                       libraryPath="" linkTimeOptimisation="1"/>
+                       libraryPath="" linkTimeOptimisation="1" macOSDeploymentTarget="10.12"
+                       osxCompatibility="10.12 SDK"/>
         <CONFIGURATION name="Release" isDebug="0" optimisation="3" targetName="MONSTR"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
