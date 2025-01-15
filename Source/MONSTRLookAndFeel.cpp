@@ -78,5 +78,5 @@ void MONSTRLookAndFeel::drawTooltip(Graphics& g,
 }
 
 Typeface::Ptr MONSTRLookAndFeel::getTypefaceForFont(const Font& /*font*/) {
-    return _regularFont.getTypeface();
+    return _regularFont.getTypefacePtr();
 }
