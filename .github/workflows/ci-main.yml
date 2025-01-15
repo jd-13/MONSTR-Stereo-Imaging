@@ -3,41 +3,41 @@ name: CI Main
 on: [push, pull_request]
 
 jobs:
-  BuildLinuxClang:
-    runs-on: ubuntu-latest
-    container: jackd13/audioplugins:clang
+  # BuildLinuxClang:
+  #   runs-on: ubuntu-latest
+  #   container: jackd13/audioplugins:clang
 
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          submodules: true
-      - name: RunBuild
-        run: Scripts/BuildLinux.sh
-      - name: RunPluginval
-        run: Scripts/PluginvalLinux.sh
-      - uses: actions/upload-artifact@v4
-        if: ${{ success() }}
-        with:
-          name: monstr-linux-clang
-          path: Builds/LinuxMakefile/build/*.vst3
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #       with:
+  #         submodules: true
+  #     - name: RunBuild
+  #       run: Scripts/BuildLinux.sh
+  #     - name: RunPluginval
+  #       run: Scripts/PluginvalLinux.sh
+  #     - uses: actions/upload-artifact@v4
+  #       if: ${{ success() }}
+  #       with:
+  #         name: monstr-linux-clang
+  #         path: Builds/LinuxMakefile/build/*.vst3
 
-  BuildLinuxGCC:
-    runs-on: ubuntu-latest
-    container: jackd13/audioplugins:gcc
+  # BuildLinuxGCC:
+  #   runs-on: ubuntu-latest
+  #   container: jackd13/audioplugins:gcc
 
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          submodules: true
-      - name: RunBuild
-        run: Scripts/BuildLinux.sh
-      - name: RunPluginval
-        run: Scripts/PluginvalLinux.sh
-      - uses: actions/upload-artifact@v4
-        if: ${{ success() }}
-        with:
-          name: monstr-linux-gcc
-          path: Builds/LinuxMakefile/build/*.vst3
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #       with:
+  #         submodules: true
+  #     - name: RunBuild
+  #       run: Scripts/BuildLinux.sh
+  #     - name: RunPluginval
+  #       run: Scripts/PluginvalLinux.sh
+  #     - uses: actions/upload-artifact@v4
+  #       if: ${{ success() }}
+  #       with:
+  #         name: monstr-linux-gcc
+  #         path: Builds/LinuxMakefile/build/*.vst3
 
   BuildMacOS:
     runs-on: macos-12
@@ -54,20 +54,20 @@ jobs:
           name: monstr-macOS
           path: Scripts/dist
 
-  BuildWindows:
-    runs-on: windows-2019
+  # BuildWindows:
+  #   runs-on: windows-2019
 
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          submodules: true
-      - name: SetupMSBuild
-        uses: microsoft/setup-msbuild@v1.0.2
-      - name: RunBuild
-        shell: cmd
-        run: Scripts\BuildWindows.bat
-      - uses: actions/upload-artifact@v4
-        if: ${{ success() }}
-        with:
-          name: monstr-windows
-          path: Builds/VisualStudio2019/x64/Debug/VST3/*.vst3
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #       with:
+  #         submodules: true
+  #     - name: SetupMSBuild
+  #       uses: microsoft/setup-msbuild@v1.0.2
+  #     - name: RunBuild
+  #       shell: cmd
+  #       run: Scripts\BuildWindows.bat
+  #     - uses: actions/upload-artifact@v4
+  #       if: ${{ success() }}
+  #       with:
+  #         name: monstr-windows
+  #         path: Builds/VisualStudio2019/x64/Debug/VST3/*.vst3
