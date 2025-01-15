@@ -15,7 +15,7 @@ jobs:
         run: Scripts/BuildLinux.sh
       - name: RunPluginval
         run: Scripts/PluginvalLinux.sh
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         if: ${{ success() }}
         with:
           name: monstr-linux-clang
@@ -33,7 +33,7 @@ jobs:
         run: Scripts/BuildLinux.sh
       - name: RunPluginval
         run: Scripts/PluginvalLinux.sh
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         if: ${{ success() }}
         with:
           name: monstr-linux-gcc
@@ -48,7 +48,7 @@ jobs:
           submodules: true
       - name: RunBuild
         run: Scripts/BuildMacOS.sh
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         if: ${{ success() }}
         with:
           name: monstr-macOS
@@ -66,7 +66,7 @@ jobs:
       - name: RunBuild
         shell: cmd
         run: Scripts\BuildWindows.bat
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         if: ${{ success() }}
         with:
           name: monstr-windows
