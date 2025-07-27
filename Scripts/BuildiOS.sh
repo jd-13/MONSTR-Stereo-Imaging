@@ -34,7 +34,7 @@ $SCRIPT_DIR/../JUCE/Projucer.app/Contents/MacOS/Projucer --resave $SCRIPT_DIR/..
 echo "=== Starting build ==="
 cd $SCRIPT_DIR/../Builds/iOS
 xcodebuild -version
-xcodebuild -project MONSTR.xcodeproj -scheme "MONSTR - All" -configuration Debug
+xcodebuild -project MONSTR.xcodeproj -scheme "MONSTR - All" -configuration Debug -allowProvisioningUpdates
 
 echo "=== Collecting artefacts ==="
 mkdir -p $SCRIPT_DIR/dist
