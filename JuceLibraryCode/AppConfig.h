@@ -23,7 +23,7 @@
 
 #include "JucePluginDefines.h"
 
-#define JUCE_PROJUCER_VERSION 0x80004
+#define JUCE_PROJUCER_VERSION 0x80007
 
 //==============================================================================
 #define JUCE_MODULE_AVAILABLE_juce_audio_basics             1
