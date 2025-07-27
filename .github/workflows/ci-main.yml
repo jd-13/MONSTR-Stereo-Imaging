@@ -54,6 +54,21 @@ jobs:
           name: monstr-macOS
           path: Scripts/dist
 
+  BuildiOS:
+    runs-on: macos-15
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+      - name: RunBuild
+        run: Scripts/BuildiOS.sh
+      - uses: actions/upload-artifact@v4
+        if: ${{ success() }}
+        with:
+          name: monstr-iOS
+          path: Scripts/dist
+
   BuildWindows:
     runs-on: windows-2022
 
