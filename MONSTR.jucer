@@ -157,7 +157,7 @@
         <MODULEPATH id="juce_dsp" path="../../../../../SDKs/JUCE/modules"/>
       </MODULEPATHS>
     </VS2019>
-    <XCODE_IPHONE targetFolder="Builds/iOS" microphonePermissionNeeded="1">
+    <XCODE_IPHONE targetFolder="Builds/iOS" microphonePermissionNeeded="1" iosDevelopmentTeamID="NH7FFR42DK">
       <CONFIGURATIONS>
         <CONFIGURATION isDebug="0" name="Debug" targetName="MONSTR" headerPath="../../../WECore/WECore"
                        linkTimeOptimisation="1" optimisation="3"/>
