@@ -105,7 +105,7 @@
                 vst3Folder="~/SDKs/VST3 SDK">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" libraryPath="/usr/X11R6/lib/" isDebug="0" optimisation="3"
-                       targetName="MONSTR" headerPath="~/WEA/WECore/WECore"/>
+                       targetName="MONSTR" headerPath="~/WEA/WECore/WECore&#10;/usr/include/freetype"/>
         <CONFIGURATION name="Release" libraryPath="/usr/X11R6/lib/" isDebug="0" optimisation="3"
                        targetName="MONSTR"/>
       </CONFIGURATIONS>
